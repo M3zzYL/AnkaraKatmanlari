@@ -253,10 +253,26 @@
     .toolbar{top:64px;}
   }
 </style>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
 </head>
 <body>
 
 <header class="site">
+  <div class="mark">ANKARA <span>KATMANLARI</span></div>
+  <div style="display:flex; gap:16px; align-items:center;">
+    <!-- Giriş Butonu -->
+    <button id="auth-btn" style="background:var(--paper-deep); border:1px solid var(--bronze); padding:6px 12px; font-family:'IBM Plex Mono', monospace; font-size:11px; cursor:pointer; border-radius:3px; color:var(--ink); display:flex; align-items:center; gap:6px; transition:0.2s;">
+      Google ile Giriş Yap
+    </button>
+    <div class="progress-container">
+      <div class="progress-text" id="progress-text">Ankara'nın <strong>%0</strong>'ını keşfettin.<br>0 / 379 durak</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar-fill"></div></div>
+    </div>
+  </div>
+</header>
   <div class="mark">ANKARA <span>KATMANLARI</span></div>
   <div class="progress-container">
     <div class="progress-text" id="progress-text">Ankara'nın <strong>%0</strong>'ını keşfettin.<br>0 / 379 durak</div>
@@ -825,10 +841,98 @@ let activeDistrict = "Tümü";
 let activeSpecial = null;
 let searchQuery = "";
 
+// ==========================================
+// BULUT VERİTABANI VE GİRİŞ SİSTEMİ (FIREBASE)
+// ==========================================
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBiD36KC3CzgY1rZ9zFNNUd0PgVRHngXhk",
+  authDomain: "ankara-katmanlari.firebaseapp.com",
+  projectId: "ankara-katmanlari",
+  storageBucket: "ankara-katmanlari.firebasestorage.app",
+  messagingSenderId: "178079559288",
+  appId: "1:178079559288:web:02afb601ec5df891c9478d",
+  measurementId: "G-3S0VZGKGK3"
+};
+const firebaseConfig = {
+  apiKey: "API_ANAHTARIN_BURAYA",
+  authDomain: "PROJE_ADIN.firebaseapp.com",
+  projectId: "PROJE_ADIN",
+  storageBucket: "PROJE_ADIN.appspot.com",
+  messagingSenderId: "SAYI",
+  appId: "APP_ID"
+};
+
+// Firebase'i başlat
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const auth = firebase.auth();
+const db = firebase.firestore();
+
 const STORAGE_KEY = 'ankaraEnesYilmazState_v1';
-function loadState(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch(e){ return {}; } }
-function saveState(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE)); }catch(e){} }
-let STATE = loadState();
+let STATE = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+let currentUser = null;
+
+// Auth Butonu İşlevleri
+const authBtn = document.getElementById('auth-btn');
+
+authBtn.addEventListener('click', () => {
+  if (currentUser) {
+    auth.signOut();
+  } else {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).catch(err => alert("Giriş yapılamadı: " + err.message));
+  }
+});
+
+// Kullanıcı giriş/çıkış yaptığında tetiklenir
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    currentUser = user;
+    authBtn.innerHTML = `<img src="${user.photoURL}" style="width:18px; border-radius:50%;"> Çıkış Yap`;
+    
+    // Veritabanından kullanıcının verilerini çek
+    const docRef = db.collection("users").doc(user.uid);
+    const docSnap = await docRef.get();
+    
+    if (docSnap.exists) {
+      STATE = docSnap.data().places || {};
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE)); // Yerel yedeği de güncelle
+    } else {
+      // Eğer ilk defa giriyorsa, yerel kayıtlı verilerini buluta aktar
+      await docRef.set({ places: STATE });
+    }
+  } else {
+    currentUser = null;
+    authBtn.innerHTML = `Google ile Giriş Yap`;
+    STATE = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  }
+  updateProgress();
+  renderGrid();
+});
+
+function getPlaceState(name){ 
+  return STATE[name] || {visited:false, rating:0, favorite:false}; 
+}
+
+function setPlaceState(name, partial){
+  STATE[name] = Object.assign({}, getPlaceState(name), partial);
+  
+  // Önce çevrimdışı (internetsiz) durumlar için tarayıcıya kaydet
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+  updateProgress();
+
+  // Eğer kullanıcı giriş yapmışsa, bulut veritabanına senkronize et!
+  if(currentUser) {
+    db.collection("users").doc(currentUser.uid).set({
+      places: STATE
+    }, { merge: true }).catch(err => console.log("Buluta kaydedilemedi", err));
+  } else {
+    // Giriş yapmamışsa uyarı verebiliriz
+    console.log("Veri sadece bu tarayıcıya kaydedildi. Kalıcı olması için giriş yapın.");
+  }
+}
 
 function getPlaceState(name){ return STATE[name] || {visited:false, rating:0, favorite:false}; }
 function setPlaceState(name, partial){
