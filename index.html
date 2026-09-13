@@ -29,9 +29,16 @@
   .hero-caption{ padding:28px 32px 34px; max-width:620px; } .hero-caption .eyebrow{ font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--red-deep); text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px; }
   .hero-caption h1{font-size:38px;line-height:1.05;margin:0 0 14px;font-weight:600;} .hero-caption p{font-size:15px;line-height:1.6;color:var(--ink-soft);margin:0;}
   .toolbar{ position:sticky;top:74px;z-index:30; background:var(--paper-deep); border-bottom:1px solid var(--line); display:flex;flex-direction:column; }
-  .search-bar{ padding:12px 32px; border-bottom:1px solid rgba(0,0,0,0.05); }
-  .search-input{ width:100%; max-width:400px; padding:10px 14px; border:1px solid var(--line); border-radius:3px; font-family:'Manrope',sans-serif; font-size:13px; background:var(--card); color:var(--ink); outline:none; transition:border-color 0.2s; }
+  .search-bar{ padding:12px 32px; border-bottom:1px solid rgba(0,0,0,0.05); display:flex;gap:10px;flex-wrap:wrap; }
+  .search-input{ padding:10px 14px; border:1px solid var(--line); border-radius:3px; font-family:'Manrope',sans-serif; font-size:13px; background:var(--card); color:var(--ink); outline:none; transition:border-color 0.2s; }
+  #search-input{flex:1 1 220px;max-width:400px;}
+  .category-select{flex:0 0 auto;min-width:150px;cursor:pointer;}
+  .district-select{flex:0 0 auto;min-width:150px;cursor:pointer;display:none;}
   .search-input:focus{border-color:var(--bronze);}
+  @media(max-width:640px){
+    .district-select{display:block;width:100%;}
+    .d-chip-item{display:none;}
+  }
   .filter-bar{ padding:12px 32px; display:flex;gap:8px;flex-wrap:nowrap;align-items:center; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scrollbar-color:var(--bronze) var(--paper-deep); }
   .filter-bar::-webkit-scrollbar{height:6px;} .filter-bar::-webkit-scrollbar-track{background:var(--paper-deep);} .filter-bar::-webkit-scrollbar-thumb{background:var(--bronze);border-radius:3px;}
   .filter-bar .label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin-right:2px;text-transform:uppercase;letter-spacing:.06em;flex:0 0 auto;padding-right:6px;}
@@ -55,10 +62,24 @@
   .placard .p-story{font-size:14.5px;line-height:1.75;color:var(--ink);margin-bottom:20px;} .placard .p-map-link{ display:flex;align-items:center;gap:8px; padding:14px 16px;background:var(--paper-deep); border:1px solid var(--line); font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink); text-decoration:none; transition:background .15s,border-color .15s; } .placard .p-map-link:hover{background:var(--bronze);border-color:var(--bronze);color:var(--paper);}
   .p-controls{display:flex;gap:8px;margin:16px 0 14px;flex-wrap:wrap;} .ctrl-btn{ font-family:'IBM Plex Mono',monospace;font-size:12px; padding:9px 14px;border:1px solid var(--line);border-radius:2px; background:var(--paper-deep);cursor:pointer;color:var(--ink); transition:background .15s,color .15s,border-color .15s; } .ctrl-btn.active.fav{background:var(--red);border-color:var(--red);color:var(--paper);} .ctrl-btn.active.visited{background:var(--moss);border-color:var(--moss);color:var(--paper);}
   .p-rating{display:flex;align-items:center;gap:10px;margin-bottom:22px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);} .stars-wrap{position:relative;font-size:20px;line-height:1;letter-spacing:2px;white-space:nowrap;} .stars-empty{color:var(--line);} .stars-filled{position:absolute;top:0;left:0;overflow:hidden;color:var(--bronze);white-space:nowrap;} .p-rating input[type=range]{accent-color:var(--bronze);width:110px;} .p-rating .rating-val{font-weight:600;color:var(--ink);}
+  .auth-gate{ position:fixed;inset:0;z-index:200; background:var(--paper); display:flex;align-items:center;justify-content:center;padding:24px; }
+  .auth-gate-box{ text-align:center;max-width:380px; }
+  .auth-gate-box p{font-size:14px;color:var(--ink-soft);line-height:1.6;}
   @media(max-width:640px){ header.site,.toolbar,main{padding-left:16px;padding-right:16px;} .hero-caption h1{font-size:28px;} .toolbar{top:64px;} }
 </style>
 </head>
 <body>
+
+<div class="auth-gate" id="auth-gate">
+  <div class="auth-gate-box">
+    <div class="mark" style="margin-bottom:18px;">ANKARA <span>KATMANLARI</span></div>
+    <p>Bu site sadece giriş yapan kişilerin görebileceği şekilde ayarlandı.</p>
+    <button id="gate-auth-btn" class="ctrl-btn" style="margin-top:14px;padding:12px 20px;font-size:13px;">Google ile Giriş Yap</button>
+    <p id="gate-error" style="color:var(--red);font-size:12px;margin-top:14px;display:none;"></p>
+  </div>
+</div>
+
+<div id="app-content" style="display:none;">
 
 <header class="site">
   <div class="mark">ANKARA <span>KATMANLARI</span></div>
@@ -92,6 +113,12 @@
 <div class="toolbar">
   <div class="search-bar">
     <input type="text" id="search-input" class="search-input" placeholder="Mekan, müze, ilçe veya dönem ara...">
+    <select id="category-select" class="search-input category-select">
+      <option value="">Tüm türler</option>
+    </select>
+    <select id="district-select" class="search-input district-select">
+      <option value="Tümü">Tüm ilçeler (379)</option>
+    </select>
   </div>
   <div class="filter-bar" id="filter-bar"></div>
 </div>
@@ -103,6 +130,8 @@
 
 <div class="overlay" id="overlay">
   <div class="placard" id="placard"></div>
+</div>
+
 </div>
 
 <script>
@@ -352,8 +381,8 @@ const PLACES = [
   { name:"Türkşerefli Kaya Mezarı", district:"Haymana", type:"Kaya Mezarı", era:"s3", period:"Roma Dönemi", founder:"Bilinmiyor", fee:"Ücretsiz", hours:"7/24 Açık", story:"Türkşerefli köyü kırsalında yer alan, dönemin taş işçiliğinin ince detaylarını günümüze taşıyan antik mezar kalıntısı.", mapQuery:"Türkşerefli Kaya Mezarı, Haymana", img:"images/Haymana/T%C3%BCrk%C5%9Ferefli%20Kaya%20Mezar%C4%B1.jpg" },
   { name:"Bahçecik Nekropolü", district:"Haymana", type:"Antik Mezarlık", era:"s3", period:"Roma ve Bizans", founder:"Bilinmiyor", fee:"Ücretsiz", hours:"7/24 Açık", story:"Geçmiş yıllarda yapılan yüzey araştırmalarında ortaya çıkarılan, yüzlerce antik mezar barındıran geniş bir tarihi nekropol alanı.", mapQuery:"Bahçecik Nekropolü, Haymana", img:"images/Haymana/Bah%C3%A7ecik%20Nekropol%C3%BC.jpg" },
   { name:"Bostanhüyük Mehmet Ağa Konağı", district:"Haymana", type:"Tarihi Konak", era:"s5", period:"Geç Osmanlı", founder:"Mehmet Ağa", fee:"Dışarıdan Görülebilir", hours:"Gündüz", story:"Bölgedeki sivil mimarinin en güzel örneklerinden biri olan, kerpiç ve ahşap işçiliğinin harmanlandığı tarihi köy konağı.", mapQuery:"Bostanhüyük, Haymana", img:"images/Haymana/Bostanh%C3%BCy%C3%BCk%20Mehmet%20A%C4%9Fa%20Kona%C4%9F%C4%B1.jpg" },
-  { name:"Haymana Papazın Evi", district:"Haymana", type:"Tarihi Ev", era:"s5", period:"Geç Osmanlı", founder:"Bilinmiyor", fee:"Dışarıdan Görülebilir", hours:"Gündüz", story:"Geçmişte Haymana'da yaşayan gayrimüslim toplulukların dini liderlerine ev sahipliği yapmış olan özgün taş yapılı sivil mimari örneği.", mapQuery:"Papazın Evi, Haymana", img:"images/Haymana/Haymana%20Papaz%C4%B1n%20Evi.jpg" },
-  { name:"Türkşerefli Dedegil Konağı", district:"Haymana", type:"Tarihi Konak", era:"s5", period:"Osmanlı Dönemi", founder:"Dedegil Ailesi", fee:"Dışarıdan Görülebilir", hours:"Gündüz", story:"Türkşerefli köyünde yer alan, geniş avlusu ve cumbalı yapısıyla İç Anadolu kırsal ağa/bey konaklarının karakteristik bir örneği.", mapQuery:"Türkşerefli Dedegil Konağı, Haymana", img:"images/Haymana/T%C3%BCrk%C5%9Ferefli%20Dedegil%20Kona%C4%9F%C4%B1.jpg" },
+  { name:"Haymana Papazın Evi", district:"Haymana", type:"Tarihi Ev", era:"s5", period:"Üzerindeki tarihe göre 1906", founder:"Osmanlı dönemi Rum cemaati", fee:"Dışarıdan Görülebilir", hours:"Gündüz", story:"Halk arasında 'Papaz Evi' olarak bilinen bu taş yapının, üzerindeki tarihe göre 1906'da inşa edildiği anlaşılıyor. Osmanlı döneminde Haymana'da yaşayan Rum cemaatinin din adamına ait olduğu düşünülen ev, kesme taş işçiliği ve kemerli pencereleriyle döneminin sivil mimarisini yansıtıyor; iki katlı yapısı ve geniş avlusuyla ilçenin çok kültürlü geçmişine tanıklık ediyor.", mapQuery:"Papazın Evi, Haymana", img:"images/Haymana/Haymana%20Papaz%C4%B1n%20Evi.jpg" },
+  { name:"Türkşerefli Dedegil Konağı", district:"Haymana", type:"Tarihi Konak", era:"s5", period:"19. yüzyıl sonları", founder:"Dede Mehmetzade (konağın mevcut sahibi Ömer Çiftçi'nin aktardığına göre)", fee:"Dışarıdan Görülebilir", hours:"Gündüz", story:"Türkşerefli köyünde, iç mekânı neredeyse tamamen ahşaptan oluşan iki katlı bir konak. Yapımında kullanılan keresteler uzak bir bölge olan Gerede'den getirtilmiş ve inşaatta kullanılmadan önce 12 yıl boyunca bekletilerek dinlendirilmiş; bu titizlik, konağın bugün hâlâ sağlam ayakta durmasının sebeplerinden biri sayılıyor. Cephedeki taş işçiliği ve ahşap saçak detayları, dönemin İç Anadolu ağa/bey konağı geleneğini yansıtıyor.", mapQuery:"Türkşerefli Dedegil Konağı, Haymana", img:"images/Haymana/T%C3%BCrk%C5%9Ferefli%20Dedegil%20Kona%C4%9F%C4%B1.jpg" },
   { name:"Hüsameddin Ankaravi Camii", district:"Haymana", type:"Cami", era:"s4", period:"13-14. Yüzyıl", founder:"Şeyh Hüsameddin Ankaravi", fee:"Ücretsiz", hours:"İbadet Saatleri", story:"Kutluhan köyünde, ünlü mutasavvıf Hüsameddin Ankaravi tarafından kurulan tarihi dergahın ve caminin günümüze ulaşan manevi yapısı.", mapQuery:"Hüsameddin Ankaravi Camii, Kutluhan, Haymana", img:"images/Haymana/H%C3%BCsameddin%20Ankaravi%20Camii.jpg" },
   { name:"Merkez Camii", district:"Haymana", type:"Cami", era:"s6", period:"Modern Dönem", founder:"Haymana Halkı", fee:"Ücretsiz", hours:"İbadet Saatleri", story:"İlçe merkezinde toplanma ve ibadet alanı olan, klasik mimari özellikler taşıyan büyük merkez camisi.", mapQuery:"Haymana Merkez Camii", img:"images/Haymana/Merkez%20Camii.jpg" },
   { name:"Hüseyin Bin Mehmed (Karahoca) Camii", district:"Haymana", type:"Cami", era:"s5", period:"Osmanlı Dönemi", founder:"Hüseyin Bin Mehmed", fee:"Ücretsiz", hours:"İbadet Saatleri", story:"Karahoca Mahallesi'nde, ilçe merkezine 10 dakika mesafede yer alan bu cami, iç mekânındaki özenli kalem işi süslemeleriyle Haymana'nın gezi rotalarının klasik ilk durağı. Aynı güzergâhta 15 dakika sonra Culuk Mahallesi'ndeki Osmanlı dönemi cami, tarihi çeşme ve çamaşırhane de ziyaret edilebiliyor.", mapQuery:"Hüseyin Bin Mehmed Camii, Karahoca, Haymana", img:"images/Haymana/H%C3%BCseyin%20Bin%20Mehmed%20%28Karahoca%29%20Camii.jpg" },
@@ -559,26 +588,35 @@ try {
   db = firebase.firestore();
 
   const authBtn = document.getElementById('auth-btn');
+  const gateAuthBtn = document.getElementById('gate-auth-btn');
+  const gateError = document.getElementById('gate-error');
+
+  function doSignIn(){
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).catch(err => {
+      let msg;
+      if(err.code === "auth/operation-not-supported-in-this-environment") {
+        msg = "Google girişi, dosyayı masaüstünden direkt (file:///) açtığınızda çalışmaz. Firebase Hosting üzerinden açtığınızda çalışacaktır.";
+      } else {
+        msg = "Giriş yapılamadı: " + err.message;
+      }
+      gateError.textContent = msg;
+      gateError.style.display = 'block';
+      alert(msg);
+    });
+  }
 
   authBtn.addEventListener('click', () => {
-    if (currentUser) {
-      auth.signOut();
-    } else {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider).catch(err => {
-        if(err.code === "auth/operation-not-supported-in-this-environment") {
-           alert("Google girişi, güvenlik nedeniyle dosyayı masaüstünden direkt (file:///) açtığınızda çalışmaz. Kodu GitHub'a yüklediğinizde kusursuz çalışacaktır!");
-        } else {
-           alert("Giriş yapılamadı: " + err.message);
-        }
-      });
-    }
+    if (currentUser) { auth.signOut(); } else { doSignIn(); }
   });
+  gateAuthBtn.addEventListener('click', doSignIn);
 
   auth.onAuthStateChanged(async (user) => {
     if (user) {
       currentUser = user;
       document.getElementById('auth-btn').innerHTML = `<img src="${user.photoURL}" style="width:18px; border-radius:50%;"> Çıkış Yap`;
+      document.getElementById('auth-gate').style.display = 'none';
+      document.getElementById('app-content').style.display = 'block';
       const docRef = db.collection("users").doc(user.uid);
       const docSnap = await docRef.get();
       if (docSnap.exists) {
@@ -590,13 +628,17 @@ try {
     } else {
       currentUser = null;
       document.getElementById('auth-btn').innerHTML = `Google ile Giriş Yap`;
+      document.getElementById('auth-gate').style.display = 'flex';
+      document.getElementById('app-content').style.display = 'none';
       STATE = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
     }
     updateProgress();
     renderGrid();
   });
 } catch(e) {
-  console.warn("Firebase bağlantı hatası. Program yerel bellekle çalışmaya devam ediyor.", e);
+  console.warn("Firebase bağlantı hatası.", e);
+  document.getElementById('gate-error').textContent = "Giriş sistemi şu an başlatılamadı. Sayfayı Firebase Hosting üzerinden açtığınızdan emin olun.";
+  document.getElementById('gate-error').style.display = 'block';
 }
 
 function getPlaceState(name){ return STATE[name] || {visited:false, rating:0, favorite:false}; }
@@ -630,10 +672,10 @@ function renderFilters(){
   const bar = document.getElementById('filter-bar');
   bar.innerHTML = '';
   const label = document.createElement('span');
-  label.className = 'label'; label.textContent = 'İlçe'; bar.appendChild(label);
+  label.className = 'label d-chip-item'; label.textContent = 'İlçe'; bar.appendChild(label);
 
   const allChip = document.createElement('div');
-  allChip.className = 'chip active'; allChip.dataset.d = 'Tümü';
+  allChip.className = 'chip active d-chip-item'; allChip.dataset.d = 'Tümü';
   allChip.innerHTML = `Tümü <span class="n">379</span>`; bar.appendChild(allChip);
 
   const favChip = document.createElement('div');
@@ -645,11 +687,11 @@ function renderFilters(){
   visitedChip.innerHTML = `✓ Gittiklerim`; bar.appendChild(visitedChip);
 
   const sep = document.createElement('div');
-  sep.className = 'chip-sep'; bar.appendChild(sep);
+  sep.className = 'chip-sep d-chip-item'; bar.appendChild(sep);
 
   DISTRICTS.forEach(d=>{
     const chip = document.createElement('div');
-    chip.className = 'chip'; chip.dataset.d = d;
+    chip.className = 'chip d-chip-item'; chip.dataset.d = d;
     chip.innerHTML = `${d} <span class="n">${TOTALS[d]}</span>`;
     bar.appendChild(chip);
   });
@@ -659,6 +701,7 @@ function renderFilters(){
       bar.querySelectorAll('.chip[data-d]').forEach(c=>c.classList.remove('active'));
       chip.classList.add('active');
       activeDistrict = chip.dataset.d;
+      document.getElementById('district-select').value = activeDistrict;
       updateDistrictNote();
       renderGrid();
     });
@@ -679,13 +722,65 @@ document.getElementById('search-input').addEventListener('input', (e) => {
   renderGrid();
 });
 
+let activeCategory = '';
+const CATEGORIES = [
+  { label:"Cami", keys:["cami"] },
+  { label:"Kale / Harabe", keys:["kale","harabe"] },
+  { label:"Müze", keys:["müze"] },
+  { label:"Göl / Gölet / Baraj", keys:["göl","gölet","baraj"] },
+  { label:"Türbe", keys:["türbe"] },
+  { label:"Konak", keys:["konak"] },
+  { label:"Köprü", keys:["köprü"] },
+  { label:"Çeşme", keys:["çeşme"] },
+  { label:"Han / Kervansaray", keys:["han","kervansaray"] },
+  { label:"Hamam / Kaplıca", keys:["hamam","kaplıca","termal"] },
+  { label:"Mağara", keys:["mağara"] },
+  { label:"Höyük / Antik Kent / Tümülüs", keys:["höyük","antik","tümülüs","nekropol"] },
+  { label:"Kaya Mezarı", keys:["kaya mezar"] },
+  { label:"Şelale", keys:["şelale"] },
+  { label:"Yayla", keys:["yayla"] },
+  { label:"Park / Orman / Bahçe", keys:["park","orman","bahçe","vadi"] },
+  { label:"Şehitlik / Anıt", keys:["şehitlik","anıt"] },
+  { label:"Çarşı / Pazar", keys:["çarşı","pazar"] },
+];
+const categorySelect = document.getElementById('category-select');
+CATEGORIES.forEach(c=>{
+  const opt = document.createElement('option');
+  opt.value = c.label; opt.textContent = c.label;
+  categorySelect.appendChild(opt);
+});
+categorySelect.addEventListener('change', (e)=>{
+  activeCategory = e.target.value;
+  renderGrid();
+});
+function matchesCategory(p){
+  if(!activeCategory) return true;
+  const cat = CATEGORIES.find(c=>c.label === activeCategory);
+  if(!cat) return true;
+  const t = p.type.toLowerCase();
+  return cat.keys.some(k=>t.includes(k));
+}
+
+const districtSelect = document.getElementById('district-select');
+DISTRICTS.forEach(d=>{
+  const opt = document.createElement('option');
+  opt.value = d; opt.textContent = `${d} (${TOTALS[d]})`;
+  districtSelect.appendChild(opt);
+});
+districtSelect.addEventListener('change', (e)=>{
+  activeDistrict = e.target.value;
+  document.querySelectorAll('.chip[data-d]').forEach(c=>c.classList.toggle('active', c.dataset.d === activeDistrict));
+  updateDistrictNote();
+  renderGrid();
+});
+
 const eraColors = { s1:'#DCE2DE', s2:'#C7D3CC', s3:'#9FB8AD', s4:'#2E7D6B', s5:'#C1652B', s6:'#1C2321', nature:'#1F4A3D' };
 const eraGlyph = { s1:'𐰸', s2:'⌘', s3:'⌂', s4:'☾', s5:'✦', s6:'▦', nature:'❧' };
 
 // ==========================================
 // CANLI GÖRSEL ÇEKME (Wikipedia + Wikimedia Commons)
 // ==========================================
-const WIKI_IMG_CACHE_KEY = 'ankaraImgCache_v1';
+const WIKI_IMG_CACHE_KEY = 'ankaraImgCache_v2';
 let wikiImgCache = {};
 try{ wikiImgCache = JSON.parse(localStorage.getItem(WIKI_IMG_CACHE_KEY) || '{}'); }catch(e){ wikiImgCache = {}; }
 function saveWikiImgCache(){ try{ localStorage.setItem(WIKI_IMG_CACHE_KEY, JSON.stringify(wikiImgCache)); }catch(e){} }
@@ -734,7 +829,6 @@ async function fetchPlaceImage(p){
   const name = p.name;
   if(wikiImgCache[name] !== undefined) return wikiImgCache[name];
   let src = null;
-  let generic = false;
   // 1) Türkçe Wikipedia'da aynı isimli sayfanın kapak görseli
   try{
     const r1 = await fetch(`https://tr.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(name)}&prop=pageimages&format=json&pithumbsize=600&origin=*`);
@@ -745,11 +839,8 @@ async function fetchPlaceImage(p){
   }catch(e){}
   // 2) Bulunamazsa Wikimedia Commons'ta tam isimle serbest arama (hâlâ bu yere özel sayılır)
   if(!src) src = await commonsSearch(name + " " + p.district + " Ankara");
-  // 3) Bulunamazsa ilçe + tür ile arama (artık kesin eşleşme garantisi yok — temsili işaretle)
-  if(!src){ src = await commonsSearch(p.district + " " + genericTermFor(p) + " Ankara"); if(src) generic = true; }
-  // 4) Son çare: türe göre genel bir Türkiye görseli (temsili)
-  if(!src){ src = await commonsSearch(genericTermFor(p) + " Türkiye"); if(src) generic = true; }
-  const result = { src, generic };
+  // Temsili/genel görsel araması kaldırıldı — yer bulunamazsa görselsiz kalır
+  const result = { src, generic:false };
   wikiImgCache[name] = result;
   saveWikiImgCache();
   return result;
@@ -835,13 +926,15 @@ function renderGrid(){
   if(activeSpecial === 'favorites'){ list = list.filter(p=>getPlaceState(p.name).favorite); } 
   else if(activeSpecial === 'visited'){ list = list.filter(p=>getPlaceState(p.name).visited); }
   
+  list = list.filter(matchesCategory);
+  
   if(searchQuery.trim() !== '') {
     list = list.filter(p => p.name.toLowerCase().includes(searchQuery) || p.district.toLowerCase().includes(searchQuery) || p.type.toLowerCase().includes(searchQuery));
   }
 
   list.forEach(p=>grid.appendChild(placeCard(p)));
 
-  if(!activeSpecial && searchQuery === ''){
+  if(!activeSpecial && searchQuery === '' && !activeCategory){
     const districtsToFill = activeDistrict === 'Tümü' ? DISTRICTS : [activeDistrict];
     districtsToFill.forEach(d=>{
       const done = PLACES.filter(p=>p.district===d).length;
