@@ -55,13 +55,64 @@
   .thumb .badge.fav{color:var(--red);} .thumb .badge.visited{color:var(--moss);} .thumb .place-type{ font-family:'IBM Plex Mono',monospace;font-size:10px; background:rgba(246,241,228,.88); color:var(--ink); padding:4px 8px; text-transform:uppercase;letter-spacing:.05em; }
   .card-body{padding:14px 14px 16px;} .card-body .district{ font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--bronze); text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px; } .card-body h3{font-size:17px;margin:0 0 4px;line-height:1.25;font-weight:500;} .card-body .era-line{font-size:12px;color:var(--ink-soft);} .card-body .card-rating{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--bronze);font-weight:600;margin-top:6px;}
   .place-card.pending{opacity:.55;cursor:default;} .place-card.pending:hover{transform:none;box-shadow:none;} .place-card.pending .thumb{background:repeating-linear-gradient(45deg,var(--paper-deep),var(--paper-deep) 8px,var(--card) 8px,var(--card) 16px);}
-  .section-note{ font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--ink); line-height:1.75;margin:0 0 22px;padding:16px 20px;border-left:4px solid var(--bronze);background:var(--card); }
+  .section-note{ font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink); line-height:1.6;margin:0 0 22px;padding:12px 16px;border-left:4px solid var(--bronze);background:var(--card); }
+  .district-history-btn{ background:none;border:none;padding:0;margin:0; font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--ink);cursor:pointer;text-align:left; }
+  .district-history-btn:hover{color:var(--red);}
+  .district-history-btn strong{color:var(--bronze);}
   .overlay{ position:fixed;inset:0;background:rgba(34,29,22,.55); display:none;align-items:center;justify-content:center;z-index:100; padding:24px; } .overlay.open{display:flex;}
   .placard{ background:var(--card);max-width:640px;width:100%; max-height:88vh;overflow-y:auto; border:1px solid var(--ink); } .placard .p-image{height:220px;position:relative;border-bottom:1px solid var(--line);overflow:hidden;} .placard .p-image img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;} .placard .p-close{ position:absolute;top:12px;right:12px;z-index:2; width:30px;height:30px;background:var(--ink);color:var(--paper); display:flex;align-items:center;justify-content:center; cursor:pointer;font-size:16px;border-radius:50%; }
   .placard .p-body{padding:24px 26px 28px;} .placard .p-district{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--bronze);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;} .placard h2{font-size:26px;margin:0 0 14px;font-weight:600;} .placard .p-facts{ display:flex;gap:22px;flex-wrap:wrap; padding:14px 0;margin-bottom:16px; border-top:1px solid var(--line);border-bottom:1px solid var(--line); } .placard .fact{flex:1; min-width:120px;} .placard .fact .k{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;} .placard .fact .v{font-size:13px;font-weight:500;}
   .placard .p-story{font-size:14.5px;line-height:1.75;color:var(--ink);margin-bottom:20px;} .placard .p-map-link{ display:flex;align-items:center;gap:8px; padding:14px 16px;background:var(--paper-deep); border:1px solid var(--line); font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink); text-decoration:none; transition:background .15s,border-color .15s; } .placard .p-map-link:hover{background:var(--bronze);border-color:var(--bronze);color:var(--paper);}
   .p-controls{display:flex;gap:8px;margin:16px 0 14px;flex-wrap:wrap;} .ctrl-btn{ font-family:'IBM Plex Mono',monospace;font-size:12px; padding:9px 14px;border:1px solid var(--line);border-radius:2px; background:var(--paper-deep);cursor:pointer;color:var(--ink); transition:background .15s,color .15s,border-color .15s; } .ctrl-btn.active.fav{background:var(--red);border-color:var(--red);color:var(--paper);} .ctrl-btn.active.visited{background:var(--moss);border-color:var(--moss);color:var(--paper);}
   .p-rating{display:flex;align-items:center;gap:10px;margin-bottom:22px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);} .stars-wrap{position:relative;font-size:20px;line-height:1;letter-spacing:2px;white-space:nowrap;} .stars-empty{color:var(--line);} .stars-filled{position:absolute;top:0;left:0;overflow:hidden;color:var(--bronze);white-space:nowrap;} .p-rating input[type=range]{accent-color:var(--bronze);width:110px;} .p-rating .rating-val{font-weight:600;color:var(--ink);}
+  .nav-mini-btn{ background:var(--paper-deep); border:1px solid var(--line); padding:6px 10px; font-family:'IBM Plex Mono', monospace; font-size:11px; cursor:pointer; border-radius:3px; color:var(--ink); transition:0.2s; }
+  .nav-mini-btn:hover{border-color:var(--bronze);}
+
+  /* Onboarding */
+  .onboard-overlay{ position:fixed;inset:0;z-index:210; background:rgba(28,35,33,.72); display:none;align-items:center;justify-content:center;padding:20px; }
+  .onboard-overlay.open{display:flex;}
+  .onboard-box{ background:var(--card);max-width:560px;width:100%;max-height:85vh;overflow-y:auto;border:1px solid var(--ink);padding:24px; }
+  .onboard-box h2{margin:0 0 8px;font-size:22px;}
+  .onboard-box p{color:var(--ink-soft);font-size:13.5px;margin:0 0 16px;}
+  .onboard-list{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto;margin-bottom:16px;border:1px solid var(--line);padding:8px;}
+  .onboard-item{display:flex;align-items:center;gap:10px;padding:7px 8px;cursor:pointer;font-size:13px;}
+  .onboard-item:hover{background:var(--paper-deep);}
+  .onboard-item input{accent-color:var(--bronze);}
+  .onboard-actions{display:flex;justify-content:space-between;gap:10px;}
+
+  /* Badge toast */
+  .badge-toast{ position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:300; background:var(--ink);color:var(--paper); padding:14px 20px;border-radius:4px; font-family:'IBM Plex Mono',monospace;font-size:13px; display:flex;align-items:center;gap:10px; opacity:0;transition:opacity .3s,transform .3s; pointer-events:none; }
+  .badge-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .badge-toast .icon{font-size:22px;}
+
+  /* Passport & Badges pages */
+  .passport-page, .badges-page{padding:8px 2px;}
+  .stamp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;margin-top:16px;}
+  .stamp{ border:2px dashed var(--bronze); border-radius:50%; aspect-ratio:1; display:flex;flex-direction:column;align-items:center;justify-content:center; text-align:center;padding:10px; transform:rotate(-3deg); background:var(--paper-deep); }
+  .stamp:nth-child(even){transform:rotate(2deg);}
+  .stamp .stamp-glyph{font-size:22px;color:var(--bronze);}
+  .stamp .stamp-name{font-size:10px;font-weight:600;margin-top:4px;line-height:1.2;}
+  .stamp .stamp-date{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--ink-soft);margin-top:3px;}
+  .stamp.gold{border-color:var(--red);}
+  .badge-card{ display:flex;align-items:center;gap:14px; padding:14px;border:1px solid var(--line);background:var(--card);margin-bottom:10px; }
+  .badge-card.locked{opacity:.4;}
+  .badge-card .badge-icon{font-size:28px;width:44px;text-align:center;}
+  .badge-card .badge-name{font-weight:600;font-size:14px;}
+  .badge-card .badge-desc{font-size:12px;color:var(--ink-soft);}
+
+  /* Related places */
+  .related-places{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);}
+  .related-places .rp-title{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:10px;}
+  .rp-item{display:flex;align-items:center;gap:10px;padding:6px 4px;cursor:pointer;border-radius:3px;}
+  .rp-item:hover{background:var(--paper-deep);}
+  .rp-thumb{width:44px;height:44px;border-radius:3px;flex:0 0 auto;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .rp-name{font-size:13px;}
+
+  /* GPS/self visit buttons */
+  .visit-btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .badge.visited-gps{color:var(--red) !important;}
+  .badge.visited-self{color:var(--ink-soft) !important;}
+
   .auth-gate{ position:fixed;inset:0;z-index:200; background:var(--paper); display:flex;align-items:center;justify-content:center;padding:24px; }
   .auth-gate-box{ text-align:center;max-width:380px; }
   .auth-gate-box p{font-size:14px;color:var(--ink-soft);line-height:1.6;}
@@ -87,6 +138,8 @@
     <button id="auth-btn" style="background:var(--paper-deep); border:1px solid var(--bronze); padding:6px 12px; font-family:'IBM Plex Mono', monospace; font-size:11px; cursor:pointer; border-radius:3px; color:var(--ink); display:flex; align-items:center; gap:6px; transition:0.2s;">
       Google ile Giriş Yap
     </button>
+    <button id="badges-nav-btn" class="nav-mini-btn">🏅 Rozetlerim</button>
+    <button id="passport-nav-btn" class="nav-mini-btn">📖 Pasaportum</button>
     <div class="progress-container">
       <div class="progress-text" id="progress-text">Ankara'nın <strong>%0</strong>'ını keşfettin.<br>0 / 379 durak</div>
       <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar-fill"></div></div>
@@ -112,7 +165,7 @@
 
 <div class="toolbar">
   <div class="search-bar">
-    <input type="text" id="search-input" class="search-input" placeholder="Mekan, müze, ilçe veya dönem ara...">
+    <input type="text" id="search-input" class="search-input" placeholder="Mekan veya yapı ara...">
     <select id="category-select" class="search-input category-select">
       <option value="">Tüm türler</option>
     </select>
@@ -127,6 +180,20 @@
   <div class="section-note" id="mode-note">Tüm ilçeler listeleniyor.</div>
   <div class="grid" id="grid"></div>
 </main>
+
+<div class="onboard-overlay" id="onboard-overlay">
+  <div class="onboard-box">
+    <h2>Ankara'da daha önce nereleri gördün?</h2>
+    <p>Aşağıdaki listeden hızlıca seçerek profiline ekle — sıfırdan başlamana gerek yok!</p>
+    <div class="onboard-list" id="onboard-list"></div>
+    <div class="onboard-actions">
+      <button class="ctrl-btn" id="onboard-skip">Atla</button>
+      <button class="ctrl-btn fav active" id="onboard-confirm">Seçilenleri Ekle</button>
+    </div>
+  </div>
+</div>
+
+<div class="badge-toast" id="badge-toast"><span class="icon">🏅</span><span id="badge-toast-text"></span></div>
 
 <div class="overlay" id="overlay">
   <div class="placard" id="placard"></div>
@@ -150,11 +217,11 @@ const TOTALS = {
 
 const DISTRICT_INFOS = {
   "Tümü": "Ankara'nın 25 ilçesindeki tarihi katmanları; Paleolitik çağlardan Hitit höyüklerine, Roma hamamlarından Selçuklu kervansaraylarına ve Cumhuriyet anıtlarına kadar tüm detaylarıyla keşfet.",
-  "Akyurt": "Eski çağlarda önemli bir ticaret rotası olan Akyurt, günümüzde sanayisi ve tarihi dokusuyla dikkat çekmektedir. MÖ 3000'lere tarihlenen Balıkhisar Höyüğü, Eski Tunç Çağı, Hitit ve Frig uygarlıklarının izlerini barındırarak Ankara'nın en eski dönemlerine ışık tutar. Roma İmparatorluğu döneminde stratejik önemini koruyan ilçe, Kızıleşik Tümülüsü gibi anıtsal mezarlarla geçmişin görkemini yansıtır. Doğa ile iç içe geçmiş Kızık Göleti, ilçenin nefes alan yüzünü oluştururken, Şehitler Anıtı bölgenin yakın tarihine saygı duruşunda bulunur. Bugün Akyurt, hızla gelişen yapısıyla başkentin cazibe merkezlerinden biridir.",
-  "Altındağ": "Ankara'nın tarihi ve kültürel kalbi olan Altındağ, kentin kurulduğu ilk yer olan Ankara Kalesi'ni kucaklamaktadır. Galatların anısı olan Augustus Tapınağı ve Roma'nın ihtişamını yansıtan Roma Hamamı ile antik çağların eşsiz izlerini taşır. Selçuklu'nun ahşap zarafetini sunan Arslanhane Camii ve Osmanlı'nın ticari hayatını canlandıran tarihi hanlarla zengin bir mimari mozaik oluşturur. Aynı zamanda ilk TBMM binası ile Türkiye Cumhuriyeti'nin doğduğu, bağımsızlık ateşinin yakıldığı kutsal topraklardır. Hamamönü sokaklarında gezinirken Cumhuriyetin ilk yıllarının ve İstiklal Marşı'nın yazıldığı o manevi ruhu hissetmek mümkündür.",
-  "Ayaş": "Tarihi İpek Yolu üzerinde yer alan Ayaş, şifalı kaplıcaları ve tarihi konaklarıyla ünlü, huzur dolu bir İç Anadolu yerleşimidir. İlçe, Selçuklu ve erken Osmanlı sivil mimarisinin en güzel ahşap ve kerpiç ev örneklerini vadisinde saklayarak ziyaretçilerini geçmişe götürür. Bayramiyye tarikatının önemli isimlerinden Bünyamin Ayaşi gibi mutasavvıflara ev sahipliği yapmasıyla, köklü ve manevi bir derinliğe sahiptir. Geleneksel tarımı ve meşhur dutu ile yöresel lezzetlerin de merkezidir. Vadileri ve doğal göletleriyle Ayaş, hem doğa hem de kültür turizmini bir arada sunan eşsiz bir duraktır.",
+  "Akyurt": "Akyurt'un bugünkü ismi aslında oldukça yeni: 1961'de İçişleri Bakanlığı kararıyla verilen bu ad, ilçenin eski adı olan 'Ravlı'nın hikâyesinden türetilmiş. Ravlı, Reşidüddin'in tarihî çizelgelerinde 'Alka-Bölük' ya da 'Alka Ravlı' olarak geçen bir Oğuz boyunun adıydı; zamanla 'Ravlı' biçiminde söylenişi yerleşen bu kelimenin Oğuz Türkçesinde 'avlu, evli' anlamına geldiği düşünülüyor. 1961'de yeni bir isim aranırken boyun adındaki 'Alka' kısmından 'Ak', Ravlı'nın taşıdığı anlamdan da 'yurt' alınarak 'Akyurt' ismi oluşturulmuş — yani ilçe adı, kayıp bir Oğuz boyunun hâlâ yaşayan son izi. Bölge, Ankara'dan Karadeniz'e (Çankırı/Gangra) uzanan antik Kral Yolu güzergâhı üzerinde bulunduğu için Roma döneminde büyük önem taşımış; Elecik Mahallesi'nde İmparator Nerva ve oğlu Traianus adına, Büğdüz ve Balıkhisar'da İmparator Hadrianus adına, ilçe merkezinde ise Septimius Severus ve Caracalla adına dikilmiş sütun ve yazıtlar bulunmuş. Anadolu Selçuklu Devleti'nin 1308'de dağılmasının ardından bölge, 1335-1390 arasında Ankara'dan Erzurum'a uzanan geniş bir alanı yöneten Eretna Beyliği'nin, ardından kısa süreliğine Kadı Burhaneddin'in eline geçmiş. Timur tehlikesi karşısında Osmanlı'ya bağlanan Akyurt halkı, bu dönemde Osmanlı Padişahı Yıldırım Bayezid'e otağını kurması için toprak vererek ev sahipliği yapmış. 1928'de 21 köyün bağlı olduğu bucak merkezi hâline gelen Ravlı, 1971'de belediye teşkilatı kurup 9 Mayıs 1990'da ilçe statüsüne kavuşmuştur.",
+  "Altındağ": "İlçenin adı hakkında birkaç rivayet var: en yaygını, Roma ve Osmanlı dönemlerinde önemli kişilerin bu tepelere defnedilmesi nedeniyle bölgenin 'değerli' görülüp 'Altındağ' adını aldığı yönünde. Altındağ, aslında Ankara'nın doğduğu topraktır — kentin en eski yerleşim çekirdeği olan Ankara Kalesi'nin bulunduğu tepe burada yükselir ve şehrin bilinen tarihi Firigyalılar, Galatlar ve Roma İmparatorluğu'na, oradan da Selçuklu ve Osmanlı'ya uzanan katmanlar hâlinde bu ilçe sınırları içinde saklıdır. Roma İmparatoru Augustus'un MÖ 25'te Galatya'yı ilhak etmesinin ardından kentin adı 'Ankyra' olarak Roma eyalet başkentine dönüşmüş, İmparator Augustus'un siyasi vasiyetinin kazılı olduğu tapınak da bugün hâlâ Altındağ sınırlarında ayakta duruyor. Bizans döneminde Arap akınlarına karşı güçlendirilen iç kale, Selçuklu ve Osmanlı fetihlerinin ardından da önemini korumuş; 1071 Malazgirt sonrası bölgeye giren Türkler, 1073'te Ankara'yı ele geçirmiş. Cumhuriyet'in ilanından önce, 23 Nisan 1920'de Türkiye Büyük Millet Meclisi'nin ilk kez toplandığı bina da bugünkü Altındağ sınırları içindedir — yani Türkiye Cumhuriyeti'nin nüvesi, Ankara'nın en eski katmanlarının üzerine kurulmuştur.",
+  "Ayaş": "Ayaş, öz Türkçe bir isim olup 'parlak, aydınlık gece' anlamına geliyor; aynı zamanda Oğuz Türklerinin Bozok Kolu, Gün Han Oğulları, Bayat Boyu, Barak Obası'na bağlı bir Türkmen oymağının da adı. Bölgenin bilinen en eski adları 'Mnizos' ve 'Prasmon'; kuruluşunun da Mnizos adıyla gerçekleştiği düşünülüyor. Hititler, Frigler, Galatlar, Romalılar ve Bizanslılar sırasıyla bu topraklarda hüküm sürmüş; Ayaş, Roma'nın İstanbul'dan başlayıp Tarsus üzerinden Kudüs'e uzanan tarihî 'Hac Yolu' (Via Tauri) üzerinde bulunduğu için hem Roma ordularının hem Bizans döneminde Sasani ordularının, hem de İstanbul'un fethi için Ankara üzerinden geçen İslam (Emevi-Abbasi) ordularının güzergâhı olmuş. 1071 Malazgirt Zaferi'nin ardından Selçuklu ordusu 1073'te, o dönemin beş büyük piskoposluk merkezinden biri olan Minozos'u fethedip Ayaş oymağını buraya yerleştirmiş — bölgenin bugünkü adını almasının kökeni de bu. Evliya Çelebi'nin Seyahatnamesi'nden, o dönemde Ayaş'ta bininin üzerinde oba-çadır bulunduğu, nüfusunun bugünkünden bile yoğun olduğu öğreniliyor. Anadolu Selçuklu Devleti zayıflayınca bölgeye bir süre Germiyanoğulları ve Candaroğulları hâkim olmuş, 1354'te Orhan Gazi'nin oğlu Gazi Süleyman Paşa tarafından Osmanlı topraklarına katılmıştır.",
   "Bala": "İç Anadolu bozkırının kalbinde, Kızılırmak havzasındaki verimli topraklarda kurulan Bala, Galat ve Roma dönemlerinin izlerini taşır. Selçuklu döneminde inşa edilen tarihi Kesikköprü, yüzyıllar boyunca kervanlar ve ordular için hayati bir geçiş noktası olmuştur. Bugün Beynam Ormanları ile bozkırın ortasında yeşil bir nefes sunarak doğaseverlerin ilgisini çeker. Baraj gölleri ve mesire alanlarıyla ilçenin çehresi modern dönemde doğa turizmine açılmıştır. Köklü geçmişi ve bozulmamış bozkır kültürüyle Bala, Ankara'nın güneydoğusundaki gizli hazinesidir.",
-  "Beypazarı": "Tarihi İpek Yolu üzerinde yer alan Beypazarı; bozulmamış ahşap Osmanlı konakları, geleneksel çarşıları ve asırlık telkari gümüş işçiliğiyle yaşayan bir açık hava müzesidir. İnözü Vadisi'ndeki sarp kayalıklara oyulmuş mezarlar, erken Hristiyanlık ve Bizans döneminin mistik izlerini saklar. Yüzyıllardır süregelen zanaat kültürü, ilçenin sokaklarında çekiç sesleriyle yankılanmaya devam etmektedir. Sivil mimarinin en seçkin örneklerini barındıran konakları, yöresel lezzetleri ve Yaşayan Müze gibi kültürel alanlarıyla başkentin turizm vitrinidir. Doğal ve tarihi güzelliklerin kusursuzca harmanlandığı bir kültür merkezidir.",
+  "Beypazarı": "Beypazarı da tıpkı komşuları gibi Hitit, Frig, Galat, Roma, Bizans, Selçuklu ve Osmanlı egemenliklerinin izlerini taşıyor. Rivayete göre, MS 491-518 yılları arasında hüküm süren Bizans İmparatoru Anastasios, dönemin bir piskoposluk merkezi olan kenti (o zamanki adıyla Lagania) ziyaret edip şehrin adını 'Lagania-Anastasiopolis' olarak değiştirmiş. Bölgenin ilk fatihinin Kütahya beylerinden Germiyanoğlu Yakup Şah'ın veziri Dinar Hezar olduğu, bu yüzden şehre bir dönem 'Germiyan Hezar' da dendiği aktarılıyor. Bugünkü ismi ise çok daha somut bir kökene dayanıyor: Osmanlı'nın toprak rejiminde tımarlı sipahi merkezlerinden biri olan kentte ticari ve ekonomik hayat o denli yoğunlaşmış ki halk arasında 'Beğ Bazarı' (Bey'in Pazarı) olarak anılmaya başlanmış — zamanla bu isim 'Beypazarı'na dönüşmüş. İpek Yolu üzerindeki bu konumu, kentin yüzyıllar boyunca canlı bir ticaret ve zanaat merkezi olarak kalmasını sağlamış; bugün hâlâ ayakta duran cumbalı Osmanlı evleri ve telkâri gümüş işçiliği geleneği, bu ticari geçmişin doğrudan mirasıdır.",
   "Çamlıdere": "Uçsuz bucaksız sarıçam ve karaçam ormanları, serin yaylaları ve devasa baraj gölüyle Çamlıdere, başkentin en temiz oksijen deposudur. Selçuklu dönemi mutasavvıflarından Şeyh Ali Semerkandi'nin türbesine ev sahipliği yaparak inanç turizminde köklü bir manevi miras sunar. İlçe, son yıllarda ardı ardına açılan Doğa ve Hayvan Müzesi, Terazi Müzesi gibi özgün tematik müzeleriyle dikkat çekmektedir. Aluçdağı Tabiat Parkı ve yaylaları, doğa sporları ve kampçılık için eşsiz imkanlar barındırır. Orman köylerindeki geleneksel ahşap mimari, ilçenin otantik dokusunu tamamlamaktadır.",
   "Çankaya": "Modern Türkiye Cumhuriyeti'nin yönetim merkezi olan Çankaya, Anıtkabir'in manevi huzurunu ve Cumhuriyet dönemi erken mimarisinin en seçkin örneklerini barındırır. Mustafa Kemal Atatürk'ün Çankaya Köşkü'nde attığı temeller üzerinde yükselen ilçe, bugün Türkiye'nin diplomatik, kültürel ve sosyal kalbidir. Atakule gibi sembol yapıları, Kuğulu Park ve Seğmenler gibi yemyeşil rekreasyon alanlarıyla modern kent yaşamının standartlarını belirler. Çok sayıda müze, sanat galerisi ve üniversiteye ev sahipliği yaparak başkentin entelektüel yüzünü yansıtır. Tarih ve modernitenin kusursuz bir dengeyle buluştuğu eşsiz bir merkezdir.",
   "Çubuk": "1402'deki tarihi Ankara Savaşı'nın ana muharebe alanı olan Çubuk Ovası, bu devasa savaşın izlerini taşıyan köyleriyle efsaneleşmiş bir coğrafyadır. Volkanik oluşumlu Karagöl gibi krater gölleri, sık çam ormanları ve Cumhuriyetin ilk yıllarında inşa edilen tarihi barajlarıyla doğa turizminin kuzeydeki tartışmasız merkezidir. Yaylaları, şelaleleri ve temiz su kaynaklarıyla yaban hayatı açısından son derece zengin bir ekosistem sunar. Yöresel lezzetleri ve tarımsal kültürüyle öne çıkan ilçe, doğa yürüyüşçülerinin ve kampçıların vazgeçilmez rotasıdır. Hem tarihi hem ekolojik katmanlarıyla Ankara'nın nefes borusudur.",
@@ -162,17 +229,17 @@ const DISTRICT_INFOS = {
   "Etimesgut": "Gazi Mustafa Kemal Atatürk'ün örnek bir modern nahiye olarak bizzat planladığı Etimesgut, adını tarihi Selçuklu beylerinden Ahi Mesud'dan alır. Günümüzde Göksu Parkı gibi devasa rekreasyon alanları ve havacılık müzeleriyle başkentin en dinamik ve modern yüzlerinden biridir. Cumhuriyet tarihinin ilk demiryolu binalarından biri olan Gazi İstasyonu bu ilçe sınırlarında yer alarak ulaşım tarihine tanıklık eder. Eryaman gibi devasa uydu kentlerin yanı sıra eski köy dokusunu koruyan bölgeleriyle farklı yaşam tarzlarını barındırır. Türk Tarih Müzesi gibi anıtsal projelerle kültürel derinliğini her geçen gün artırmaktadır.",
   "Evren": "Ankara'nın en güney ucunda yer alan ve nüfus olarak en küçük ilçesi olan Evren, devasa Hirfanlı Baraj Gölü'nün kıyısında adeta gizli bir sahil kasabasıdır. Baraj sularının altında kalan eski yerleşimlerin (Çıkınağıl) tarihi hüznünü taşısa da, bugün kumsalları ve balıkçı tekneleriyle İç Anadolu'nun ortasında deniz havası sunar. Semizbağı Höyüğü gibi alanlar, bölgenin Tunç Çağı'na kadar uzanan köklü yerleşim izlerini gözler önüne serer. Doğa ile iç içe, sessiz ve sakin bir yaşamın sürdüğü ilçe, su sporları ve olta balıkçılığı için idealdir. Doğal güzellikleri ve bozkırın ortasındaki maviliğiyle benzersiz bir kaçış noktasıdır.",
   "Gölbaşı": "Mogan ve Eymir göllerinin hayat verdiği Gölbaşı, su ve kuş seslerinin birbirine karıştığı, Ankara'nın en önemli sulak alan ekosistemidir. Tulumtaş Mağarası'ndaki prehistorik buluntulardan, Bezirhane Kalesi'ndeki Roma izlerine ve Boyalık Nekropolü'ne kadar doğa ve tarihin kusursuz bir birleşimini sergiler. Göl kenarındaki yürüyüş yolları, bisiklet parkurları ve geniş rekreasyon alanlarıyla kentlilerin hafta sonu rotalarının başında gelir. Çağdaş sanat müzeleri ve modern mimari yapılarıyla kültürel zenginliğini artırırken doğal SİT alanlarını titizlikle korur. Gölbaşı, bozkırın ortasında yeşilin ve mavinin buluştuğu yaşam kaynağıdır.",
-  "Güdül": "Ankara'nın ilk ve tek 'Sakin Şehri' (Cittaslow) unvanlı Güdül, Mnizos Antik Kenti ve Kirmir Çayı kenarına oyulmuş İnönü Mağaraları ile ilk çağlardan bugüne uzanan otantik bir sığınaktır. Ahşap konakları, dar sokakları ve bozulmamış doğasıyla zamana direnen ilçe, sivil mimarinin zarif örneklerini sergiler. Salihler kaya yazıtları ile Orta Asya'dan Anadolu'ya uzanan tarihi şifreleri barındırır. Yemyeşil vadileri, göletleri ve mesire alanlarıyla doğa fotoğrafçıları ve kampçılar için gizli bir cennettir. Geleneksel yaşam tarzını ve tarımsal kültürünü koruyan Güdül, huzur dolu bir sığınaktır.",
-  "Haymana": "Dünyaca ünlü şifalı termal sularıyla bilinen Haymana, binlerce yıllık efsanelerin ve savaşların coğrafyasıdır. Hititlerin devasa kaya kabartmalarına sahip Gavur Kalesi'nden başlayıp, Kurtuluş Savaşı'nın kaderini değiştiren Mangal Dağı ve Çal Dağı'ndaki 'Son Kale' direnişine kadar uzanan büyük bir tarihi yükü omuzlarında taşır. İkiztepeler ve Evliyafakı şehitlikleri ile vatan savunmasının en kritik anlarına şahitlik etmiştir. Roma döneminden kalma kaya mezarları, antik sarnıçlar ve yeraltı mağaralarıyla tam bir arkeoloji cennetidir. Hem sağlık hem de tarih turizmi açısından Anadolu'nun en zengin ilçelerinden biridir.",
+  "Güdül": "Güdül'ün kuruluşu, 1071 Malazgirt Zaferi'nin hemen ardından bölgenin Anadolu Selçuklu egemenliğine girmesiyle başlıyor. İlçenin adı, o dönemde bölgeyi yöneten Ankara Emiri Güdül Bey'den geliyor — yaklaşık 850 yıllık bu isim, Ankara ilçeleri arasında doğrudan bir Selçuklu beyinin adını taşıyan nadir örneklerden biri. Kirmir Çayı vadisine kurulan yerleşim, Hititlerden Bizans'a uzanan yamaç mağaraları ve Salihler köyündeki kaya yazıtlarının gösterdiği üzere çok daha eski çağlardan beri iskân edilmiş olsa da, il Türk idari kimliğini bu Selçuklu beyinden almış. Osmanlı ve Cumhuriyet dönemleri boyunca sakin, kırsal bir yörük ve tarım bölgesi olarak kalan Güdül, günümüzde Ankara'nın ilk ve tek 'Cittaslow' (Sakin Şehir) unvanlı ilçesi olarak, bu köklü ve durgun karakterini bir marka hâline getirmiş durumda.",
+  "Haymana": "Haymana adının kökeni konusunda birkaç rivayet var: biri, adını Osmanlı'nın kurucusu Osman Gazi'nin büyükannesi (bazı kaynaklara göre annesi) Hayme Ana'dan aldığını, onun bölgede vefat edip buraya defnedildiğini söylüyor; bir diğeri Kaşgarlı Mahmud'un Divan-ı Lugati't-Türk'ünde geçen 'mera, otlak, yeşillik' anlamındaki 'haymana' sözcüğüne, üçüncüsü ise Arapça 'çadır' anlamına gelen 'hayme' kökünden türeyip konar-göçer aşiretlerin bölgesi anlamına gelen 'Haymaneteyn' (iki Haymane) adından geldiğine dayanıyor — çünkü Osmanlı döneminde bölgede 'Büyük' ve 'Küçük' Haymana adıyla iki ayrı kaza vardı. Bölge, yüzeydeki höyük ve kaya kalıntılarının gösterdiği üzere Hitit ve Frig dönemlerinden beri iskân edilmiş; Roma-Bizans döneminde ise imparatorluk ordularının kışlık konaklama alanı olarak stratejik önem kazanmış, hatta bazı araştırmacılar antik Heliopolis kentinin kalıntılarının bugünkü Sındıran (Yenice) civarında aranması gerektiğini öne sürmüştür. 1071 Malazgirt sonrası bölgeye giren Selçuklu hâkimiyeti 1101'de bir süreliğine Haçlı kuvvetlerince kesintiye uğramış, 1127'de yeniden Türklerin eline geçmiş, 1211 tarihli Kutluhan Camii bu dönemden kalan en somut izlerden biridir. Ancak Haymana'nın Türk tarihindeki en köklü yeri, Osmanlı Beyliği'nin Söğüt'e yerleşmeden önce Anadolu'daki ilk konak yerlerinden birinin, bugün ilçe sınırlarına yakın Karacadağ eteklerindeki Altılar köyü ve çevresi olmasıdır — Ertuğrul Gazi'nin ailesinin ilk durakladığı topraklardan biri burasıdır. 1354'te Orhan Gazi'nin oğlu Süleyman Paşa'yla Osmanlı topraklarına katılan Haymana, 1402 Ankara Savaşı'na dek Osmanlı yönetiminde kalmış; bugünkü ilçe merkezindeki hükûmet konağının 1882'de tamamlanmasıyla birlikte yerleşimin kuruluş tarihi 1880 olarak kabul edilir. Yüzyıllar sonra, 1921'de Sakarya Meydan Muharebesi'nin büyük bölümü yine bu topraklarda, Mangal Dağı ve Çal Dağı'nın eteklerinde yaşanmış, Haymana bir kez daha Anadolu'nun kaderinin belirlendiği bir sahne olmuştur.",
   "Kahramankazan": "Akıncı Ovası üzerine kurulu Kahramankazan, adını 15 Temmuz'daki kahramanca sivil direnişten alarak yakın tarihimize damga vurmuştur. Dünyaca ünlü 'Bitik Vazosu'nun bulunduğu Bitik Höyük ile antik çağlara, devasa Çalta fosil yatakları ile on milyonlarca yıl öncesine tanıklık eder. Satı Kadın Müzesi ile Cumhuriyet kadınlarının siyasetteki rolünü onurlandıran köklü bir ilçedir. Kurtboğazı Barajı ve Kent Ormanı gibi alanlarıyla doğa turizmine, aynı zamanda tarım ve sanayiye yön veren dinamik bir yapıya sahiptir. Geçmişten geleceğe uzanan geniş bir kültürel yelpaze sunar.",
   "Kalecik": "Kızılırmak'ın bereket kattığı Kalecik; dünyaca meşhur bağları, sarp kayalıklar üzerinde yükselen tarihi kalesi ve Osmanlı mimarisini yansıtan ahşap konaklarıyla Ankara'nın şirin, tarihi ve tarımsal açıdan değerli bir köşesidir. Hititlerden Osmanlı'ya kadar önemli bir askeri gözetleme üssü ve ticaret durağı olmuştur. Karahan ve Şükrü Ağa gibi tarihi konaklar ile Davud Dede gibi manevi türbeler, ilçenin kültürel zenginliğini yansıtır. Tarihi Kızılırmak köprüsü, yüzyılların ulaşım mirasını bugüne taşır. Doğal güzellikleri, bağ bozumu kültürü ve tarihi sokaklarıyla Kalecik, adeta zamanın durduğu bir yerleşimdir.",
   "Keçiören": "Ankara'nın nüfus olarak en büyük ilçelerinden biri olan Keçiören; Cumhuriyet döneminin ilk sayfalarına tanıklık etmiş Ziraat Mektebi gibi tarihi yapıları barındırır. Şelalesi, teleferiği, Estergon Kalesi replikası ve devasa botanik parklarıyla modern kent yaşamının öne çıkan rekreasyon merkezlerindendir. Etnografya müzeleri ve Mahalle Konakları ile geleneksel kültürü modern şehir hayatına entegre etmeyi başarmıştır. Atatürk'ün Ankara'ya gelişinde ilk karargah olarak kullandığı bu bölge, Milli Mücadele'nin planlandığı manevi bir değere sahiptir. Bugün yoğun yerleşim alanlarıyla başkentin en canlı ve hareketli ilçesidir.",
   "Kızılcahamam": "Yemyeşil devasa çam ormanları, Soğuksu Milli Parkı, şifalı termal suları, fosil ormanları ve sarp peribacalarıyla Kızılcahamam, başkentin en önemli doğal oksijen deposudur. Alicin Kültürel Jeositi gibi tarihi kanyonları ve Abacı Peribacaları ile jeoturizm açısından adeta bir açık hava laboratuvarıdır. Kara akbabaların yuva yaptığı sarp kayalıkları ve yaban hayatı zenginliği ile doğa fotoğrafçılarının vazgeçilmez rotasıdır. Oruç Gazi ve Kırmızı Ebe gibi Anadolu'nun Türkleşmesinde rol alan manevi şahsiyetlerin türbelerine ev sahipliği yapar. Hem şifa arayanların hem de macera tutkunlarının buluşma noktasıdır.",
   "Mamak": "Başkentin doğu kapısı Mamak; Hüseyin Gazi Dağı'nın eteklerinde yer alarak hem efsanelere hem de Cumhuriyet'in gelişimine sahne olmuştur. Cumhuriyet döneminin ilk müzik öğretmen okulundan, bugünün modern bilim merkezlerine ve devasa millet bahçelerine uzanan, gecekondulardan modern kente kentsel dönüşümün en belirgin serüvenidir. Ali Kuşçu Gökbilim Merkezi gibi çağdaş eğitim alanları ile ilçenin çehresi tamamen değişmiştir. Mavi Göl (Bayındır Barajı) ve tarihi çınaraltı kıraathaneleri ile sosyal yaşamın canlı olduğu bir alandır. Çok kültürlü yapısı ve hızla değişen silüetiyle Mamak, kentin parlayan yıldızıdır.",
-  "Nallıhan": "Tarihi İpek Yolu'nun vazgeçilmez durağı Nallıhan; Kız Tepesi'nin renkli ve büyüleyici jeolojik yapısı, Juliopolis Antik Kenti'nin sular altındaki gizemi ve Kuş Cenneti ile yaban hayatı ve tarih tutkunlarının rotasıdır. Tapduk Emre ve Bacım Sultan gibi erenlerin türbelerini barındırarak tasavvuf kültürünün köklü bir merkezi konumundadır. Uyuz Suyu Şelalesi ve devasa baraj gölleriyle ekolojik çeşitliliği en yüksek ilçelerin başında gelir. Yüzyıllardır süregelen iğne oyası el sanatları, ilçenin kültürel kimliğinin ayrılmaz bir parçasıdır. Nallıhan, bozulmamış doğası ve anıt ağaçlarıyla Ankara'nın batıdaki doğal sınırıdır.",
+  "Nallıhan": "Osmanlı döneminde 'Karahisar-ı Naallu' adıyla kayıtlara geçen Nallıhan'ın bugünkü isminin kökeni konusunda iki rivayet var. İlki, bölgeden geçen 'Nallı Suyu'na dayanıyor. Daha yaygın olan ikinci rivayet ise halk hikâyesine bağlı: Efsaneye göre Köroğlu, buradaki bir handa konakladığında atının nalı düşmüş; bu nal han kapısına asılmış ve zamanla halk arasında 'nalı olan han' tabiri kullanılır olmuş — işte 'Nallıhan' adı buradan geliyor. İpek Yolu'nun İstanbul-Bağdat hattı üzerindeki konumu, ilçeyi yüzyıllar boyunca canlı bir kervan ve ticaret durağı yapmış; 1595'te Vezir Nasuh Paşa'nın inşa ettirdiği Kocahan ve karşısındaki cami, bu ticari geçmişin en somut kalıntılarından. Sakarya Nehri vadisindeki konumu, Cumhuriyet döneminde de bölgeyi Türkiye'nin ilk büyük hidroelektrik enerji yatırımlarından Sarıyar Barajı'na (1956) ev sahipliği yapacak şekilde öne çıkarmıştır.",
   "Polatlı": "Frigya'nın başkenti Gordion'da Kral Midas'ın mirasını, antik tümülüsleri ve devasa mozaikleri taşıyan Polatlı, dünya tarihinin kalbinin attığı topraklardır. Aynı zamanda Sakarya Meydan Muharebesi'nin kazanıldığı, Duatepe ve Kartaltepe gibi kutsal şehitliklerde Cumhuriyetin bağımsızlık ateşinin yandığı yerdir. Malıköy Tren İstasyonu gibi tarihi alanlar, Milli Mücadele'nin lojistik hafızasını günümüze taşır. Geniş tarım arazileri ve bilim merkezleriyle geçmiş ile geleceği harmanlayan devasa bir ilçedir. Tarihi derinliği ve stratejik konumuyla Polatlı, kentin hem antik hem de yakın tarihindeki en güçlü kalesidir.",
   "Pursaklar": "Ankara'nın hızla gelişen kuzey yıldızı Pursaklar; modern parkları, kültürel tesisleri, endemik kedi koruma evleri ve Sirkeli Höyüğü'ndeki tarihi dokusuyla geleneği ve yeniliği başarıyla harmanlar. Sirkeli'de ortaya çıkarılan Hitit kralı Muvattalli'ye ait kaya kabartması, ilçenin binlerce yıllık geçmişini kanıtlar. Saray Kent Ormanı ve devasa Millet Bahçesi ile bölge halkına geniş yeşil alanlar sunar. Geleneksel Çarşamba pazarı ve mahalle konaklarıyla kent kültürünü yaşatmaya devam etmektedir. Bugün Pursaklar, modern konut projeleri ve artan nüfusuyla başkentin yeni cazibe merkezlerinden biridir.",
-  "Sincan": "Lale devrinin zarafetini ve çiçek kültürünü simgeleyen Sincan; Masal Adası, Harikalar Diyarı gibi devasa rekreasyon alanlarıyla kentin batıdaki eğlence ve dinlenme merkezidir. Eski Bucuk Köyü Camii ve Ali Yakut Camii gibi asırlık köy camileriyle Osmanlı'nın sivil mimari mirasını korur. Eğitim vadileri, Matematik Müzesi ve Türk Dünyası Kültür Mahallesi gibi vizyoner projelerle kültürel altyapısını güçlendirmiştir. Geniş sanayi bölgelerine ev sahipliği yaparak kentin ekonomik gücüne büyük katkı sağlar. Geleneksel değerlerle modern kent yaşamının iç içe geçtiği dinamik bir ilçedir.",
+  "Sincan": "Sincan adının kökeni, ilçenin karakterine dair güzel bir ipucu veriyor: kelimenin etimolojik anlamı 'şen, canlı insanların yurdu'. 17. yüzyıl arşivlerinde bir köy olarak geçen Sincan, İpek Yolu'na yakın konumu sayesinde tarihî çağlarda önem kazanmış bir yerleşim. Osmanlı döneminde küçük bir tarım köyü olarak varlığını sürdüren Sincan, Cumhuriyet'in ardından Ankara'nın batıya doğru büyümesiyle birlikte hızla nüfuslanmış; 1990'da ilçe statüsü kazanmıştır. Bugün hem yoğun bir sanayi bölgesine hem de kalabalık bir yerleşim alanına ev sahipliği yapan ilçe, adının işaret ettiği o 'canlı' karakterini, artan nüfusu ve gelişen sosyal-kültürel projeleriyle sürdürmeye devam ediyor.",
   "Şereflikoçhisar": "Tuz Gölü'nün uçsuz bucaksız beyazlığına ve Hirfanlı Barajı'nın serin sularına komşu olan Şereflikoçhisar; Parnassos Antik Kenti ve Selçuklu mirası yapılarıyla bozkırın ortasında parlayan tarihi bir vahadır. Sultan Alaeddin Camii ve Koçhisar Kalesi kalıntıları, bölgenin Orta Çağ'daki askeri ve ticari önemini vurgular. Hacı Enbiya Türbesi gibi manevi durakları, bölge halkının inanç turizmi merkezlerindendir. Tuz Gölü kıyısındaki flamingolar ve Peçenek Boğazı'nın eşsiz doğası ekolojik turizm için bulunmaz fırsatlar sunar. Tarihin ve tuzun harmanlandığı, kendine has bir iklime ve kültüre sahiptir.",
   "Yenimahalle": "Atatürk Orman Çiftliği'nin yeşilinden devasa endüstri bölgelerine uzanan Yenimahalle; Cumhuriyet vizyonunun en net şekilde okunduğu gelişim aksıdır. Selçuklu eseri tarihi Akköprü'den, çağdaş Cumhurbaşkanlığı Külliyesi ve devasa Millet Kütüphanesi'ne kadar geniş bir zaman tünelini barındırır. Devlet Mezarlığı Müzesi ile Kurtuluş Savaşı komutanlarına ev sahipliği yaparak milli hafızamızı yaşatır. Nazım Hikmet Kültür Merkezi ve Evrensel Değerler Çocuk Müzesi gibi alanlarla kültür sanat hayatına yön verir. Dijital hayvanat bahçesi ve geniş mesire alanlarıyla Yenimahalle, kentin en yenilikçi ve kapsayıcı yüzüdür."
 };
@@ -617,6 +684,7 @@ try {
       document.getElementById('auth-btn').innerHTML = `<img src="${user.photoURL}" style="width:18px; border-radius:50%;"> Çıkış Yap`;
       document.getElementById('auth-gate').style.display = 'none';
       document.getElementById('app-content').style.display = 'block';
+      maybeShowOnboarding();
       const docRef = db.collection("users").doc(user.uid);
       const docSnap = await docRef.get();
       if (docSnap.exists) {
@@ -641,11 +709,12 @@ try {
   document.getElementById('gate-error').style.display = 'block';
 }
 
-function getPlaceState(name){ return STATE[name] || {visited:false, rating:0, favorite:false}; }
+function getPlaceState(name){ return STATE[name] || {visited:false, visitType:null, visitedAt:null, rating:0, favorite:false}; }
 function setPlaceState(name, partial){
   STATE[name] = Object.assign({}, getPlaceState(name), partial);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
   updateProgress();
+  checkBadges();
   
   if(currentUser && db) {
     db.collection("users").doc(currentUser.uid).set({
@@ -662,10 +731,200 @@ function updateProgress() {
   document.getElementById('progress-bar-fill').style.width = percentage + '%';
 }
 
+// ==========================================
+// ROZETLER, KARŞILAMA EKRANI, PASAPORT, GPS CHECK-IN
+// ==========================================
+const APP_META_KEY = 'ankaraAppMeta_v1';
+let APP_META = JSON.parse(localStorage.getItem(APP_META_KEY)) || { onboardingDone:false, earnedBadges:[] };
+function saveAppMeta(){ localStorage.setItem(APP_META_KEY, JSON.stringify(APP_META)); }
+
+const ERA_BADGE_NAMES = { s1:"Hitit-Frig Kâşifi", s2:"Galatya Gezgini", s3:"Roma Lejyoneri", s4:"Selçuklu Mimarı", s5:"Osmanlı Gezgini", s6:"Cumhuriyet Kâşifi", nature:"Doğa Avcısı" };
+
+function getVisitedNames(){ return Object.keys(STATE).filter(n => STATE[n] && STATE[n].visited); }
+
+function getAllBadgeDefs(){
+  const defs = [];
+  Object.keys(ERA_BADGE_NAMES).forEach(era=>{
+    const totalInEra = PLACES.filter(p=>p.era===era).length;
+    const threshold = Math.min(10, totalInEra) || 1;
+    defs.push({ id:'era-'+era, icon: eraGlyph[era]||'★', name: ERA_BADGE_NAMES[era], desc: `${threshold} ${era==='nature'?'doğal alanı':'dönem durağını'} işaretle`, 
+      check: () => getVisitedNames().filter(n=>{ const p = PLACES.find(x=>x.name===n); return p && p.era===era; }).length >= threshold });
+  });
+  DISTRICTS.forEach(d=>{
+    const totalInDistrict = PLACES.filter(p=>p.district===d).length;
+    if(totalInDistrict > 0){
+      defs.push({ id:'district-'+d, icon:'🔑', name: `${d} Uzmanı`, desc:`${d}'deki ${totalInDistrict} durağın tamamını gez`,
+        check: () => getVisitedNames().filter(n=>{ const p = PLACES.find(x=>x.name===n); return p && p.district===d; }).length >= totalInDistrict });
+    }
+  });
+  defs.push({ id:'gps-first', icon:'📍', name:'Onaylı Kaşif', desc:'GPS ile ilk konum doğrulamanı yap', 
+    check: () => Object.values(STATE).some(s=>s.visitType==='gps') });
+  defs.push({ id:'gps-10', icon:'🥇', name:'Altın Tikli Kaşif', desc:'GPS ile 10 yeri doğrula',
+    check: () => Object.values(STATE).filter(s=>s.visitType==='gps').length >= 10 });
+  return defs;
+}
+
+function checkBadges(){
+  const defs = getAllBadgeDefs();
+  defs.forEach(b=>{
+    if(!APP_META.earnedBadges.includes(b.id) && b.check()){
+      APP_META.earnedBadges.push(b.id);
+      saveAppMeta();
+      showBadgeToast(b);
+    }
+  });
+}
+
+function showBadgeToast(badge){
+  const toast = document.getElementById('badge-toast');
+  document.getElementById('badge-toast-text').textContent = `Yeni rozet kazandın: ${badge.name}!`;
+  toast.querySelector('.icon').textContent = badge.icon;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'), 4200);
+}
+
+// --- Onboarding ---
+function maybeShowOnboarding(){
+  if(APP_META.onboardingDone) return;
+  const list = document.getElementById('onboard-list');
+  list.innerHTML = '';
+  const candidates = POPULARITY_ORDER.slice(0, 45).map(n=>PLACES.find(p=>p.name===n)).filter(Boolean);
+  candidates.forEach(p=>{
+    const row = document.createElement('label');
+    row.className = 'onboard-item';
+    row.innerHTML = `<input type="checkbox" value="${p.name}"> <span>${p.name} <span style="color:var(--ink-soft);font-size:11px;">(${p.district})</span></span>`;
+    list.appendChild(row);
+  });
+  document.getElementById('onboard-overlay').classList.add('open');
+}
+document.getElementById('onboard-skip').addEventListener('click', ()=>{
+  APP_META.onboardingDone = true; saveAppMeta();
+  document.getElementById('onboard-overlay').classList.remove('open');
+});
+document.getElementById('onboard-confirm').addEventListener('click', ()=>{
+  const checked = document.querySelectorAll('#onboard-list input:checked');
+  checked.forEach(chk=>{
+    setPlaceState(chk.value, { visited:true, visitType:'self', visitedAt: Date.now() });
+  });
+  APP_META.onboardingDone = true; saveAppMeta();
+  document.getElementById('onboard-overlay').classList.remove('open');
+  renderGrid();
+});
+
+// --- GPS check-in ---
+const GEOCODE_CACHE_KEY = 'ankaraGeocodeCache_v1';
+let geocodeCache = JSON.parse(localStorage.getItem(GEOCODE_CACHE_KEY)) || {};
+function saveGeocodeCache(){ localStorage.setItem(GEOCODE_CACHE_KEY, JSON.stringify(geocodeCache)); }
+async function geocodePlace(p){
+  if(geocodeCache[p.name] !== undefined) return geocodeCache[p.name];
+  try{
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(p.mapQuery)}`);
+    const d = await r.json();
+    const coords = (d && d[0]) ? { lat: parseFloat(d[0].lat), lon: parseFloat(d[0].lon) } : null;
+    geocodeCache[p.name] = coords;
+    saveGeocodeCache();
+    return coords;
+  }catch(e){ return null; }
+}
+function haversineMeters(lat1, lon1, lat2, lon2){
+  const R = 6371000;
+  const toRad = x => x*Math.PI/180;
+  const dLat = toRad(lat2-lat1), dLon = toRad(lon2-lon1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+async function doGpsCheckin(p, statusEl){
+  if(!navigator.geolocation){ alert('Tarayıcın konum servisini desteklemiyor.'); return; }
+  statusEl.textContent = 'Konumun ve yer bilgisi karşılaştırılıyor...';
+  navigator.geolocation.getCurrentPosition(async (pos)=>{
+    const coords = await geocodePlace(p);
+    if(!coords){ statusEl.textContent = 'Bu yerin konum bilgisi bulunamadı, GPS doğrulaması yapılamıyor.'; return; }
+    const dist = haversineMeters(pos.coords.latitude, pos.coords.longitude, coords.lat, coords.lon);
+    if(dist <= 200){
+      setPlaceState(p.name, {visited:true, visitType:'gps', visitedAt: Date.now(), rating: getPlaceState(p.name).rating || 2.5});
+      openPlacard(p); renderGrid();
+    } else {
+      statusEl.textContent = `Şu an yaklaşık ${Math.round(dist)} metre uzaktasın — 200m içinde olman gerekiyor. (Not: konum, yerin metin adına göre tahmini bulunur, tam isabet garanti değildir.)`;
+    }
+  }, (err)=>{
+    statusEl.textContent = 'Konum izni alınamadı: ' + err.message;
+  }, { enableHighAccuracy:true, timeout:10000 });
+}
+
+// --- Passport & Badges pages ---
+document.getElementById('passport-nav-btn').addEventListener('click', openPassportPage);
+document.getElementById('badges-nav-btn').addEventListener('click', openBadgesPage);
+
+function openPassportPage(){
+  const placard = document.getElementById('placard');
+  const visited = Object.entries(STATE).filter(([n,s])=>s.visited).sort((a,b)=>(b[1].visitedAt||0)-(a[1].visitedAt||0));
+  let stamps = visited.map(([name, s])=>{
+    const p = PLACES.find(x=>x.name===name);
+    if(!p) return '';
+    const dateStr = s.visitedAt ? new Date(s.visitedAt).toLocaleDateString('tr-TR') : '';
+    return `<div class="stamp ${s.visitType==='gps'?'gold':''}"><div class="stamp-glyph">${eraGlyph[p.era]||'★'}</div><div class="stamp-name">${p.name}</div><div class="stamp-date">${s.visitType==='gps'?'GPS ✓':'Beyan'} ${dateStr}</div></div>`;
+  }).join('');
+  if(!stamps) stamps = `<p style="color:var(--ink-soft);">Henüz damgan yok — bir yeri "gittim" olarak işaretlediğinde burada görünecek.</p>`;
+  placard.innerHTML = `
+    <div class="p-image" style="background:var(--paper-deep);display:flex;align-items:center;justify-content:center;">
+      <div class="glyph" style="position:static;color:var(--bronze);font-size:34px;">📖</div>
+      <div class="p-close" id="p-close">×</div>
+    </div>
+    <div class="p-body">
+      <div class="p-district">Gezgin Pasaportu</div>
+      <h2>${visited.length} damga</h2>
+      <div class="passport-page"><div class="stamp-grid">${stamps}</div></div>
+    </div>`;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('p-close').addEventListener('click', closePlacard);
+}
+
+function openBadgesPage(){
+  const placard = document.getElementById('placard');
+  const defs = getAllBadgeDefs();
+  const cards = defs.map(b=>{
+    const unlocked = APP_META.earnedBadges.includes(b.id);
+    return `<div class="badge-card ${unlocked?'':'locked'}"><div class="badge-icon">${b.icon}</div><div><div class="badge-name">${b.name}</div><div class="badge-desc">${b.desc}</div></div></div>`;
+  }).join('');
+  placard.innerHTML = `
+    <div class="p-image" style="background:var(--paper-deep);display:flex;align-items:center;justify-content:center;">
+      <div class="glyph" style="position:static;color:var(--bronze);font-size:34px;">🏅</div>
+      <div class="p-close" id="p-close">×</div>
+    </div>
+    <div class="p-body">
+      <div class="p-district">Rozetlerim</div>
+      <h2>${APP_META.earnedBadges.length} / ${defs.length} rozet</h2>
+      <div class="badges-page">${cards}</div>
+    </div>`;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('p-close').addEventListener('click', closePlacard);
+}
+
 function updateDistrictNote() {
   const noteEl = document.getElementById('mode-note');
-  const info = DISTRICT_INFOS[activeDistrict] || `${activeDistrict} ilçesindeki tarihi katmanları keşfet.`;
-  if (activeDistrict === 'Tümü') { noteEl.innerHTML = info; } else { noteEl.innerHTML = `<strong>${activeDistrict}:</strong> ${info}`; }
+  if (activeDistrict === 'Tümü') {
+    noteEl.innerHTML = `Ankara'nın 25 ilçesindeki tarihi katmanları keşfet.`;
+    return;
+  }
+  noteEl.innerHTML = `<button class="district-history-btn" id="district-history-btn"><strong>${activeDistrict}</strong> ilçesinin tarihini gör →</button>`;
+  document.getElementById('district-history-btn').addEventListener('click', ()=>openDistrictHistory(activeDistrict));
+}
+
+function openDistrictHistory(district){
+  const placard = document.getElementById('placard');
+  const info = DISTRICT_INFOS[district] || `${district} ilçesinin tarihi içeriği hazırlanıyor.`;
+  placard.innerHTML = `
+    <div class="p-image" style="background:var(--paper-deep);display:flex;align-items:center;justify-content:center;">
+      <div class="glyph" style="position:static;color:var(--bronze);font-size:34px;">▦</div>
+      <div class="p-close" id="p-close">×</div>
+    </div>
+    <div class="p-body">
+      <div class="p-district">İlçe Tarihi</div>
+      <h2>${district}</h2>
+      <div class="p-story">${info}</div>
+    </div>`;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('p-close').addEventListener('click', closePlacard);
 }
 
 function renderFilters(){
@@ -875,7 +1134,9 @@ function placeCard(p){
   card.className = 'place-card';
   const st = getPlaceState(p.name);
   const thumbInner = `<div class="glyph" style="color:${eraColors[p.era]}">${eraGlyph[p.era]}</div>`;
-  const badges = (st.favorite || st.visited) ? `<div class="badges">${st.favorite ? '<div class="badge fav">★</div>' : ''}${st.visited ? '<div class="badge visited">✓</div>' : ''}</div>` : '';
+  const visitedBadgeClass = st.visitType === 'gps' ? 'badge visited visited-gps' : 'badge visited visited-self';
+  const visitedIcon = st.visitType === 'gps' ? '✓' : '✓';
+  const badges = (st.favorite || st.visited) ? `<div class="badges">${st.favorite ? '<div class="badge fav">★</div>' : ''}${st.visited ? `<div class="${visitedBadgeClass}" title="${st.visitType==='gps'?'GPS ile doğrulandı':'Beyan edildi'}">${visitedIcon}</div>` : ''}</div>` : '';
   card.innerHTML = `<div class="thumb" style="background:${eraColors[p.era]}22;">${thumbInner}${badges}<div class="place-type">${p.type}</div></div>
     <div class="card-body"><div class="district">${p.district}</div><h3>${p.name}</h3><div class="era-line">${p.period}</div>${st.visited ? `<div class="card-rating">★ ${st.rating.toFixed(1)}/5</div>` : ''}</div>`;
   card.addEventListener('click', ()=>openPlacard(p));
@@ -929,7 +1190,7 @@ function renderGrid(){
   list = list.filter(matchesCategory);
   
   if(searchQuery.trim() !== '') {
-    list = list.filter(p => p.name.toLowerCase().includes(searchQuery) || p.district.toLowerCase().includes(searchQuery) || p.type.toLowerCase().includes(searchQuery));
+    list = list.filter(p => p.name.toLowerCase().includes(searchQuery) || p.type.toLowerCase().includes(searchQuery));
   }
 
   list.forEach(p=>grid.appendChild(placeCard(p)));
@@ -957,7 +1218,15 @@ function openPlacard(p){
   const st = getPlaceState(p.name);
   const fee = p.fee || 'Bilinmiyor';
   const hours = p.hours || 'Bilinmiyor';
-  
+  const related = PLACES.filter(x=>x.district===p.district && x.name!==p.name);
+  for(let i=related.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [related[i],related[j]]=[related[j],related[i]]; }
+  const relatedPick = related.slice(0,3);
+  const relatedHtml = relatedPick.length ? `
+    <div class="related-places">
+      <div class="rp-title">${p.district}'ten diğer yerler</div>
+      ${relatedPick.map(r=>`<div class="rp-item" data-name="${r.name}"><div class="rp-thumb" style="background-color:${eraColors[r.era]}22;">${eraGlyph[r.era]}</div><div class="rp-name">${r.name}</div></div>`).join('')}
+    </div>` : '';
+
   placard.innerHTML = `
     <div class="p-image" style="background:${eraColors[p.era]}33;"><div class="p-close" id="p-close">×</div></div>
     <div class="p-body">
@@ -975,14 +1244,20 @@ function openPlacard(p){
       </a>
       <div class="p-controls">
         <button class="ctrl-btn fav ${st.favorite?'active':''}" id="fav-btn">${st.favorite ? '★ Favorilerimde' : '☆ Favorilere ekle'}</button>
-        <button class="ctrl-btn visited ${st.visited?'active':''}" id="visited-btn">${st.visited ? '✓ Daha önce gittim' : 'Daha önce gittim'}</button>
       </div>
+      <div class="visit-btn-row" style="margin-bottom:14px;">
+        <button class="ctrl-btn visited ${st.visited && st.visitType==='gps' ?'active':''}" id="gps-btn">📍 Şimdi Buradayım (GPS)</button>
+        <button class="ctrl-btn visited ${st.visited && st.visitType==='self' ?'active':''}" id="self-btn">${st.visited ? (st.visitType==='self' ? '✓ Daha önce ziyaret ettim' : 'Ayrıca daha önce de gitmiştim') : 'Daha Önce Ziyaret Ettim'}</button>
+        ${st.visited ? '<button class="ctrl-btn" id="unvisit-btn" style="font-size:11px;">Ziyareti kaldır</button>' : ''}
+      </div>
+      <div id="gps-status" style="font-size:12px;color:var(--ink-soft);margin:-8px 0 14px;"></div>
       ${st.visited ? `
       <div class="p-rating" id="rating-block">
         <div class="stars-wrap"><div class="stars-empty">★★★★★</div><div class="stars-filled" id="stars-filled" style="width:${(st.rating/5*100)}%">★★★★★</div></div>
         <input type="range" min="0" max="5" step="0.5" value="${st.rating}" id="rating-input">
         <span><span class="rating-val" id="rating-val">${st.rating}</span>/5</span>
       </div>` : ''}
+      ${relatedHtml}
     </div>`;
   document.getElementById('overlay').classList.add('open');
   attachPlaceImage(placard.querySelector('.p-image'), p);
@@ -993,12 +1268,21 @@ function openPlacard(p){
     setPlaceState(p.name, {favorite: !cur.favorite});
     openPlacard(p); renderGrid();
   });
-  document.getElementById('visited-btn').addEventListener('click', ()=>{
+  document.getElementById('self-btn').addEventListener('click', ()=>{
     const cur = getPlaceState(p.name);
-    const nowVisited = !cur.visited;
-    setPlaceState(p.name, {visited: nowVisited, rating: nowVisited ? (cur.rating || 2.5) : cur.rating});
+    setPlaceState(p.name, {visited:true, visitType:'self', visitedAt: cur.visitedAt || Date.now(), rating: cur.rating || 2.5});
     openPlacard(p); renderGrid();
   });
+  document.getElementById('gps-btn').addEventListener('click', ()=>{
+    doGpsCheckin(p, document.getElementById('gps-status'));
+  });
+  const unvisitBtn = document.getElementById('unvisit-btn');
+  if(unvisitBtn){
+    unvisitBtn.addEventListener('click', ()=>{
+      setPlaceState(p.name, {visited:false, visitType:null, visitedAt:null});
+      openPlacard(p); renderGrid();
+    });
+  }
   const ratingInput = document.getElementById('rating-input');
   if(ratingInput){
     ratingInput.addEventListener('input', (e)=>{
@@ -1009,6 +1293,12 @@ function openPlacard(p){
       renderGrid();
     });
   }
+  placard.querySelectorAll('.rp-item').forEach(item=>{
+    item.addEventListener('click', ()=>{
+      const target = PLACES.find(x=>x.name === item.dataset.name);
+      if(target) openPlacard(target);
+    });
+  });
 }
 function closePlacard(){ document.getElementById('overlay').classList.remove('open'); }
 document.getElementById('overlay').addEventListener('click', e=>{ if(e.target.id === 'overlay') closePlacard(); });
