@@ -87,13 +87,17 @@
 
   /* Passport & Badges pages */
   .passport-page, .badges-page{padding:8px 2px;}
-  .stamp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;margin-top:16px;}
-  .stamp{ border:2px dashed var(--bronze); border-radius:50%; aspect-ratio:1; display:flex;flex-direction:column;align-items:center;justify-content:center; text-align:center;padding:10px; transform:rotate(-3deg); background:var(--paper-deep); }
-  .stamp:nth-child(even){transform:rotate(2deg);}
-  .stamp .stamp-glyph{font-size:22px;color:var(--bronze);}
-  .stamp .stamp-name{font-size:10px;font-weight:600;margin-top:4px;line-height:1.2;}
-  .stamp .stamp-date{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--ink-soft);margin-top:3px;}
+  .passport-page{background:repeating-linear-gradient(var(--paper) 0px, var(--paper) 27px, var(--line) 27px, var(--line) 28px);padding:14px 10px;border:1px solid var(--line);}
+  .stamp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;margin-top:0;}
+  .stamp{ border:1.3px solid var(--bronze); border-radius:5px; display:flex;flex-direction:column;align-items:center;justify-content:center; text-align:center;padding:6px 4px;min-height:64px; transform:rotate(-2.5deg); background:rgba(246,241,228,.9); box-shadow:0 1px 2px rgba(28,35,33,.12); }
+  .stamp:nth-child(3n+1){transform:rotate(2deg);}
+  .stamp:nth-child(3n+2){transform:rotate(-1.5deg);}
+  .stamp:nth-child(3n){transform:rotate(1deg);}
+  .stamp .stamp-glyph{font-size:14px;color:var(--bronze);line-height:1;}
+  .stamp .stamp-name{font-size:8px;font-weight:600;margin-top:3px;line-height:1.15;max-width:100%;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+  .stamp .stamp-date{font-family:'IBM Plex Mono',monospace;font-size:6.5px;color:var(--ink-soft);margin-top:2px;letter-spacing:.01em;}
   .stamp.gold{border-color:var(--red);}
+  .stamp.gold .stamp-glyph{color:var(--red);}
   .badge-card{ display:flex;align-items:center;gap:14px; padding:14px;border:1px solid var(--line);background:var(--card);margin-bottom:10px; }
   .badge-card.locked{opacity:.4;}
   .badge-card .badge-icon{font-size:28px;width:44px;text-align:center;}
