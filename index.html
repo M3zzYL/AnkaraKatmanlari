@@ -122,15 +122,6 @@
   .auth-gate-box{ text-align:center;max-width:380px; }
   .auth-gate-box p{font-size:14px;color:var(--ink-soft);line-height:1.6;}
   @media(max-width:640px){ header.site,.toolbar,main{padding-left:16px;padding-right:16px;} .hero-caption h1{font-size:28px;} .toolbar{top:64px;} }
-
-/* Rating stars design */
-.rating-stars-container { display: flex; align-items: center; gap: 4px; margin-top: 8px; }
-.star { font-size: 18px; cursor: pointer; color: #ccc; transition: color 0.2s; }
-.star.active { color: #f39c12; }
-.avg-rating-badge { font-size: 12px; color: var(--bronze); font-weight: bold; margin-left: 8px; font-family: 'IBM Plex Mono', monospace; }
-.admin-panel-container { background: var(--card); border: 2px solid var(--line); padding: 16px; margin: 20px 0; border-radius: 8px; }
-.admin-user-row { border-bottom: 1px solid var(--line); padding: 8px 0; font-size: 13px; }
-
 </style>
 </head>
 <body>
@@ -144,11 +135,6 @@
   </div>
 </div>
 
-<div id="admin-panel" class="admin-panel-container" style="display:none;">
-  <h3 class="serif" style="margin-top:0;">🛡️ Yönetici Rozet ve Kullanıcı Takip Paneli</h3>
-  <p style="font-size:13px;color:var(--ink-soft);">Sitedeki tüm kayıtlı kullanıcıların kazandığı rozetleri ve tamamladıkları yerleri anlık olarak buradan takip edebilirsiniz.</p>
-  <div id="admin-users-list">Yükleniyor...</div>
-</div>
 <div id="app-content" style="display:none;">
 
 <header class="site">
@@ -742,85 +728,6 @@ function setPlaceState(name, partial){
   }
 }
 
-
-// Real-time Global Ratings Storage
-let GLOBAL_RATINGS = {};
-
-async function loadGlobalRatings() {
-  if(!db) return;
-  try {
-    const snapshot = await db.collection("ratings").get();
-    GLOBAL_RATINGS = {};
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      const placeName = doc.id;
-      let total = 0, count = 0;
-      Object.values(data).forEach(val => {
-        total += val;
-        count++;
-      });
-      GLOBAL_RATINGS[placeName] = {
-        avg: count > 0 ? (total / count).toFixed(1) : null,
-        count: count
-      };
-    });
-    renderGrid();
-  } catch(e) {
-    console.error("Puanlar yüklenemedi:", e);
-  }
-}
-
-async function submitRating(placeName, ratingVal) {
-  if(!currentUser) {
-    alert("Puan vermek için lütfen giriş yapın!");
-    return;
-  }
-  if(!db) return;
-  try {
-    await db.collection("ratings").doc(placeName).set({
-      [currentUser.uid]: ratingVal
-    }, { merge: true });
-    loadGlobalRatings();
-  } catch(e) {
-    console.error("Puan kaydedilemedi:", e);
-  }
-}
-
-async function initAdminPanel() {
-  if(!db) return;
-  const isHashAdmin = window.location.hash === '#admin' || window.location.hash === '#admin-badges';
-  if(isHashAdmin) {
-    document.getElementById('admin-panel').style.display = 'block';
-    try {
-      const snapshot = await db.collection("users").get();
-      let htmlStr = '';
-      snapshot.forEach(doc => {
-        const udata = doc.data();
-        const uplaces = udata.places || {};
-        const visitedCount = Object.values(uplaces).filter(p => p.visited).length;
-        // badge calculation
-        let badgesWon = [];
-        if(visitedCount >= 5) badgesWon.push("🥉 Çırak Gezgin");
-        if(visitedCount >= 25) badgesWon.push("🥈 Kaşif");
-        if(visitedCount >= 100) badgesWon.push("🥇 Seyyah-ı Azam");
-        if(visitedCount >= 250) badgesWon.push("👑 Ankara Muhafızı");
-
-        htmlStr += `<div class="admin-user-row">
-          <strong>Kullanıcı ID:</strong> ${doc.id} | 
-          <strong>Ziyaret Edilen Mekan:</strong> ${visitedCount} | 
-          <strong>Rozetler:</strong> ${badgesWon.join(', ') || 'Yok'} 
-        </div>`;
-      });
-      document.getElementById('admin-users-list').innerHTML = htmlStr || 'Kayıtlı kullanıcı bulunmuyor.';
-    } catch(e) {
-      document.getElementById('admin-users-list').innerHTML = 'Veriler çekilirken hata oluştu: ' + e.message;
-    }
-  }
-}
-
-// Trigger ratings and admin on hash change
-window.addEventListener("hashchange", initAdminPanel);
-
 function updateProgress() {
   const totalPlaces = 379;
   let visitedCount = Object.values(STATE).filter(s => s.visited).length;
@@ -1283,74 +1190,32 @@ function getPopularityRank(p){
   return popularityRank[p.name] !== undefined ? popularityRank[p.name] : 100000;
 }
 
-
-function renderGrid() {
+function renderGrid(){
   const grid = document.getElementById('grid');
-  if(!grid) return;
   grid.innerHTML = '';
-
+  
   let list = activeDistrict === 'Tümü' ? PLACES : PLACES.filter(p=>p.district===activeDistrict);
   list = [...list].sort((a,b) => getPopularityRank(a) - getPopularityRank(b));
-
-  if(activeSpecial === 'favorites'){
-    list = list.filter(p=>getPlaceState(p.name).favorite);
-  } else if(activeSpecial === 'visited'){
-    list = list.filter(p=>getPlaceState(p.name).visited);
-  } else if(activeSpecial === 'unvisited'){
-    list = list.filter(p=>!getPlaceState(p.name).visited);
+  
+  if(activeSpecial === 'favorites'){ list = list.filter(p=>getPlaceState(p.name).favorite); } 
+  else if(activeSpecial === 'visited'){ list = list.filter(p=>getPlaceState(p.name).visited); }
+  
+  list = list.filter(matchesCategory);
+  
+  if(searchQuery.trim() !== '') {
+    list = list.filter(p => p.name.toLowerCase().includes(searchQuery) || p.type.toLowerCase().includes(searchQuery));
   }
 
-  if(searchQuery){
-    const q = searchQuery.toLowerCase();
-    list = list.filter(p=>p.name.toLowerCase().includes(q) || p.story.toLowerCase().includes(q));
-  }
+  list.forEach(p=>grid.appendChild(placeCard(p)));
 
-  if(activeCategory !== 'Tümü'){
-    list = list.filter(p=>p.type === activeCategory);
-  }
-
-  list.forEach(item => {
-    const isVisited = getPlaceState(item.name).visited;
-    const isFavorite = getPlaceState(item.name).favorite;
-
-    const globalPlaceRating = (typeof GLOBAL_RATINGS !== 'undefined' && GLOBAL_RATINGS[item.name]) || { avg: null, count: 0 };
-    const displayAvg = globalPlaceRating.avg ? `⭐ ${globalPlaceRating.avg}/5 (${globalPlaceRating.count} Oy)` : '⭐ Puan Yok';
-    
-    let starHtml = `<div class="rating-stars-container">`;
-    for(let s=1; s<=5; s++) {
-      const isStarActive = s <= ((STATE[item.name] && STATE[item.name].rating) || 0);
-      starHtml += `<span class="star ${isStarActive ? 'active' : ''}" onclick="event.stopPropagation(); submitRating('${item.name.replace(/'/g, "\'")}', ${s}); if(!STATE['${item.name.replace(/'/g, "\'")}']) STATE['${item.name.replace(/'/g, "\'")}']={}; STATE['${item.name.replace(/'/g, "\'")}'].rating=${s}; saveState();">★</span>`;
-    }
-    starHtml += `<span class="avg-rating-badge">${displayAvg}</span></div>`;
-
-    const card = document.createElement('div');
-    card.className = `place-card ${isVisited ? 'visited' : ''}`;
-    card.onclick = () => showDetail(item);
-
-    card.innerHTML = `
-      <div class="thumb">
-        <img src="${item.img || 'https://via.placeholder.com/400x250?text=Ankara'}" alt="${item.name}" loading="lazy">
-        <div class="action-btns">
-          <button class="act-btn fav-btn ${isFavorite ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${item.name.replace(/'/g, "\'")}')">
-            ${isFavorite ? '❤️' : '🤍'}
-          </button>
-          <button class="act-btn check-btn ${isVisited ? 'active' : ''}" onclick="event.stopPropagation(); toggleVisited('${item.name.replace(/'/g, "\'")}')">
-            ${isVisited ? '✅' : '⬜'}
-          </button>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="era-line mono">${item.period}</div>
-        <h3 class="serif">${item.name}</h3>
-        <p class="story-preview">${item.story}</p>
-        <div class="meta-line">⏱️ ${item.hours} | 🎫 ${item.fee}</div>
-        ${starHtml}
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-}
-;
+  if(!activeSpecial && searchQuery === '' && !activeCategory){
+    const districtsToFill = activeDistrict === 'Tümü' ? DISTRICTS : [activeDistrict];
+    districtsToFill.forEach(d=>{
+      const done = PLACES.filter(p=>p.district===d).length;
+      const remaining = TOTALS[d] - done;
+      const showCount = activeDistrict === 'Tümü' ? Math.min(remaining, 2) : remaining;
+      for(let i=1;i<=showCount;i++){ grid.appendChild(pendingCard(d, done+i)); }
+    });
   }
 
   if(list.length === 0){
