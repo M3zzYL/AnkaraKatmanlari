@@ -1283,32 +1283,74 @@ function getPopularityRank(p){
   return popularityRank[p.name] !== undefined ? popularityRank[p.name] : 100000;
 }
 
-function renderGrid(){
+
+function renderGrid() {
   const grid = document.getElementById('grid');
+  if(!grid) return;
   grid.innerHTML = '';
-  
+
   let list = activeDistrict === 'Tümü' ? PLACES : PLACES.filter(p=>p.district===activeDistrict);
   list = [...list].sort((a,b) => getPopularityRank(a) - getPopularityRank(b));
-  
-  if(activeSpecial === 'favorites'){ list = list.filter(p=>getPlaceState(p.name).favorite); } 
-  else if(activeSpecial === 'visited'){ list = list.filter(p=>getPlaceState(p.name).visited); }
-  
-  list = list.filter(matchesCategory);
-  
-  if(searchQuery.trim() !== '') {
-    list = list.filter(p => p.name.toLowerCase().includes(searchQuery) || p.type.toLowerCase().includes(searchQuery));
+
+  if(activeSpecial === 'favorites'){
+    list = list.filter(p=>getPlaceState(p.name).favorite);
+  } else if(activeSpecial === 'visited'){
+    list = list.filter(p=>getPlaceState(p.name).visited);
+  } else if(activeSpecial === 'unvisited'){
+    list = list.filter(p=>!getPlaceState(p.name).visited);
   }
 
-  list.forEach(p=>grid.appendChild(placeCard(p)));
+  if(searchQuery){
+    const q = searchQuery.toLowerCase();
+    list = list.filter(p=>p.name.toLowerCase().includes(q) || p.story.toLowerCase().includes(q));
+  }
 
-  if(!activeSpecial && searchQuery === '' && !activeCategory){
-    const districtsToFill = activeDistrict === 'Tümü' ? DISTRICTS : [activeDistrict];
-    districtsToFill.forEach(d=>{
-      const done = PLACES.filter(p=>p.district===d).length;
-      const remaining = TOTALS[d] - done;
-      const showCount = activeDistrict === 'Tümü' ? Math.min(remaining, 2) : remaining;
-      for(let i=1;i<=showCount;i++){ grid.appendChild(pendingCard(d, done+i)); }
-    });
+  if(activeCategory !== 'Tümü'){
+    list = list.filter(p=>p.type === activeCategory);
+  }
+
+  list.forEach(item => {
+    const isVisited = getPlaceState(item.name).visited;
+    const isFavorite = getPlaceState(item.name).favorite;
+
+    const globalPlaceRating = (typeof GLOBAL_RATINGS !== 'undefined' && GLOBAL_RATINGS[item.name]) || { avg: null, count: 0 };
+    const displayAvg = globalPlaceRating.avg ? `⭐ ${globalPlaceRating.avg}/5 (${globalPlaceRating.count} Oy)` : '⭐ Puan Yok';
+    
+    let starHtml = `<div class="rating-stars-container">`;
+    for(let s=1; s<=5; s++) {
+      const isStarActive = s <= ((STATE[item.name] && STATE[item.name].rating) || 0);
+      starHtml += `<span class="star ${isStarActive ? 'active' : ''}" onclick="event.stopPropagation(); submitRating('${item.name.replace(/'/g, "\'")}', ${s}); if(!STATE['${item.name.replace(/'/g, "\'")}']) STATE['${item.name.replace(/'/g, "\'")}']={}; STATE['${item.name.replace(/'/g, "\'")}'].rating=${s}; saveState();">★</span>`;
+    }
+    starHtml += `<span class="avg-rating-badge">${displayAvg}</span></div>`;
+
+    const card = document.createElement('div');
+    card.className = `place-card ${isVisited ? 'visited' : ''}`;
+    card.onclick = () => showDetail(item);
+
+    card.innerHTML = `
+      <div class="thumb">
+        <img src="${item.img || 'https://via.placeholder.com/400x250?text=Ankara'}" alt="${item.name}" loading="lazy">
+        <div class="action-btns">
+          <button class="act-btn fav-btn ${isFavorite ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${item.name.replace(/'/g, "\'")}')">
+            ${isFavorite ? '❤️' : '🤍'}
+          </button>
+          <button class="act-btn check-btn ${isVisited ? 'active' : ''}" onclick="event.stopPropagation(); toggleVisited('${item.name.replace(/'/g, "\'")}')">
+            ${isVisited ? '✅' : '⬜'}
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="era-line mono">${item.period}</div>
+        <h3 class="serif">${item.name}</h3>
+        <p class="story-preview">${item.story}</p>
+        <div class="meta-line">⏱️ ${item.hours} | 🎫 ${item.fee}</div>
+        ${starHtml}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+;
   }
 
   if(list.length === 0){
