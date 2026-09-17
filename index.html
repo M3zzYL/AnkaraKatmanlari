@@ -122,6 +122,15 @@
   .auth-gate-box{ text-align:center;max-width:380px; }
   .auth-gate-box p{font-size:14px;color:var(--ink-soft);line-height:1.6;}
   @media(max-width:640px){ header.site,.toolbar,main{padding-left:16px;padding-right:16px;} .hero-caption h1{font-size:28px;} .toolbar{top:64px;} }
+
+/* Rating stars design */
+.rating-stars-container { display: flex; align-items: center; gap: 4px; margin-top: 8px; }
+.star { font-size: 18px; cursor: pointer; color: #ccc; transition: color 0.2s; }
+.star.active { color: #f39c12; }
+.avg-rating-badge { font-size: 12px; color: var(--bronze); font-weight: bold; margin-left: 8px; font-family: 'IBM Plex Mono', monospace; }
+.admin-panel-container { background: var(--card); border: 2px solid var(--line); padding: 16px; margin: 20px 0; border-radius: 8px; }
+.admin-user-row { border-bottom: 1px solid var(--line); padding: 8px 0; font-size: 13px; }
+
 </style>
 </head>
 <body>
@@ -135,6 +144,11 @@
   </div>
 </div>
 
+<div id="admin-panel" class="admin-panel-container" style="display:none;">
+  <h3 class="serif" style="margin-top:0;">🛡️ Yönetici Rozet ve Kullanıcı Takip Paneli</h3>
+  <p style="font-size:13px;color:var(--ink-soft);">Sitedeki tüm kayıtlı kullanıcıların kazandığı rozetleri ve tamamladıkları yerleri anlık olarak buradan takip edebilirsiniz.</p>
+  <div id="admin-users-list">Yükleniyor...</div>
+</div>
 <div id="app-content" style="display:none;">
 
 <header class="site">
@@ -727,6 +741,85 @@ function setPlaceState(name, partial){
     }, { merge: true }).catch(err => console.log("Buluta kaydedilemedi", err));
   }
 }
+
+
+// Real-time Global Ratings Storage
+let GLOBAL_RATINGS = {};
+
+async function loadGlobalRatings() {
+  if(!db) return;
+  try {
+    const snapshot = await db.collection("ratings").get();
+    GLOBAL_RATINGS = {};
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const placeName = doc.id;
+      let total = 0, count = 0;
+      Object.values(data).forEach(val => {
+        total += val;
+        count++;
+      });
+      GLOBAL_RATINGS[placeName] = {
+        avg: count > 0 ? (total / count).toFixed(1) : null,
+        count: count
+      };
+    });
+    renderGrid();
+  } catch(e) {
+    console.error("Puanlar yüklenemedi:", e);
+  }
+}
+
+async function submitRating(placeName, ratingVal) {
+  if(!currentUser) {
+    alert("Puan vermek için lütfen giriş yapın!");
+    return;
+  }
+  if(!db) return;
+  try {
+    await db.collection("ratings").doc(placeName).set({
+      [currentUser.uid]: ratingVal
+    }, { merge: true });
+    loadGlobalRatings();
+  } catch(e) {
+    console.error("Puan kaydedilemedi:", e);
+  }
+}
+
+async function initAdminPanel() {
+  if(!db) return;
+  const isHashAdmin = window.location.hash === '#admin' || window.location.hash === '#admin-badges';
+  if(isHashAdmin) {
+    document.getElementById('admin-panel').style.display = 'block';
+    try {
+      const snapshot = await db.collection("users").get();
+      let htmlStr = '';
+      snapshot.forEach(doc => {
+        const udata = doc.data();
+        const uplaces = udata.places || {};
+        const visitedCount = Object.values(uplaces).filter(p => p.visited).length;
+        // badge calculation
+        let badgesWon = [];
+        if(visitedCount >= 5) badgesWon.push("🥉 Çırak Gezgin");
+        if(visitedCount >= 25) badgesWon.push("🥈 Kaşif");
+        if(visitedCount >= 100) badgesWon.push("🥇 Seyyah-ı Azam");
+        if(visitedCount >= 250) badgesWon.push("👑 Ankara Muhafızı");
+
+        htmlStr += `<div class="admin-user-row">
+          <strong>Kullanıcı ID:</strong> ${doc.id} | 
+          <strong>Ziyaret Edilen Mekan:</strong> ${visitedCount} | 
+          <strong>Rozetler:</strong> ${badgesWon.join(', ') || 'Yok'} 
+        </div>`;
+      });
+      document.getElementById('admin-users-list').innerHTML = htmlStr || 'Kayıtlı kullanıcı bulunmuyor.';
+    } catch(e) {
+      document.getElementById('admin-users-list').innerHTML = 'Veriler çekilirken hata oluştu: ' + e.message;
+    }
+  }
+}
+
+// Trigger ratings and admin on hash change
+window.addEventListener("hashchange", initAdminPanel);
 
 function updateProgress() {
   const totalPlaces = 379;
