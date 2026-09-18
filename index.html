@@ -683,30 +683,40 @@ try {
   });
   gateAuthBtn.addEventListener('click', doSignIn);
 
-  auth.onAuthStateChanged(async (user) => {
-    if (user) {
-      currentUser = user;
-      document.getElementById('auth-btn').innerHTML = `<img src="${user.photoURL}" style="width:18px; border-radius:50%;"> Çıkış Yap`;
-      document.getElementById('auth-gate').style.display = 'none';
-      document.getElementById('app-content').style.display = 'block';
-      maybeShowOnboarding();
-      const docRef = db.collection("users").doc(user.uid);
-      const docSnap = await docRef.get();
-      if (docSnap.exists) {
-        STATE = docSnap.data().places || {};
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+    auth.onAuthStateChanged(async (user) => {
+    try {
+      if (user) {
+        currentUser = user;
+        document.getElementById('auth-btn').innerHTML = `<img src="${user.photoURL}" style="width:18px; border-radius:50%;"> Çıkış Yap`;
+        document.getElementById('auth-gate').style.display = 'none';
+        document.getElementById('app-content').style.display = 'block';
+        maybeShowOnboarding();
+
+        const docRef = db.collection("users").doc(user.uid);
+        const docSnap = await docRef.get();
+        if (docSnap.exists) {
+          const cloudPlaces = docSnap.data().places || {};
+          // Sadece yeni/farklı veriler varsa yerel state güncellenir (donmayı ve sonsuz döngüyü önler)
+          if (JSON.stringify(STATE) !== JSON.stringify(cloudPlaces)) {
+            STATE = cloudPlaces;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+          }
+        } else {
+          await docRef.set({ places: STATE });
+        }
       } else {
-        await docRef.set({ places: STATE });
+        currentUser = null;
+        document.getElementById('auth-btn').innerHTML = `Google ile Giriş Yap`;
+        document.getElementById('auth-gate').style.display = 'flex';
+        document.getElementById('app-content').style.display = 'none';
+        STATE = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
       }
-    } else {
-      currentUser = null;
-      document.getElementById('auth-btn').innerHTML = `Google ile Giriş Yap`;
-      document.getElementById('auth-gate').style.display = 'flex';
-      document.getElementById('app-content').style.display = 'none';
-      STATE = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch (err) {
+      console.error("Giriş senkronizasyon hatası (Güvenle yakalandı, kilitlenme önlendi):", err);
+    } finally {
+      updateProgress();
+      renderGrid();
     }
-    updateProgress();
-    renderGrid();
   });
 } catch(e) {
   console.warn("Firebase bağlantı hatası.", e);
