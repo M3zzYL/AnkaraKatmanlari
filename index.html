@@ -751,6 +751,17 @@ function setPlaceState(name, partial){
 // --- Gelişmiş Puanlama ve Admin Fonksiyonları ---
 let GLOBAL_RATINGS = {};
 
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+  updateProgress();
+  if(currentUser && db) {
+    db.collection("users").doc(currentUser.uid).set({
+      places: STATE
+    }, { merge: true }).catch(err => console.error("Bulut senkronizasyon hatası:", err));
+  }
+}
+
 async function loadGlobalRatings() {
   if(!db) return;
   try {
