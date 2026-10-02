@@ -634,9 +634,11 @@ const PLACES = [
 let activeDistrict = "Tümü";
 let activeSpecial = null;
 let searchQuery = "";
-const STORAGE_KEY = 'ankaraEnesYilmazState_v1';
-let STATE = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+const GUEST_STORAGE_KEY = 'ankaraEnesYilmazState_guest_v1';
+function userStorageKey(uid){ return 'ankaraEnesYilmazState_user_' + uid; }
+let STATE = JSON.parse(localStorage.getItem(GUEST_STORAGE_KEY)) || {};
 let currentUser = null;
+let firestoreUnsubscribe = null;
 
 // ==========================================
 // BULUT VERİTABANI VE GİRİŞ SİSTEMİ (FIREBASE)
@@ -685,30 +687,43 @@ try {
   gateAuthBtn.addEventListener('click', doSignIn);
 
   auth.onAuthStateChanged(async (user) => {
+    if (firestoreUnsubscribe) { firestoreUnsubscribe(); firestoreUnsubscribe = null; }
     if (user) {
       currentUser = user;
       document.getElementById('auth-btn').innerHTML = `<img src="${user.photoURL}" style="width:18px; border-radius:50%;"> Çıkış Yap`;
       document.getElementById('auth-gate').style.display = 'none';
       document.getElementById('app-content').style.display = 'block';
-      maybeShowOnboarding();
       if(ADMIN_EMAILS.includes(user.email)){ document.getElementById('admin-nav-btn').style.display = 'inline-block'; }
       const docRef = db.collection("users").doc(user.uid);
       const docSnap = await docRef.get();
       if (docSnap.exists) {
         STATE = docSnap.data().places || {};
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
       } else {
+        STATE = {};
         await docRef.set({ places: STATE, email: user.email || null, name: user.displayName || null, badges: APP_META.earnedBadges });
       }
+      localStorage.setItem(userStorageKey(user.uid), JSON.stringify(STATE));
+      if(docSnap.exists && docSnap.data().badges){ APP_META.earnedBadges = docSnap.data().badges; saveAppMetaLocalOnly(); }
+      maybeShowOnboarding();
+      updateProgress();
+      renderGrid();
+      firestoreUnsubscribe = docRef.onSnapshot((snap)=>{
+        if(!snap.exists) return;
+        STATE = snap.data().places || {};
+        localStorage.setItem(userStorageKey(user.uid), JSON.stringify(STATE));
+        updateProgress();
+        renderGrid();
+      });
     } else {
       currentUser = null;
       document.getElementById('auth-btn').innerHTML = `Google ile Giriş Yap`;
       document.getElementById('auth-gate').style.display = 'flex';
       document.getElementById('app-content').style.display = 'none';
-      STATE = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      document.getElementById('admin-nav-btn').style.display = 'none';
+      STATE = JSON.parse(localStorage.getItem(GUEST_STORAGE_KEY)) || {};
+      updateProgress();
+      renderGrid();
     }
-    updateProgress();
-    renderGrid();
   });
 } catch(e) {
   console.warn("Firebase bağlantı hatası.", e);
@@ -719,7 +734,8 @@ try {
 function getPlaceState(name){ return STATE[name] || {visited:false, visitType:null, visitedAt:null, rating:0, favorite:false}; }
 function setPlaceState(name, partial){
   STATE[name] = Object.assign({}, getPlaceState(name), partial);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+  const key = currentUser ? userStorageKey(currentUser.uid) : GUEST_STORAGE_KEY;
+  localStorage.setItem(key, JSON.stringify(STATE));
   updateProgress();
   checkBadges();
   
@@ -743,8 +759,11 @@ function updateProgress() {
 // ==========================================
 const APP_META_KEY = 'ankaraAppMeta_v1';
 let APP_META = JSON.parse(localStorage.getItem(APP_META_KEY)) || { onboardingDone:false, earnedBadges:[] };
-function saveAppMeta(){
+function saveAppMetaLocalOnly(){
   localStorage.setItem(APP_META_KEY, JSON.stringify(APP_META));
+}
+function saveAppMeta(){
+  saveAppMetaLocalOnly();
   if(currentUser && db){
     db.collection("users").doc(currentUser.uid).set({
       email: currentUser.email || null,
