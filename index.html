@@ -702,22 +702,25 @@ try {
       document.getElementById('auth-btn').innerHTML = `<img src="${user.photoURL}" style="width:18px; border-radius:50%;"> Çıkış Yap`;
       document.getElementById('auth-gate').style.display = 'none';
       document.getElementById('app-content').style.display = 'block';
+      toggleAdminBtn();
       maybeShowOnboarding();
       const docRef = db.collection("users").doc(user.uid);
-      const docSnap = await docRef.get();
-      if (docSnap.exists) {
-        STATE = docSnap.data().places || {};
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
-      } else {
-        await docRef.set({ places: STATE });
-      }
-      // Rozetleri hesabın kendi verisinden yeniden hesapla (cihaz bazlı eski kayıt yerine)
-      APP_META.earnedBadges = computeEarnedBadges().map(b => b.id); saveAppMeta();
+      try {
+        const docSnap = await docRef.get();
+        if (docSnap.exists) {
+          STATE = docSnap.data().places || {};
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+        } else {
+          await docRef.set({ places: STATE });
+        }
+      } catch(e){ console.warn('Hesap verisi okunamadı', e); }
+      try { APP_META.earnedBadges = computeEarnedBadges().map(b => b.id); saveAppMeta(); } catch(e){ console.warn(e); }
       syncProfile();
-      toggleAdminBtn();
-      loadCommunityRatings();
+      startUserListener(docRef);
+      startRatingsListener();
     } else {
       currentUser = null;
+      stopListeners();
       COMMUNITY_VOTES = {};
       toggleAdminBtn();
       document.getElementById('auth-btn').innerHTML = `Google ile Giriş Yap`;
@@ -743,7 +746,7 @@ function setPlaceState(name, partial){
   
   if(currentUser && db) {
     db.collection("users").doc(currentUser.uid).set({
-      places: STATE,
+      places: { [name]: STATE[name] },
       profile: buildProfile()
     }, { merge: true }).catch(err => console.log("Buluta kaydedilemedi", err));
   }
@@ -781,10 +784,15 @@ function syncProfile(){
 
 // ----- Topluluk puanları (tüm giriş yapan hesapların ortalaması) -----
 let COMMUNITY_VOTES = {};   // yerAdı -> { uid: puan }
+let RATINGS_ERROR = '';
+let unsubUser = null, unsubRatings = null, migrated = false;
 function ratingDocId(name){ return name.replace(/[\/\\.#$\[\]]/g, '_'); }
 function communityAvg(name){
-  const votes = COMMUNITY_VOTES[name];
-  if(!votes) return null;
+  const votes = Object.assign({}, COMMUNITY_VOTES[name] || {});
+  if(currentUser){
+    const st = STATE[name];
+    if(st && st.visited && st.rated && st.rating > 0 && votes[currentUser.uid] === undefined) votes[currentUser.uid] = st.rating;
+  }
   const vals = Object.values(votes).filter(v => typeof v === 'number' && v > 0);
   if(!vals.length) return null;
   return { avg: vals.reduce((a,b) => a+b, 0) / vals.length, count: vals.length };
@@ -794,37 +802,66 @@ function publishRating(name, val){
   const ref = db.collection('placeRatings').doc(ratingDocId(name));
   const uid = currentUser.uid;
   const del = (!val || val <= 0);
-  const voteVal = del ? firebase.firestore.FieldValue.delete() : val;
   COMMUNITY_VOTES[name] = COMMUNITY_VOTES[name] || {};
   if(del) delete COMMUNITY_VOTES[name][uid]; else COMMUNITY_VOTES[name][uid] = val;
-  ref.set({ name: name, votes: { [uid]: voteVal } }, { merge: true })
-     .catch(err => console.log('Puan kaydedilemedi', err));
+  ref.set({ name: name, votes: { [uid]: del ? firebase.firestore.FieldValue.delete() : val } }, { merge: true })
+     .then(() => { RATINGS_ERROR = ''; })
+     .catch(err => { console.error('Puan kaydedilemedi', err); RATINGS_ERROR = err.code || 'hata'; refreshCommunityLine(); });
 }
-async function loadCommunityRatings(){
-  if(!currentUser || !db) return;
-  try {
-    const snap = await db.collection('placeRatings').get();
+function refreshCommunityLine(){
+  const cm = document.getElementById('p-community');
+  if(cm && window.__openPlaceName) cm.innerHTML = communityLineHtml(window.__openPlaceName);
+}
+function stopListeners(){
+  if(unsubUser){ unsubUser(); unsubUser = null; }
+  if(unsubRatings){ unsubRatings(); unsubRatings = null; }
+  migrated = false;
+}
+// Aynı hesapla başka cihazda yapılan değişiklikler (ziyaret, favori, puan) anında buraya gelir
+function startUserListener(docRef){
+  if(unsubUser) unsubUser();
+  unsubUser = docRef.onSnapshot(snap => {
+    if(snap.metadata.hasPendingWrites || !snap.exists) return;
+    const cloud = snap.data().places || {};
+    if(JSON.stringify(cloud) === JSON.stringify(STATE)) return;
+    STATE = cloud;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+    try { APP_META.earnedBadges = computeEarnedBadges().map(b => b.id); saveAppMeta(); } catch(e){}
+    updateProgress(); renderGrid();
+  }, err => console.warn('Hesap senkronu kesildi', err));
+}
+function startRatingsListener(){
+  if(unsubRatings) unsubRatings();
+  unsubRatings = db.collection('placeRatings').onSnapshot(snap => {
+    RATINGS_ERROR = '';
     COMMUNITY_VOTES = {};
     snap.forEach(d => { const x = d.data(); COMMUNITY_VOTES[x.name || d.id] = x.votes || {}; });
-    // Eski (bu güncellemeden önce verilmiş) puanları bir kereliğine topluluğa aktar
-    const uid = currentUser.uid;
-    const batch = db.batch(); let n = 0;
-    Object.entries(STATE).forEach(([name, s]) => {
-      if(s && s.visited && s.rating > 0 && (s.rated || s.rating !== 2.5)){
-        const mine = (COMMUNITY_VOTES[name] || {})[uid];
-        if(mine === undefined && n < 450){
-          batch.set(db.collection('placeRatings').doc(ratingDocId(name)), { name: name, votes: { [uid]: s.rating } }, { merge: true });
-          COMMUNITY_VOTES[name] = COMMUNITY_VOTES[name] || {};
-          COMMUNITY_VOTES[name][uid] = s.rating; n++;
-        }
+    if(!migrated){ migrated = true; migrateOldRatings(); }
+    renderGrid(); refreshCommunityLine();
+  }, err => {
+    console.error('Topluluk puanları okunamadı', err);
+    RATINGS_ERROR = err.code || 'hata';
+    renderGrid(); refreshCommunityLine();
+  });
+}
+// Bu güncellemeden önce verilmiş puanları bir kereliğine topluluğa aktar
+function migrateOldRatings(){
+  if(!currentUser) return;
+  const uid = currentUser.uid, batch = db.batch(); let n = 0;
+  Object.entries(STATE).forEach(([name, s]) => {
+    if(s && s.visited && s.rating > 0 && (s.rated || s.rating !== 2.5) && n < 450){
+      const mine = (COMMUNITY_VOTES[name] || {})[uid];
+      if(mine === undefined){
+        batch.set(db.collection('placeRatings').doc(ratingDocId(name)), { name: name, votes: { [uid]: s.rating } }, { merge: true });
+        n++;
       }
-    });
-    if(n) await batch.commit().catch(err => console.log('Eski puanlar aktarılamadı', err));
-  } catch(e){ console.warn('Topluluk puanları okunamadı (Firestore kurallarını kontrol edin).', e); }
-  renderGrid();
+    }
+  });
+  if(n) batch.commit().catch(err => { console.error('Eski puanlar aktarılamadı', err); RATINGS_ERROR = err.code || 'hata'; refreshCommunityLine(); });
 }
 function communityLineHtml(name){
   const c = communityAvg(name);
+  if(RATINGS_ERROR && !c) return `<span class="pc-sub">Topluluk puanlarına şu an erişilemiyor (${escHtml(RATINGS_ERROR)}). Yönetici: Firestore güvenlik kurallarını kontrol etmelidir.</span>`;
   if(!c) return `<span class="pc-sub">Henüz puan verilmemiş — ilk puanı sen ver.</span>`;
   return `★ ${c.avg.toFixed(1)}/5 <span class="pc-sub">· ${c.count} kişi puanladı</span>`;
 }
@@ -832,6 +869,7 @@ function communityLineHtml(name){
 // ----- Yönetici paneli -----
 async function openAdminPage(){
   if(!isAdmin()) return;
+  window.__openPlaceName = null;
   const placard = document.getElementById('placard');
   placard.innerHTML = `<div class="p-image" style="background:var(--paper-deep);display:flex;align-items:center;justify-content:center;"><div class="glyph" style="position:static;color:var(--bronze);font-size:34px;">👑</div><div class="p-close" id="p-close">×</div></div><div class="p-body"><div class="p-district">Yönetici Paneli</div><h2>Yükleniyor…</h2></div>`;
   document.getElementById('overlay').classList.add('open');
@@ -1001,6 +1039,7 @@ document.getElementById('badges-nav-btn').addEventListener('click', openBadgesPa
 document.getElementById('admin-nav-btn').addEventListener('click', openAdminPage);
 
 function openPassportPage(){
+  window.__openPlaceName = null;
   const placard = document.getElementById('placard');
   const visited = Object.entries(STATE).filter(([n,s])=>s.visited).sort((a,b)=>(b[1].visitedAt||0)-(a[1].visitedAt||0));
   let stamps = visited.map(([name, s])=>{
@@ -1025,6 +1064,7 @@ function openPassportPage(){
 }
 
 function openBadgesPage(){
+  window.__openPlaceName = null;
   const placard = document.getElementById('placard');
   const defs = getAllBadgeDefs();
   const cards = defs.map(b=>{
@@ -1375,6 +1415,7 @@ function renderGrid(){
 }
 
 function openPlacard(p){
+  window.__openPlaceName = p.name;
   const placard = document.getElementById('placard');
   const st = getPlaceState(p.name);
   const fee = p.fee || 'Bilinmiyor';
@@ -1400,7 +1441,7 @@ function openPlacard(p){
         <div class="fact"><div class="k">Giriş Ücreti</div><div class="v">${fee}</div></div>
         <div class="fact"><div class="k">Ziyaret Saatleri</div><div class="v">${hours}</div></div>
       </div>
-      <div class="p-note">Ücret ve ziyaret saatleri değişebilir; gitmeden önce ilgili kurumun duyurusunu kontrol et.</div>
+      <div class="p-note">Giriş ücretleri ve ziyaret saatleri önceden duyuru yapılmaksızın değişebilir. Güncel bilgi için ilgili kurum veya işletmenin resmî kanallarına başvurulması önerilir.</div>
       <div class="p-story">${p.story}</div>
       <a class="p-map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.mapQuery)}" target="_blank" rel="noopener">
         <span>📍 Haritada aç — ${p.mapQuery}</span>
