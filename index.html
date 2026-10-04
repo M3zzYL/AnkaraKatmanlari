@@ -15,6 +15,7 @@
   *{box-sizing:border-box;} html,body{margin:0;padding:0;}
   body{ background:var(--paper); color:var(--ink); font-family:'Manrope',sans-serif; -webkit-font-smoothing:antialiased; }
   h1,h2,h3,.serif{font-family:'Fraunces',serif;} .mono{font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;} a{color:inherit;}
+  /* ÜST BAŞLIK: logo, giriş butonu, ilerleme çubuğu */
   header.site{ position:sticky;top:0;z-index:40; background:var(--paper); border-bottom:1px solid var(--line); padding:18px 32px; display:flex;justify-content:space-between;align-items:center; flex-wrap:wrap; gap:12px; }
   header.site .mark{font-family:'Fraunces',serif;font-weight:600;font-size:20px;} header.site .mark span{color:var(--red);}
   .progress-container {display:flex; flex-direction:column; align-items:flex-end; gap:6px;}
@@ -22,12 +23,14 @@
   .progress-text strong {color:var(--ink);font-weight:600;}
   .progress-bar-bg {width:160px; height:5px; background:var(--line); border-radius:3px; overflow:hidden;}
   .progress-bar-fill {height:100%; background:var(--moss); width:0%; transition:width 0.4s ease;}
+  /* KARŞILAMA BANDI: dönemleri gösteren renkli katmanlar (Hitit → Cumhuriyet) ve başlık */
   .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);} .strata{display:flex;flex-direction:column;}
   .stratum{ display:flex;align-items:center;justify-content:space-between; padding:14px 32px; font-family:'IBM Plex Mono',monospace;font-size:12px; border-top:1px solid rgba(34,29,22,0.08); }
   .stratum:first-child{border-top:none;} .stratum .era{font-weight:500;letter-spacing:.06em;text-transform:uppercase;} .stratum .yil{color:inherit;opacity:.75;}
   .s1{background:#DCE2DE;} .s2{background:#C7D3CC;} .s3{background:#9FB8AD;color:#1C2321;} .s4{background:var(--bronze);color:#F2F4F2;} .s5{background:var(--red);color:#F2F4F2;} .s6{background:var(--ink);color:#F2F4F2;}
   .hero-caption{ padding:28px 32px 34px; max-width:620px; } .hero-caption .eyebrow{ font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--red-deep); text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px; }
   .hero-caption h1{font-size:38px;line-height:1.05;margin:0 0 14px;font-weight:600;} .hero-caption p{font-size:15px;line-height:1.6;color:var(--ink-soft);margin:0;}
+  /* ARAMA ÇUBUĞU VE FİLTRELER: arama kutusu, tür/ilçe seçimi, ilçe düğmeleri */
   .toolbar{ position:sticky;top:74px;z-index:30; background:var(--paper-deep); border-bottom:1px solid var(--line); display:flex;flex-direction:column; }
   .search-bar{ padding:12px 32px; border-bottom:1px solid rgba(0,0,0,0.05); display:flex;gap:10px;flex-wrap:wrap; }
   .search-input{ padding:10px 14px; border:1px solid var(--line); border-radius:3px; font-family:'Manrope',sans-serif; font-size:13px; background:var(--card); color:var(--ink); outline:none; transition:border-color 0.2s; }
@@ -46,6 +49,7 @@
   .chip{ font-family:'IBM Plex Mono',monospace;font-size:12px; padding:7px 13px;border:1px solid var(--line);border-radius:2px; background:var(--card);cursor:pointer;color:var(--ink-soft); transition:background .15s,color .15s,border-color .15s; white-space:nowrap; flex:0 0 auto; }
   .chip:hover{border-color:var(--bronze);} .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);} .chip .n{opacity:.6;margin-left:5px;}
   .chip.special{border-color:var(--bronze);} .chip.special.active{background:var(--bronze);border-color:var(--bronze);color:var(--paper);} .chip-sep{width:1px;background:var(--line);flex:0 0 auto;align-self:stretch;margin:0 4px;}
+  /* YER KARTLARI: ana listedeki kart ızgarası ve tek kartın görünümü */
   main{padding:34px 32px 60px;max-width:1180px;margin:0 auto;} .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:22px; }
   .place-card{ background:var(--card); border:1px solid var(--line); cursor:pointer; display:flex;flex-direction:column; transition:transform .15s, box-shadow .15s; } .place-card:hover{transform:translate(-2px,-2px);box-shadow:var(--shadow);}
   .thumb{ height:150px;position:relative; display:flex;align-items:flex-end; padding:12px; border-bottom:1px solid var(--line); background-repeat:repeat; overflow:hidden; }
@@ -56,16 +60,20 @@
   .thumb .badge.fav{color:var(--red);} .thumb .badge.visited{color:var(--moss);} .thumb .place-type{ font-family:'IBM Plex Mono',monospace;font-size:10px; background:rgba(246,241,228,.88); color:var(--ink); padding:4px 8px; text-transform:uppercase;letter-spacing:.05em; }
   .card-body{padding:14px 14px 16px;} .card-body .district{ font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--bronze); text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px; } .card-body h3{font-size:17px;margin:0 0 4px;line-height:1.25;font-weight:500;} .card-body .era-line{font-size:12px;color:var(--ink-soft);} .card-body .card-rating{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--bronze);font-weight:600;margin-top:6px;}
   .place-card.pending{opacity:.55;cursor:default;} .place-card.pending:hover{transform:none;box-shadow:none;} .place-card.pending .thumb{background:repeating-linear-gradient(45deg,var(--paper-deep),var(--paper-deep) 8px,var(--card) 8px,var(--card) 16px);}
+  /* ÜSTTEKİ BİLGİ NOTU (ilçe seçilince çıkan kutu) */
   .section-note{ font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink); line-height:1.6;margin:0 0 22px;padding:12px 16px;border-left:4px solid var(--bronze);background:var(--card); }
   .district-history-btn{ background:none;border:none;padding:0;margin:0; font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--ink);cursor:pointer;text-align:left; }
   .district-history-btn:hover{color:var(--red);}
   .district-history-btn strong{color:var(--bronze);}
+  /* YER DETAY PENCERESİ: karta tıklayınca açılan pencere (fotoğraf, bilgiler, hikâye, harita linki) */
   .overlay{ position:fixed;inset:0;background:rgba(34,29,22,.55); display:none;align-items:center;justify-content:center;z-index:100; padding:24px; } .overlay.open{display:flex;}
   .placard{ background:var(--card);max-width:640px;width:100%; max-height:88vh;overflow-y:auto; border:1px solid var(--ink); } .placard .p-image{height:220px;position:relative;border-bottom:1px solid var(--line);overflow:hidden;} .placard .p-image img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;} .placard .p-close{ position:absolute;top:12px;right:12px;z-index:2; width:30px;height:30px;background:var(--ink);color:var(--paper); display:flex;align-items:center;justify-content:center; cursor:pointer;font-size:16px;border-radius:50%; }
   .placard .p-body{padding:24px 26px 28px;} .placard .p-district{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--bronze);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;} .placard h2{font-size:26px;margin:0 0 14px;font-weight:600;} .placard .p-facts{ display:flex;gap:22px;flex-wrap:wrap; padding:14px 0;margin-bottom:16px; border-top:1px solid var(--line);border-bottom:1px solid var(--line); } .placard .fact{flex:1; min-width:120px;} .placard .fact .k{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;} .placard .fact .v{font-size:13px;font-weight:500;}
   .placard .p-story{font-size:14.5px;line-height:1.75;color:var(--ink);margin-bottom:20px;} .placard .p-map-link{ display:flex;align-items:center;gap:8px; padding:14px 16px;background:var(--paper-deep); border:1px solid var(--line); font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink); text-decoration:none; transition:background .15s,border-color .15s; } .placard .p-map-link:hover{background:var(--bronze);border-color:var(--bronze);color:var(--paper);}
+  /* DETAY PENCERESİ DÜĞMELERİ VE PUAN ÇUBUĞU */
   .p-controls{display:flex;gap:8px;margin:16px 0 14px;flex-wrap:wrap;} .ctrl-btn{ font-family:'IBM Plex Mono',monospace;font-size:12px; padding:9px 14px;border:1px solid var(--line);border-radius:2px; background:var(--paper-deep);cursor:pointer;color:var(--ink); transition:background .15s,color .15s,border-color .15s; } .ctrl-btn.active.fav{background:var(--red);border-color:var(--red);color:var(--paper);} .ctrl-btn.active.visited{background:var(--moss);border-color:var(--moss);color:var(--paper);}
   .p-rating{display:flex;align-items:center;gap:10px;margin-bottom:22px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);} .stars-wrap{position:relative;font-size:20px;line-height:1;letter-spacing:2px;white-space:nowrap;} .stars-empty{color:var(--line);} .stars-filled{position:absolute;top:0;left:0;overflow:hidden;color:var(--bronze);white-space:nowrap;} .p-rating input[type=range]{accent-color:var(--bronze);width:110px;} .p-rating .rating-val{font-weight:600;color:var(--ink);}
+  /* ÜST MENÜDEKİ KÜÇÜK DÜĞMELER (Rozetlerim, Pasaportum, Yönetici) */
   .nav-mini-btn{ background:var(--paper-deep); border:1px solid var(--line); padding:6px 10px; font-family:'IBM Plex Mono', monospace; font-size:11px; cursor:pointer; border-radius:3px; color:var(--ink); transition:0.2s; }
   .nav-mini-btn:hover{border-color:var(--bronze);}
 
@@ -118,13 +126,16 @@
   .badge.visited-gps{color:var(--red) !important;}
   .badge.visited-self{color:var(--ink-soft) !important;}
 
+  /* GİRİŞ KAPISI: giriş yapmayanlara gösterilen tam ekran perde */
   .auth-gate{ position:fixed;inset:0;z-index:200; background:var(--paper); display:flex;align-items:center;justify-content:center;padding:24px; }
   .auth-gate-box{ text-align:center;max-width:380px; }
   .auth-gate-box p{font-size:14px;color:var(--ink-soft);line-height:1.6;}
+  /* TELEFON EKRANI AYARLARI */
   @media(max-width:640px){ header.site,.toolbar,main{padding-left:16px;padding-right:16px;} .hero-caption h1{font-size:28px;} .toolbar{top:64px;} }
 
   .card-body .card-rating .cr-count{font-weight:500;color:var(--ink-soft);}
   .card-body .card-rating .cr-mine{font-weight:500;color:var(--ink-soft);}
+  /* TOPLULUK PUAN SATIRI, ÜCRET NOTU VE YÖNETİCİ PANELİ SATIRLARI */
   .p-community{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--bronze);font-weight:600;margin:-4px 0 14px;}
   .p-community .pc-sub{color:var(--ink-soft);font-weight:500;}
   .p-note{font-size:11px;color:var(--ink-soft);margin:-6px 0 14px;font-family:'IBM Plex Mono',monospace;}
@@ -138,6 +149,7 @@
 </head>
 <body>
 
+<!-- GİRİŞ KAPISI: giriş yapılana kadar sitenin geri kalanını gizler -->
 <div class="auth-gate" id="auth-gate">
   <div class="auth-gate-box">
     <div class="mark" style="margin-bottom:18px;">ANKARA <span>KATMANLARI</span></div>
@@ -147,8 +159,10 @@
   </div>
 </div>
 
+<!-- ANA SİTE: giriş yapılınca görünür (auth-gate gizlenir, burası açılır) -->
 <div id="app-content" style="display:none;">
 
+<!-- ÜST BAŞLIK: giriş, rozet/pasaport/yönetici düğmeleri ve ilerleme çubuğu -->
 <header class="site">
   <div class="mark">ANKARA <span>KATMANLARI</span></div>
   <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
@@ -165,6 +179,7 @@
   </div>
 </header>
 
+<!-- KARŞILAMA BANDI: tarih katmanları ve başlık metni -->
 <section class="hero">
   <div class="strata">
     <div class="stratum s1"><span class="era">Hitit &amp; Frig</span><span class="yil">MÖ ~1800–700</span></div>
@@ -181,6 +196,7 @@
   </div>
 </section>
 
+<!-- ARAMA VE FİLTRE ÇUBUĞU (içeriği script ile doldurulur) -->
 <div class="toolbar">
   <div class="search-bar">
     <input type="text" id="search-input" class="search-input" placeholder="Mekan veya yapı ara...">
@@ -194,11 +210,13 @@
   <div class="filter-bar" id="filter-bar"></div>
 </div>
 
+<!-- YER LİSTESİ: kartlar #grid içine renderGrid() ile eklenir -->
 <main>
   <div class="section-note" id="mode-note">Tüm ilçeler listeleniyor.</div>
   <div class="grid" id="grid"></div>
 </main>
 
+<!-- İLK GİRİŞ EKRANI: 'Daha önce nereleri gördün?' seçim penceresi -->
 <div class="onboard-overlay" id="onboard-overlay">
   <div class="onboard-box">
     <h2>Ankara'da daha önce nereleri gördün?</h2>
@@ -211,8 +229,10 @@
   </div>
 </div>
 
+<!-- ROZET BİLDİRİMİ: yeni rozet kazanınca kısa süre görünen kutu -->
 <div class="badge-toast" id="badge-toast"><span class="icon">🏅</span><span id="badge-toast-text"></span></div>
 
+<!-- YER DETAY PENCERESİ: içi openPlacard() ile doldurulur -->
 <div class="overlay" id="overlay">
   <div class="placard" id="placard"></div>
 </div>
@@ -220,6 +240,7 @@
 </div>
 
 <script>
+// İLÇE LİSTESİ ve her ilçedeki toplam yer sayısı (TOTALS): filtre düğmeleri ve sayaçlar bunları kullanır
 const DISTRICTS = ["Akyurt","Altındağ","Ayaş","Bala","Beypazarı","Çamlıdere","Çankaya","Çubuk",
   "Elmadağ","Etimesgut","Evren","Gölbaşı","Güdül","Haymana","Kahramankazan","Kalecik",
   "Keçiören","Kızılcahamam","Mamak","Nallıhan","Polatlı","Pursaklar","Sincan","Şereflikoçhisar","Yenimahalle"];
@@ -233,6 +254,7 @@ const TOTALS = {
   "Pursaklar":11,"Sincan":9,"Şereflikoçhisar":16,"Yenimahalle":15
 };
 
+// İLÇE TARİH METİNLERİ: 'İlçe tarihi' penceresinde gösterilir
 const DISTRICT_INFOS = {
   "Tümü": "Ankara'nın 25 ilçesindeki tarihi katmanları; Paleolitik çağlardan Hitit höyüklerine, Roma hamamlarından Selçuklu kervansaraylarına ve Cumhuriyet anıtlarına kadar tüm detaylarıyla keşfet.",
   "Akyurt": "Akyurt'un bugünkü ismi aslında oldukça yeni: 1961'de İçişleri Bakanlığı kararıyla verilen bu ad, ilçenin eski adı olan 'Ravlı'nın hikâyesinden türetilmiş. Ravlı, Reşidüddin'in tarihî çizelgelerinde 'Alka-Bölük' ya da 'Alka Ravlı' olarak geçen bir Oğuz boyunun adıydı; zamanla 'Ravlı' biçiminde söylenişi yerleşen bu kelimenin Oğuz Türkçesinde 'avlu, evli' anlamına geldiği düşünülüyor. 1961'de yeni bir isim aranırken boyun adındaki 'Alka' kısmından 'Ak', Ravlı'nın taşıdığı anlamdan da 'yurt' alınarak 'Akyurt' ismi oluşturulmuş — yani ilçe adı, kayıp bir Oğuz boyunun hâlâ yaşayan son izi. Bölge, Ankara'dan Karadeniz'e (Çankırı/Gangra) uzanan antik Kral Yolu güzergâhı üzerinde bulunduğu için Roma döneminde büyük önem taşımış; Elecik Mahallesi'nde İmparator Nerva ve oğlu Traianus adına, Büğdüz ve Balıkhisar'da İmparator Hadrianus adına, ilçe merkezinde ise Septimius Severus ve Caracalla adına dikilmiş sütun ve yazıtlar bulunmuş. Anadolu Selçuklu Devleti'nin 1308'de dağılmasının ardından bölge, 1335-1390 arasında Ankara'dan Erzurum'a uzanan geniş bir alanı yöneten Eretna Beyliği'nin, ardından kısa süreliğine Kadı Burhaneddin'in eline geçmiş. Timur tehlikesi karşısında Osmanlı'ya bağlanan Akyurt halkı, bu dönemde Osmanlı Padişahı Yıldırım Bayezid'e otağını kurması için toprak vererek ev sahipliği yapmış. 1928'de 21 köyün bağlı olduğu bucak merkezi hâline gelen Ravlı, 1971'de belediye teşkilatı kurup 9 Mayıs 1990'da ilçe statüsüne kavuşmuştur. Bugün Akyurt, Ankara–Çankırı yolu üzerinde ve Esenboğa Havalimanı'nın komşusu olarak sanayi ve lojistik işleviyle öne çıkıyor; Çankırı, Çorum ve Kastamonu gibi illerden gelen göçmenlerle nüfusu hızla artmış durumda. İlçenin arkeolojik hafızası, Balıkhisar Köyü Höyüğü'nde Eski Tunç Çağı'ndan itibaren, Kızıleşik Tümülüsü'nde ise Roma İmparatorluk Dönemi'nde kendini gösterir. Kızık Göleti, Şehitler Anıtı ve Millet Bahçesi ise ilçenin günümüzdeki sosyal ve rekreasyon yüzünü oluşturur.",
@@ -261,6 +283,7 @@ const DISTRICT_INFOS = {
   "Şereflikoçhisar": "Şereflikoçhisar, Türkiye'nin ikinci büyük gölü olan Tuz Gölü'nün batı kıyısında yer alır. Göl, yüzyıllardır tuz üretimiyle anılır ve bugün Türkiye'nin tuz ihtiyacının önemli bir bölümünü karşılar; bölge aynı zamanda flamingolar ve diğer su kuşları için önemli bir üreme ve konaklama alanıdır. Tarih boyunca Hitit, Frig, Roma ve Bizans yönetimlerini görmüş; Kül Höyük ve Akin Höyüğü gibi Tunç Çağı yerleşmeleri, Parnassos ve Sadagoltina gibi antik kentler Roma-Bizans dönemlerinde bu yoldaki hac ve ticaret rotasının duraklarıdır. Selçuklu ve Osmanlı dönemlerinde ilçe, Koçhisar Kalesi'nin korumasında bir kervan yolu kasabasıydı; Sultan Alaeddin Camii ve Hacı Enbiya Türbesi bu dönemin dinî ve sosyal hayatını yansıtır. 1950'lerde tamamlanan Hirfanlı Barajı kıyısındaki Hamidiye Halk Plajı ve Peçenek Barajı ile Peçenek Boğazı gibi serin doğa alanları, bozkırın ortasında şaşırtıcı bir dinlenme alternatifi sunar. Kayalı Boğaz'daki Kağnı Kayası, eskiden kağnıların geçtiği yolun hatırasını taşırken, Karasenir Dağı bozkırın ortasındaki doğal bir seyir noktasıdır. Bozkırın tuzla beyazlayan yüzü, güneşin battığı saatlerde göl yüzeyine yansıyan renk oyunlarıyla fotoğrafçılar ve doğa meraklıları için ayrı bir cazibe taşır. Kent Müzesi, ilçenin tuz, tarım ve göç geçmişini bir araya getiren küçük ama bilgilendirici bir uğrak noktasıdır. Atatürk Parkı ise kasabanın günlük hayatının merkez meydanı gibi çalışır. Tuz Gölü çevresindeki köyler hâlâ tuz toplama ve tarım geleneğini sürdürür. Bu yüzden ilçeye yapılan bir ziyaret, hem doğa hem tarih hem de yerel yaşam açısından Ankara'nın başka hiçbir yerinde bulunmayan bir deneyim sunar. Böylece Şereflikoçhisar, tuz, su, kale ve höyükleri bir araya getiren bozkır kentinin tipik ama beklenmedik bir örneğidir.",
   "Yenimahalle": "Yenimahalle'nin hikâyesi Cumhuriyet'in başkenti inşa etme çabasıyla iç içedir. 1925'te kurulan Atatürk Orman Çiftliği (AOÇ), Atatürk'ün Ankara'nın bozkır iklimine karşı yeşil bir model tarım ve dinlenme alanı yaratma isteğiyle ilçenin sınırlarında şekillendi ve bugün hâlâ Ankara'nın en büyük kamusal yeşil alanlarından biridir. Ankara'nın batıya doğru planlı büyümesinde Demetevler, Batıkent ve Yenimahalle'nin mahalleleri önemli rol oynadı; Macunköy, İvedik ve Ostim ise ilçenin sanayi-ticaret yönünü temsil eder. İlçede 1222 tarihli Selçuklu eseri Akköprü, Ankara'nın en eski köprülerinden biri olarak tarih boyunca bölgeden geçen yolların hatırasını taşır. Cumhuriyet döneminin kurumsal hafızası ise Devlet Mezarlığı Müzesi (1988), MKE Sanayi ve Teknoloji Müzesi (2013) ve Nazım Hikmet Kültür Merkezi (2010) gibi yapılarda yaşar. 2010'larda Beştepe'de yükselen Cumhurbaşkanlığı Külliyesi çevresindeki Millet Kütüphanesi ve Beştepe Millet Camii ise ilçeye siyasi bir ağırlık kazandırdı. Evrensel Değerler Çocuk Müzesi (2017) ve 2024'te açılan Dijital Hayvanat Bahçesi gibi tesisler ise aileler ve çocuklar için yeni cazibe noktalarıdır. Batıkent metrosunun Ankara'nın batısını merkeze bağlaması, ilçeyi şehrin ulaşım omurgasının önemli bir noktası yapmıştır. Gençlik, aile ve eğitim odaklı tesisler ilçenin günlük yaşamını biçimlendirir; AOÇ gibi geniş yeşil alanlar ise Ankara'nın bozkır iklimine rağmen şehirliye nefes aldırır. Ostim Sanayi Bölgesi küçük ve orta ölçekli işletmeleriyle Ankara'nın üretim hayatında önemli bir yer tutarken, Batıkent ve Demetevler gibi planlı konut bölgeleri de kooperatifçilik geleneğini yansıtır. Böylece Yenimahalle, bozkırı yeşile çeviren Cumhuriyet projesinden günümüzün siyasi ve kültürel yatırımlarına uzanan bir kuşak hikâyesini aynı ilçede toplar.",
 };
+// TÜM YERLER (379): ad, ilçe, tür, dönem, yapan, ücret, saat, hikâye ve harita arama metni. Yeni yer buraya eklenir
 const PLACES = [
   { name:"Balıkhisar Köyü Höyüğü", district:"Akyurt", type:"Höyük", era:"s1", period:"MÖ ~3000'den itibaren (Eski Tunç Çağı)", founder:"Doğal/arkeolojik oluşum — ilk kazı 1999'da Ankara Üniversitesi DTCF tarafından", fee:"Ücretsiz", hours:"7/24 Açık", story:"Höyüktepe olarak da bilinen bu 15 metrelik höyük, Balıkhisar köyünün 1 km kuzeyinde yükseliyor. Kazılarda Eski Tunç Çağı, Hitit ve Frig dönemlerine ait seramikler ile kerpiçten yapılmış dikdörtgen planlı bir Hitit tapınağı kalıntısı bulunmuş. Akyurt'un bilinen en eski yerleşim izini taşıyor. Höyükler, aynı yerde yüzyıllarca süren yerleşimin üst üste biriken katmanlarından oluştuğu için her kazı seviyesi farklı bir dönemi gösterir. Balıkhisar'daki Hitit tapınağı kalıntısı, bölgenin yalnızca konut değil dinî işlevli yapılar da barındıran bir yerleşim olduğunu düşündürür. Alan arkeolojik sit niteliğinde olduğundan ziyaret ve gözlem sırasında buluntulara dokunmamak gerekir.", mapQuery:"Balıkhisar Höyüğü, Akyurt, Ankara" },
   { name:"Kızıleşik Tümülüsü", district:"Akyurt", type:"Tümülüs (mezar höyüğü)", era:"s3", period:"MS 1-2. yüzyıl (Roma İmparatorluk Dönemi)", founder:"Kazısı 1987'de Anadolu Medeniyetleri Müzesi Müdürlüğü'nce yapılmıştır", fee:"Ücretsiz", hours:"7/24 Açık", story:"Elecik Mahallesi sınırlarındaki bu Roma dönemi mezar tümülüsünden altın küpeler, bir yüzük, kolye parçaları ve bronz eşyalar çıkarılmış. Örtü toprağında MÖ 3. binyıla ait çanak-çömlek parçalarına da rastlanması, bölgenin çok daha eski bir yerleşimin üzerine kurulduğunu gösteriyor. Tümülüsler, ölenin üzerine toprak yığılarak yapılan yapay tepeler olup Anadolu'da Frig döneminden Roma çağına kadar kullanılmıştır. Altın küpe ve yüzük gibi buluntular, mezarın zengin bir kişiye ait olduğunu gösterir; bu eserler Anadolu Medeniyetleri Müzesi'nde incelenebilir. Örtü toprağındaki eski seramikler yerleşimin daha da eskiye gittiğini düşündürür.", mapQuery:"Kızıleşik Tümülüsü, Elecik, Akyurt, Ankara" },
@@ -643,6 +666,7 @@ const PLACES = [
   { name:"Dijital Hayvanat Bahçesi", district:"Yenimahalle", type:"Eğlence / Müze", era:"s6", period:"2024", founder:"Ankara B.B.", fee:"Ücretsiz (Randevulu)", hours:"10:00 - 17:00", story:"Atatürk Orman Çiftliği arazisinde bulunan eski hayvanat bahçesinin yerine kurulan, vahşi hayvanları hapsetmeden, onları devasa hologram ve lazer teknolojileriyle birebir boyutlarında gösteren yenilikçi dijital parktır. Hayvanları canlı tutmadan hologram ve lazer teknolojisiyle tanıtan bu yaklaşım, hayvan refahı ve eğitim açısından yeni bir tartışma ve deneyim alanı sunar. Bilet, saat ve etkinlik bilgileri için işletmenin güncel duyuruları izlenmelidir.", mapQuery:"AOÇ Dijital Hayvanat Bahçesi", img:"images/Yenimahalle/Dijital%20Hayvanat%20Bah%C3%A7esi.jpg" }
 ];
 
+// SİTENİN ANLIK DURUMU: seçili ilçe, özel filtre, arama metni, kayıt anahtarı ve kullanıcının ziyaret/favori/puan verisi (STATE)
 let activeDistrict = "Tümü";
 let activeSpecial = null;
 let searchQuery = "";
@@ -653,6 +677,7 @@ let currentUser = null;
 // ==========================================
 // BULUT VERİTABANI VE GİRİŞ SİSTEMİ (FIREBASE)
 // ==========================================
+// Firebase proje ayarları (kimlik doğrulama ve veritabanı bağlantısı)
 const firebaseConfig = {
   apiKey: "AIzaSyBId36KC3CzgY1rZ9zFNNUd0PgvRHngXhk",
   authDomain: "ankara-katmanlari.firebaseapp.com",
@@ -676,6 +701,7 @@ try {
   const gateAuthBtn = document.getElementById('gate-auth-btn');
   const gateError = document.getElementById('gate-error');
 
+  // 'Google ile Giriş Yap' penceresini açar
   function doSignIn(){
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider).catch(err => {
@@ -696,6 +722,7 @@ try {
   });
   gateAuthBtn.addEventListener('click', doSignIn);
 
+  // Giriş yapıldığında/çıkıldığında çalışır: kapıyı açar-kapatır, hesap verisini yükler, canlı dinleyicileri başlatır
   auth.onAuthStateChanged(async (user) => {
     if (user) {
       currentUser = user;
@@ -737,7 +764,9 @@ try {
   document.getElementById('gate-error').style.display = 'block';
 }
 
+// Bir yerin kullanıcıya ait durumunu (ziyaret, favori, puan) okur; kayıt yoksa boş bir durum döndürür
 function getPlaceState(name){ return STATE[name] || {visited:false, visitType:null, visitedAt:null, rating:0, favorite:false}; }
+// Bir yerin durumunu değiştirir, cihaza (localStorage) ve hesaba (Firestore) kaydeder, rozet kontrolünü çalıştırır
 function setPlaceState(name, partial){
   STATE[name] = Object.assign({}, getPlaceState(name), partial);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
@@ -756,14 +785,19 @@ function setPlaceState(name, partial){
 // ==========================================
 // YÖNETİCİ, ROZET SENKRONU VE TOPLULUK PUANLARI
 // ==========================================
+// Yönetici e-postası: sadece bu hesapta 'Yönetici' düğmesi görünür
 const ADMIN_EMAIL = 'yilmaz.enesankara@gmail.com';
+// Giriş yapan kişi yönetici mi?
 function isAdmin(){ return !!(currentUser && currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL); }
+// Metindeki HTML işaretlerini zararsız hâle getirir (başkasının yazdığı adı güvenle ekrana basmak için)
 function escHtml(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
+// Kullanıcının şu an kazandığı rozetlerin listesini hesaplar
 function computeEarnedBadges(){
   try { return getAllBadgeDefs().filter(b => { try { return b.check(); } catch(e){ return false; } }); }
   catch(e){ return []; }
 }
+// Yöneticinin görebilmesi için hesabın özet bilgisini (ad, e-posta, rozetler, ziyaret sayısı) hazırlar
 function buildProfile(){
   const earned = computeEarnedBadges();
   return {
@@ -776,6 +810,7 @@ function buildProfile(){
     updatedAt: Date.now()
   };
 }
+// Bu özet bilgiyi Firestore'daki kullanıcı kaydına yazar
 function syncProfile(){
   if(!currentUser || !db) return;
   db.collection('users').doc(currentUser.uid).set({ profile: buildProfile() }, { merge: true })
@@ -786,7 +821,9 @@ function syncProfile(){
 let COMMUNITY_VOTES = {};   // yerAdı -> { uid: puan }
 let RATINGS_ERROR = '';
 let unsubUser = null, unsubRatings = null, migrated = false;
+// Yer adını Firestore belge adı olarak kullanılabilecek hâle getirir (yasak karakterleri '_' yapar)
 function ratingDocId(name){ return name.replace(/[\/\\.#$\[\]]/g, '_'); }
+// Bir yerin tüm hesaplardan gelen puan ortalamasını ve kaç kişinin puanladığını hesaplar
 function communityAvg(name){
   const votes = Object.assign({}, COMMUNITY_VOTES[name] || {});
   if(currentUser){
@@ -797,6 +834,7 @@ function communityAvg(name){
   if(!vals.length) return null;
   return { avg: vals.reduce((a,b) => a+b, 0) / vals.length, count: vals.length };
 }
+// Kullanıcının verdiği puanı topluluk puanlarına (placeRatings) yazar; puan 0 ise siler
 function publishRating(name, val){
   if(!currentUser || !db) return;
   const ref = db.collection('placeRatings').doc(ratingDocId(name));
@@ -808,10 +846,12 @@ function publishRating(name, val){
      .then(() => { RATINGS_ERROR = ''; })
      .catch(err => { console.error('Puan kaydedilemedi', err); RATINGS_ERROR = err.code || 'hata'; refreshCommunityLine(); });
 }
+// Açık olan detay penceresindeki topluluk puanı satırını yeniler
 function refreshCommunityLine(){
   const cm = document.getElementById('p-community');
   if(cm && window.__openPlaceName) cm.innerHTML = communityLineHtml(window.__openPlaceName);
 }
+// Çıkış yapınca canlı dinleyicileri kapatır
 function stopListeners(){
   if(unsubUser){ unsubUser(); unsubUser = null; }
   if(unsubRatings){ unsubRatings(); unsubRatings = null; }
@@ -830,6 +870,7 @@ function startUserListener(docRef){
     updateProgress(); renderGrid();
   }, err => console.warn('Hesap senkronu kesildi', err));
 }
+// Tüm hesapların puanlarını canlı dinler; biri puan verince herkeste ortalama güncellenir
 function startRatingsListener(){
   if(unsubRatings) unsubRatings();
   unsubRatings = db.collection('placeRatings').onSnapshot(snap => {
@@ -859,6 +900,7 @@ function migrateOldRatings(){
   });
   if(n) batch.commit().catch(err => { console.error('Eski puanlar aktarılamadı', err); RATINGS_ERROR = err.code || 'hata'; refreshCommunityLine(); });
 }
+// Detay penceresindeki '★ 4.2/5 · 12 kişi puanladı' satırının yazısını üretir (puan yoksa veya okunamıyorsa uyarı verir)
 function communityLineHtml(name){
   const c = communityAvg(name);
   if(RATINGS_ERROR && !c) return `<span class="pc-sub">Topluluk puanlarına şu an erişilemiyor (${escHtml(RATINGS_ERROR)}). Yönetici: Firestore güvenlik kurallarını kontrol etmelidir.</span>`;
@@ -867,6 +909,7 @@ function communityLineHtml(name){
 }
 
 // ----- Yönetici paneli -----
+// Yönetici paneli: tüm hesapları, kazandıkları rozetleri ve ziyaret sayılarını listeler (yalnızca yönetici)
 async function openAdminPage(){
   if(!isAdmin()) return;
   window.__openPlaceName = null;
@@ -900,11 +943,13 @@ async function openAdminPage(){
     placard.querySelector('.p-body').innerHTML = `<div class="p-district">Yönetici Paneli</div><h2>Veriler okunamadı</h2><p style="color:var(--ink-soft);font-size:13px;line-height:1.6;">Firestore güvenlik kuralları yönetici okumasına izin vermiyor olabilir. Kuralları güncelledikten sonra tekrar dene.<br><span class="mono" style="font-size:11px;">${escHtml(e.message || e)}</span></p>`;
   }
 }
+// 'Yönetici' düğmesini yalnızca yönetici hesabında gösterir
 function toggleAdminBtn(){
   const b = document.getElementById('admin-nav-btn');
   if(b) b.style.display = isAdmin() ? '' : 'none';
 }
 
+// Üstteki 'Ankara'nın %X'ini keşfettin' yazısını ve ilerleme çubuğunu günceller
 function updateProgress() {
   const totalPlaces = 379;
   let visitedCount = Object.values(STATE).filter(s => s.visited).length;
@@ -916,14 +961,18 @@ function updateProgress() {
 // ==========================================
 // ROZETLER, KARŞILAMA EKRANI, PASAPORT, GPS CHECK-IN
 // ==========================================
+// Cihaza özel küçük ayarlar: karşılama ekranı görüldü mü, hangi rozetler kazanıldı
 const APP_META_KEY = 'ankaraAppMeta_v1';
 let APP_META = JSON.parse(localStorage.getItem(APP_META_KEY)) || { onboardingDone:false, earnedBadges:[] };
 function saveAppMeta(){ localStorage.setItem(APP_META_KEY, JSON.stringify(APP_META)); }
 
+// Dönem rozetlerinin adları (Hitit-Frig Kâşifi, Roma Lejyoneri vb.)
 const ERA_BADGE_NAMES = { s1:"Hitit-Frig Kâşifi", s2:"Galatya Gezgini", s3:"Roma Lejyoneri", s4:"Selçuklu Mimarı", s5:"Osmanlı Gezgini", s6:"Cumhuriyet Kâşifi", nature:"Doğa Avcısı" };
 
+// Ziyaret edilmiş yerlerin adlarını listeler
 function getVisitedNames(){ return Object.keys(STATE).filter(n => STATE[n] && STATE[n].visited); }
 
+// Tüm rozetlerin tanımı: ad, açıklama ve kazanma koşulu (check)
 function getAllBadgeDefs(){
   const defs = [];
   Object.keys(ERA_BADGE_NAMES).forEach(era=>{
@@ -946,6 +995,7 @@ function getAllBadgeDefs(){
   return defs;
 }
 
+// Yeni kazanılan rozet var mı bakar; varsa bildirim gösterir
 function checkBadges(){
   const defs = getAllBadgeDefs();
   defs.forEach(b=>{
@@ -957,6 +1007,7 @@ function checkBadges(){
   });
 }
 
+// Ekranın altında kısa süreli rozet bildirimi gösterir
 function showBadgeToast(badge){
   const toast = document.getElementById('badge-toast');
   document.getElementById('badge-toast-text').textContent = `Yeni rozet kazandın: ${badge.name}!`;
@@ -966,6 +1017,7 @@ function showBadgeToast(badge){
 }
 
 // --- Onboarding ---
+// İlk girişte 'Daha önce nereleri gördün?' penceresini açar
 function maybeShowOnboarding(){
   if(APP_META.onboardingDone) return;
   const list = document.getElementById('onboard-list');
@@ -994,9 +1046,11 @@ document.getElementById('onboard-confirm').addEventListener('click', ()=>{
 });
 
 // --- GPS check-in ---
+// Yer adından koordinat bulma sonuçlarını cihazda saklar (aynı yeri tekrar aramamak için)
 const GEOCODE_CACHE_KEY = 'ankaraGeocodeCache_v1';
 let geocodeCache = JSON.parse(localStorage.getItem(GEOCODE_CACHE_KEY)) || {};
 function saveGeocodeCache(){ localStorage.setItem(GEOCODE_CACHE_KEY, JSON.stringify(geocodeCache)); }
+// Bir yerin harita koordinatını internetten bulur
 async function geocodePlace(p){
   if(geocodeCache[p.name] !== undefined) return geocodeCache[p.name];
   try{
@@ -1008,6 +1062,7 @@ async function geocodePlace(p){
     return coords;
   }catch(e){ return null; }
 }
+// İki koordinat arasındaki mesafeyi metre olarak hesaplar
 function haversineMeters(lat1, lon1, lat2, lon2){
   const R = 6371000;
   const toRad = x => x*Math.PI/180;
@@ -1015,6 +1070,7 @@ function haversineMeters(lat1, lon1, lat2, lon2){
   const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
+// 'Konumumla doğrula': kullanıcı yerin yakınındaysa ziyareti GPS ile onaylar
 async function doGpsCheckin(p, statusEl){
   if(!navigator.geolocation){ alert('Tarayıcın konum servisini desteklemiyor.'); return; }
   statusEl.textContent = 'Konumun ve yer bilgisi karşılaştırılıyor...';
@@ -1034,10 +1090,12 @@ async function doGpsCheckin(p, statusEl){
 }
 
 // --- Passport & Badges pages ---
+// Üst menü düğmelerini ilgili sayfalara bağlar
 document.getElementById('passport-nav-btn').addEventListener('click', openPassportPage);
 document.getElementById('badges-nav-btn').addEventListener('click', openBadgesPage);
 document.getElementById('admin-nav-btn').addEventListener('click', openAdminPage);
 
+// 'Pasaportum': ziyaret edilen yerlerin damga görünümündeki sayfası
 function openPassportPage(){
   window.__openPlaceName = null;
   const placard = document.getElementById('placard');
@@ -1063,6 +1121,7 @@ function openPassportPage(){
   document.getElementById('p-close').addEventListener('click', closePlacard);
 }
 
+// 'Rozetlerim': kazanılan ve kilitli rozetlerin listesi
 function openBadgesPage(){
   window.__openPlaceName = null;
   const placard = document.getElementById('placard');
@@ -1085,6 +1144,7 @@ function openBadgesPage(){
   document.getElementById('p-close').addEventListener('click', closePlacard);
 }
 
+// Listenin üstündeki not kutusunu seçili ilçeye göre günceller
 function updateDistrictNote() {
   const noteEl = document.getElementById('mode-note');
   if (activeDistrict === 'Tümü') {
@@ -1095,6 +1155,7 @@ function updateDistrictNote() {
   document.getElementById('district-history-btn').addEventListener('click', ()=>openDistrictHistory(activeDistrict));
 }
 
+// Seçili ilçenin tarih metnini pencerede gösterir
 function openDistrictHistory(district){
   const placard = document.getElementById('placard');
   const info = DISTRICT_INFOS[district] || `${district} ilçesinin tarihi içeriği hazırlanıyor.`;
@@ -1112,6 +1173,7 @@ function openDistrictHistory(district){
   document.getElementById('p-close').addEventListener('click', closePlacard);
 }
 
+// İlçe düğmelerini ve ilçe seçim kutusunu çizer; seçim yapılınca listeyi yeniler
 function renderFilters(){
   const bar = document.getElementById('filter-bar');
   bar.innerHTML = '';
@@ -1161,11 +1223,13 @@ function renderFilters(){
   });
 }
 
+// Arama kutusuna yazdıkça listeyi süzer
 document.getElementById('search-input').addEventListener('input', (e) => {
   searchQuery = e.target.value.toLowerCase();
   renderGrid();
 });
 
+// TÜR FİLTRESİ (cami, müze, kale vb.): seçili tür ve tür grupları
 let activeCategory = '';
 const CATEGORIES = [
   { label:"Cami", keys:["cami"] },
@@ -1197,6 +1261,7 @@ categorySelect.addEventListener('change', (e)=>{
   activeCategory = e.target.value;
   renderGrid();
 });
+// Bir yerin seçili türe uyup uymadığını söyler
 function matchesCategory(p){
   if(!activeCategory) return true;
   const cat = CATEGORIES.find(c=>c.label === activeCategory);
@@ -1205,6 +1270,7 @@ function matchesCategory(p){
   return cat.keys.some(k=>t.includes(k));
 }
 
+// Telefon ekranında ilçe seçimi için açılır kutu
 const districtSelect = document.getElementById('district-select');
 DISTRICTS.forEach(d=>{
   const opt = document.createElement('option');
@@ -1218,6 +1284,7 @@ districtSelect.addEventListener('change', (e)=>{
   renderGrid();
 });
 
+// İlçe adlarının '-dan/-den' hâlleri (cümle kurarken kullanılır)
 const DISTRICT_ABLATIVE = {
   "Akyurt":"Akyurt'tan","Altındağ":"Altındağ'dan","Ayaş":"Ayaş'tan","Bala":"Bala'dan","Beypazarı":"Beypazarı'ndan",
   "Çamlıdere":"Çamlıdere'den","Çankaya":"Çankaya'dan","Çubuk":"Çubuk'tan","Elmadağ":"Elmadağ'dan","Etimesgut":"Etimesgut'tan",
@@ -1226,6 +1293,7 @@ const DISTRICT_ABLATIVE = {
   "Polatlı":"Polatlı'dan","Pursaklar":"Pursaklar'dan","Sincan":"Sincan'dan","Şereflikoçhisar":"Şereflikoçhisar'dan","Yenimahalle":"Yenimahalle'den"
 };
 
+// Dönemlere göre kart renkleri ve simgeleri
 const eraColors = { s1:'#DCE2DE', s2:'#C7D3CC', s3:'#9FB8AD', s4:'#2E7D6B', s5:'#C1652B', s6:'#1C2321', nature:'#1F4A3D' };
 const eraGlyph = { s1:'𐰸', s2:'⌘', s3:'⌂', s4:'☾', s5:'✦', s6:'▦', nature:'❧' };
 
@@ -1235,8 +1303,10 @@ const eraGlyph = { s1:'𐰸', s2:'⌘', s3:'⌂', s4:'☾', s5:'✦', s6:'▦', 
 const WIKI_IMG_CACHE_KEY = 'ankaraImgCache_v2';
 let wikiImgCache = {};
 try{ wikiImgCache = JSON.parse(localStorage.getItem(WIKI_IMG_CACHE_KEY) || '{}'); }catch(e){ wikiImgCache = {}; }
+// Bulunan fotoğrafların adreslerini cihazda saklar (her seferinde yeniden aramamak için)
 function saveWikiImgCache(){ try{ localStorage.setItem(WIKI_IMG_CACHE_KEY, JSON.stringify(wikiImgCache)); }catch(e){} }
 
+// Fotoğrafı bulunamayan yerler için, türüne göre genel bir arama terimi seçer
 function genericTermFor(p){
   const t = p.type.toLowerCase();
   if(t.includes('cami')) return 'Osmanlı camii';
@@ -1262,6 +1332,7 @@ function genericTermFor(p){
   return 'Anadolu kırsalı';
 }
 
+// Wikimedia Commons'ta fotoğraf arar
 async function commonsSearch(query, sizeHint){
   try{
     const r = await fetch(`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=1&gsrnamespace=6&prop=imageinfo&iiprop=url&iiurlwidth=600&format=json&origin=*`);
@@ -1277,6 +1348,7 @@ async function commonsSearch(query, sizeHint){
   return null;
 }
 
+// Bir yer için Wikipedia/Commons'tan fotoğraf bulur; bulamazsa genel görsel kullanılır
 async function fetchPlaceImage(p){
   const name = p.name;
   if(wikiImgCache[name] !== undefined) return wikiImgCache[name];
@@ -1298,6 +1370,7 @@ async function fetchPlaceImage(p){
   return result;
 }
 
+// Bulunan fotoğrafı karta ya da detay penceresine yerleştirir
 function attachPlaceImage(thumbEl, p){
   if(!thumbEl) return;
   if(p.img){
@@ -1322,6 +1395,7 @@ function attachPlaceImage(thumbEl, p){
   });
 }
 
+// Kartın altındaki puan satırı: topluluk ortalaması, varsa kullanıcının kendi puanı
 function cardRatingHtml(p, st){
   const c = communityAvg(p.name);
   if(c){
@@ -1330,6 +1404,7 @@ function cardRatingHtml(p, st){
   }
   return st.visited ? `<div class="card-rating">★ ${st.rating.toFixed(1)}/5</div>` : '';
 }
+// Listedeki tek bir yer kartını oluşturur
 function placeCard(p){
   const card = document.createElement('div');
   card.className = 'place-card';
@@ -1345,6 +1420,7 @@ function placeCard(p){
   return card;
 }
 
+// Henüz eklenmemiş yerler için soluk 'yakında' kartı oluşturur
 function pendingCard(district, i){
   const card = document.createElement('div');
   card.className = 'place-card pending';
@@ -1374,10 +1450,12 @@ const POPULARITY_ORDER = [
 ];
 const popularityRank = {};
 POPULARITY_ORDER.forEach((name, i) => { popularityRank[name] = i; });
+// Bir yerin popülerlik sırasını verir; listeler bu sıraya göre dizilir
 function getPopularityRank(p){
   return popularityRank[p.name] !== undefined ? popularityRank[p.name] : 100000;
 }
 
+// ANA LİSTE: ilçe, filtre, tür ve aramaya göre kartları süzüp sıralar ve ekrana basar
 function renderGrid(){
   const grid = document.getElementById('grid');
   grid.innerHTML = '';
@@ -1414,6 +1492,7 @@ function renderGrid(){
   }
 }
 
+// YER DETAYI: pencereyi doldurur (bilgiler, hikâye, puan çubuğu, ziyaret/favori düğmeleri, benzer yerler)
 function openPlacard(p){
   window.__openPlaceName = p.name;
   const placard = document.getElementById('placard');
@@ -1513,9 +1592,11 @@ function openPlacard(p){
     });
   });
 }
+// Detay penceresini kapatır
 function closePlacard(){ document.getElementById('overlay').classList.remove('open'); }
 document.getElementById('overlay').addEventListener('click', e=>{ if(e.target.id === 'overlay') closePlacard(); });
 
+// ----- Sayfa açılış komutları (aşağıdan başlar) -----
 // DİKKAT: Sayfa açılır açılmaz ekranı çizen komutlar burasıdır!
 updateProgress();
 updateDistrictNote();
