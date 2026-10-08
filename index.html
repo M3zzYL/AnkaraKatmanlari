@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#14452F">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- GÜVENLİK: İçerik Güvenliği Politikası (CSP) — sayfaya yalnızca bilinen kaynaklardan betik yüklenmesine izin verir, eklenti/nesne gömmeyi ve dış formları kapatır.
+     (Giriş ya da veritabanı beklenmedik biçimde çalışmazsa tarayıcı konsolunda "Content Security Policy" uyarısı aranır.) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://www.google.com https://www.recaptcha.net https://recaptcha.net https://*.firebaseapp.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: wss:; frame-src https://*.firebaseapp.com https://accounts.google.com https://www.google.com https://recaptcha.google.com https://www.recaptcha.net; object-src 'none'; base-uri 'none'; form-action 'none'">
+<!-- GÜVENLİK: Site başka bir sayfanın içine gömülürse (tıklama kandırma / clickjacking) gizlenir -->
+<script>if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.self.location; } catch (e) {} }</script>
+<!-- Tema (gece/gündüz) sayfa çizilmeden önce uygulanır, böylece ekran yanıp sönmez -->
+<script>(function(){try{var t=localStorage.getItem('ankaraTheme');if(t!=='dark'&&t!=='light'){t=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
 <title>Ankara Katmanları — Ankara'nın tarih katmanlarını keşfet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,6 +20,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app-check.js"></script>
 <style>
 /* =========================================================
    ANKARA KATMANLARI — TASARIM SİSTEMİ
@@ -23,7 +32,18 @@
   --maroon:#6B1425; --maroon-2:#8E2238; --danger:#B3261E;
   --radius:18px; --radius-sm:12px; --shadow:0 1px 2px rgba(26,40,34,.06),0 8px 24px rgba(26,40,34,.08);
   --shadow-lg:0 20px 60px rgba(14,30,22,.28); --ease:cubic-bezier(.2,.8,.2,1);
+  --ink-2:#25342D; --topbar-bg:#FFFDF8E6; --flag-bg:#FFFDF8EE; --suggest-a:#F4E7BE; --suggest-b:#FFF6DB; --suggest-border:#EBD99C;
+  --mem-a:#FFF9E6; --mem-b:#F7ECC9; --mem-border:#E6D49A; --mem-ink:#4A4026; --note-bg:#FFFDF2; --toast-bg:#1A2822; --hex-a:#EFE6D2; --hex-b:#1F6B4A;
+  --accent:#14452F; --brand-b:#6B1425; color-scheme:light;
   --era-s1:#A5712C; --era-s2:#8E4B3A; --era-s3:#B03A48; --era-s4:#1F6B6B; --era-s5:#2F5D8A; --era-s6:#3E4A44; --era-nature:#3F7D3A;
+}
+/* GECE MODU: aynı değişkenlerin koyu karşılıkları */
+:root[data-theme="dark"]{
+  --bg:#0E1613; --surface:#16211C; --surface-2:#1C2924; --ink:#E8EEE9; --ink-2:#C9D4CD; --muted:#93A39A; --line:#2B3B34;
+  --green:#1F7A52; --green-2:#2E9A6A; --green-3:#1F3A2D; --accent:#7FD3A8; --brand-b:#E58A9A; --gold:#D3A648; --gold-soft:#3A3012;
+  --topbar-bg:#0E1613E6; --flag-bg:#16211CEE; --suggest-a:#2B2410; --suggest-b:#241E0E; --suggest-border:#4A3F1C;
+  --mem-a:#2A2412; --mem-b:#211C0F; --mem-border:#4A3F1C; --mem-ink:#E4D8B0; --note-bg:#1B1709; --toast-bg:#2A3A32; --hex-a:#223029; --hex-b:#2E9A6A;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark;
 }
 *{box-sizing:border-box;} html{scroll-behavior:smooth;} html,body{margin:0;padding:0;}
 body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5;}
@@ -50,11 +70,11 @@ a.btn,a.btn:hover{text-decoration:none;}
 .err{color:#FFD0CB;font-size:13px;margin-top:14px;display:none;}
 
 /* ---------- ÜST MENÜ ---------- */
-.topbar{position:sticky;top:0;z-index:60;background:#FFFDF8E6;backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line);}
+.topbar{position:sticky;top:0;z-index:60;background:var(--topbar-bg);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line);}
 .topbar-in{max-width:1240px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:20px;}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:'Fraunces',serif;font-weight:700;font-size:19px;white-space:nowrap;}
 .brand-mark{width:34px;height:34px;border-radius:50%;background:var(--maroon);border:2px solid var(--gold-2);color:var(--gold-2);display:flex;align-items:center;justify-content:center;}
-.brand b{color:var(--maroon);}
+.brand b{color:var(--brand-b);}
 .nav{display:flex;gap:4px;margin-left:12px;flex:1;}
 .nav a{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;font-weight:600;font-size:14px;color:var(--muted);text-decoration:none;transition:background .15s,color .15s;}
 .nav a:hover{background:var(--surface-2);color:var(--ink);} .nav a.active{background:var(--green);color:#fff;}
@@ -108,14 +128,14 @@ a.btn,a.btn:hover{text-decoration:none;}
 #hexmap{width:100%;height:auto;display:block;}
 .map-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;} @media(max-width:640px){#hexmap{min-width:560px;}}
 .mini-list .mini .nm{font-size:13.5px;}
-.hex{cursor:pointer;outline:none;} .hex polygon{stroke:#fff;stroke-width:3;transition:transform .2s var(--ease),filter .2s,stroke .2s;transform-box:fill-box;transform-origin:center;}
+.hex{cursor:pointer;outline:none;} .hex polygon{stroke:var(--surface);stroke-width:3;transition:transform .2s var(--ease),filter .2s,stroke .2s;transform-box:fill-box;transform-origin:center;}
 .hex:hover polygon,.hex:focus-visible polygon{transform:scale(1.07);filter:drop-shadow(0 6px 10px rgba(20,40,30,.35));}
 .hex.sel polygon{stroke:var(--gold);stroke-width:5;transform:scale(1.08);filter:drop-shadow(0 8px 14px rgba(20,40,30,.4));}
 .hex text{pointer-events:none;font-family:'Manrope',sans-serif;text-anchor:middle;} .hex .hn{font-size:10.5px;font-weight:700;} .hex .hc{font-size:9px;font-weight:500;opacity:.9;}
 .hex .done{fill:var(--gold-2);}
 .legend{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);flex-wrap:wrap;margin-top:6px;}
-.legend .grad{width:120px;height:8px;border-radius:4px;background:linear-gradient(90deg,#EFE6D2,#1F6B4A);} .legend .gd{width:12px;height:12px;border-radius:50%;background:var(--gold-2);border:2px solid #fff;box-shadow:0 0 0 1px var(--line);}
-.tip{position:fixed;z-index:80;pointer-events:none;background:var(--ink);color:#fff;padding:8px 12px;border-radius:10px;font-size:12.5px;line-height:1.35;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;box-shadow:var(--shadow);}
+.legend .grad{width:120px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--hex-a),var(--hex-b));} .legend .gd{width:12px;height:12px;border-radius:50%;background:var(--gold-2);border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);}
+.tip{position:fixed;z-index:80;pointer-events:none;background:var(--toast-bg);color:#fff;padding:8px 12px;border-radius:10px;font-size:12.5px;line-height:1.35;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;box-shadow:var(--shadow);}
 .tip.show{opacity:1;transform:none;} .tip b{display:block;font-size:13px;}
 
 .panel{padding:22px;position:sticky;top:78px;max-height:calc(100vh - 100px);overflow:auto;}
@@ -124,7 +144,7 @@ a.btn,a.btn:hover{text-decoration:none;}
 .meter{margin:10px 0 14px;} .meter-row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:5px;}
 .meter-row b{color:var(--ink);} .meter-bar{height:8px;border-radius:5px;background:var(--line);overflow:hidden;} .meter-bar i{display:block;height:100%;border-radius:5px;background:var(--green-2);transition:width .5s var(--ease);} .meter-bar.gold i{background:var(--gold);}
 .panel-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 16px;}
-.history{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.7;color:#2B3A33;max-height:210px;overflow:auto;margin-bottom:16px;}
+.history{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.7;color:var(--ink-2);max-height:210px;overflow:auto;margin-bottom:16px;}
 .history.collapsed{display:none;}
 .mini-title{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:6px 0 8px;}
 .mini-list{display:flex;flex-direction:column;gap:6px;}
@@ -132,7 +152,7 @@ a.btn,a.btn:hover{text-decoration:none;}
 .mini:hover{border-color:var(--green-2);transform:translateX(2px);}
 .mini .dot{width:10px;height:10px;border-radius:50%;flex:0 0 10px;} .mini span.nm{font-size:13.5px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .mini .st{font-size:11px;color:var(--muted);} .mini .st.ok{color:var(--green-2);font-weight:700;} .mini .st.gps{color:var(--gold);font-weight:700;}
-.suggest{background:linear-gradient(135deg,var(--gold-soft),#FFF6DB);border:1px solid #EBD99C;border-radius:14px;padding:14px 16px;margin-top:14px;}
+.suggest{background:linear-gradient(135deg,var(--suggest-a),var(--suggest-b));border:1px solid var(--suggest-border);border-radius:14px;padding:14px 16px;margin-top:14px;}
 .suggest .eyebrow{margin-bottom:4px;} .suggest b{font-family:'Fraunces',serif;font-size:18px;display:block;margin-bottom:6px;}
 
 /* ---------- YERLER (liste) ---------- */
@@ -154,7 +174,7 @@ a.btn,a.btn:hover{text-decoration:none;}
 .pc-glyph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#ffffff55;font-size:52px;font-family:'Fraunces',serif;}
 .pc-type{position:absolute;left:12px;bottom:10px;z-index:2;color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
 .pc-flags{position:absolute;right:10px;top:10px;z-index:2;display:flex;gap:6px;}
-.flag{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#FFFDF8EE;box-shadow:0 1px 4px #0003;color:var(--muted);}
+.flag{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--flag-bg);box-shadow:0 1px 4px #0003;color:var(--muted);}
 .flag.fav{color:var(--gold);} .flag.vis{color:var(--green-2);} .flag.gps{background:var(--gold-2);color:#3A2705;}
 .pc-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1;}
 .pc-dist{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--gold);}
@@ -171,9 +191,9 @@ a.btn,a.btn:hover{text-decoration:none;}
 .dr-scroll{overflow-y:auto;flex:1;overscroll-behavior:contain;}
 .dr-hero{height:260px;position:relative;background:var(--era,#3E4A44);flex:0 0 auto;overflow:hidden;} .dr-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
 .dr-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,22,16,.35),transparent 35%,rgba(10,22,16,.7));}
-.dr-close{position:absolute;right:14px;top:14px;z-index:3;width:38px;height:38px;border-radius:50%;border:0;background:#FFFDF8F0;color:var(--ink);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #0004;transition:transform .15s;} .dr-close:hover{transform:rotate(90deg);}
+.dr-close{position:absolute;right:14px;top:14px;z-index:3;width:38px;height:38px;border-radius:50%;border:0;background:var(--flag-bg);color:var(--ink);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #0004;transition:transform .15s;} .dr-close:hover{transform:rotate(90deg);}
 .dr-tags{position:absolute;left:18px;bottom:16px;z-index:3;display:flex;gap:8px;flex-wrap:wrap;}
-.tag{background:#FFFDF8EE;color:var(--ink);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:700;} .tag.era{background:var(--era);color:#fff;}
+.tag{background:var(--flag-bg);color:var(--ink);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:700;} .tag.era{background:var(--era);color:#fff;}
 .dr-body{padding:22px 24px 40px;}
 .dr-dist{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--gold);background:none;border:0;padding:0;} .dr-dist:hover{text-decoration:underline;}
 .dr-body h2{font-size:32px;line-height:1.1;margin:6px 0 4px;} .dr-sub{color:var(--muted);font-size:14px;margin-bottom:4px;}
@@ -184,7 +204,7 @@ a.btn,a.btn:hover{text-decoration:none;}
 .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 8px;}
 .fact{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;} .fact .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px;} .fact .v{font-size:14px;font-weight:600;line-height:1.35;}
 .note{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:16px;}
-.story{font-size:15.5px;line-height:1.8;color:#25342D;margin:14px 0 20px;}
+.story{font-size:15.5px;line-height:1.8;color:var(--ink-2);margin:14px 0 20px;}
 .block-title{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:22px 0 10px;}
 .rate-box{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px;}
 .stars{position:relative;font-size:24px;letter-spacing:3px;line-height:1;white-space:nowrap;} .stars .e{color:var(--line);} .stars .f{position:absolute;left:0;top:0;overflow:hidden;color:var(--gold);}
@@ -193,21 +213,21 @@ a.btn,a.btn:hover{text-decoration:none;}
 .related{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
 
 /* ---------- "BEN DE BURADAYDIM" ANI KARTI ---------- */
-.memory{border-radius:18px;padding:18px;margin:6px 0 4px;background:linear-gradient(145deg,#FFF9E6,#F7ECC9);border:1px solid #E6D49A;position:relative;overflow:hidden;}
+.memory{border-radius:18px;padding:18px;margin:6px 0 4px;background:linear-gradient(145deg,var(--mem-a),var(--mem-b));border:1px solid var(--mem-border);position:relative;overflow:hidden;}
 .memory::before{content:'';position:absolute;right:-40px;top:-40px;width:130px;height:130px;border-radius:50%;border:2px dashed #C9A24B66;}
 .memory.locked{background:var(--surface);border:1px dashed #CFC4A9;} .memory.flash{animation:flash 1.4s var(--ease);}
 @keyframes flash{0%{box-shadow:0 0 0 0 #E3C46B;}60%{box-shadow:0 0 0 14px #E3C46B00;}100%{box-shadow:none;}}
 .memory .m-eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:6px;margin-bottom:6px;}
-.memory h4{font-size:20px;margin-bottom:2px;} .memory .m-date{font-size:14.5px;color:#4A4026;margin-bottom:12px;} .memory .m-date b{color:var(--maroon);}
+.memory h4{font-size:20px;margin-bottom:2px;} .memory .m-date{font-size:14.5px;color:var(--mem-ink);margin-bottom:12px;} .memory .m-date b{color:var(--brand-b);}
 .memory .m-hint{font-size:13.5px;color:var(--muted);margin-bottom:12px;}
 .m-photo{margin:0 0 10px;position:relative;border-radius:14px;overflow:hidden;box-shadow:0 6px 18px #4A402633;background:#fff;padding:8px 8px 0;transform:rotate(-.8deg);}
 .m-photo img{width:100%;max-height:340px;object-fit:cover;border-radius:8px;display:block;cursor:zoom-in;} .m-photo figcaption{font-family:'Fraunces',serif;font-style:italic;font-size:14px;padding:10px 4px 12px;color:#4A4026;min-height:38px;}
-.m-actions{display:flex;gap:8px;flex-wrap:wrap;} .m-note{width:100%;border:1px solid #E6D49A;background:#FFFDF2;border-radius:12px;padding:10px 12px;font:inherit;font-size:14px;resize:none;margin-bottom:10px;outline:none;} .m-note:focus{border-color:var(--gold);}
+.m-actions{display:flex;gap:8px;flex-wrap:wrap;} .m-note{width:100%;border:1px solid var(--mem-border);background:var(--note-bg);color:var(--ink);border-radius:12px;padding:10px 12px;font:inherit;font-size:14px;resize:none;margin-bottom:10px;outline:none;} .m-note:focus{border-color:var(--gold);}
 .m-msg{font-size:12.5px;color:var(--muted);margin-top:8px;} .m-msg.warn{color:var(--maroon);}
 
 /* ---------- ANILARIM (pasaport) ---------- */
 .memories{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;}
-.polaroid{background:#fff;border-radius:6px;padding:12px 12px 16px;box-shadow:0 2px 3px rgba(26,40,34,.1),0 14px 30px rgba(26,40,34,.12);cursor:pointer;transition:transform .3s var(--ease),box-shadow .3s;border:1px solid #EFE7D2;}
+.polaroid{background:#fff;border-radius:6px;padding:12px 12px 16px;box-shadow:0 2px 3px rgba(26,40,34,.1),0 14px 30px rgba(26,40,34,.12);cursor:pointer;transition:transform .3s var(--ease),box-shadow .3s;border:1px solid #EFE7D2;color:#1A2822;}
 .polaroid:nth-child(3n+1){transform:rotate(-1.4deg);} .polaroid:nth-child(3n+2){transform:rotate(1deg);} .polaroid:nth-child(3n){transform:rotate(-.4deg);}
 .polaroid:hover{transform:rotate(0) translateY(-6px);box-shadow:0 4px 6px rgba(26,40,34,.1),0 22px 40px rgba(26,40,34,.2);}
 .po-img{aspect-ratio:1/1;border-radius:3px;overflow:hidden;position:relative;background:var(--era,#3E4A44);} .po-img img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -216,7 +236,7 @@ a.btn,a.btn:hover{text-decoration:none;}
 .po-cap{padding:12px 4px 0;} .po-cap h4{font-family:'Fraunces',serif;font-size:17px;line-height:1.2;} .po-cap .d{font-size:12.5px;color:var(--maroon);font-weight:700;margin-top:3px;} .po-cap .n{font-family:'Fraunces',serif;font-style:italic;font-size:13.5px;color:#4A4026;margin-top:6px;}
 .po-seal{position:absolute;right:8px;top:8px;width:30px;height:30px;border-radius:50%;background:var(--gold-2);color:#3A2705;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px #0004;}
 .stamp-row{display:flex;flex-wrap:wrap;gap:8px;}
-.stamp-chip{border:1.5px solid var(--green-2);color:var(--green);border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:600;background:var(--surface);transform:rotate(-1.2deg);}
+.stamp-chip{border:1.5px solid var(--green-2);color:var(--accent);border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:600;background:var(--surface);transform:rotate(-1.2deg);}
 .stamp-chip:nth-child(2n){transform:rotate(1deg);} .stamp-chip:hover{background:var(--green-3);}
 
 /* ---------- ROZETLER ---------- */
@@ -239,7 +259,7 @@ a.btn,a.btn:hover{text-decoration:none;}
 .auser .bs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;} .auser .bs span{background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;}
 
 /* ---------- BİLDİRİM, MODAL, IŞIK KUTUSU ---------- */
-.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,24px);z-index:400;background:var(--ink);color:#fff;border-radius:18px;padding:12px 20px 12px 14px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:all .4s var(--ease);max-width:calc(100% - 28px);}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,24px);z-index:400;background:var(--toast-bg);color:#fff;border-radius:18px;padding:12px 20px 12px 14px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:all .4s var(--ease);max-width:calc(100% - 28px);}
 .toast.show{opacity:1;transform:translate(-50%,0);} .toast img{width:54px;height:54px;} .toast .tt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);font-weight:700;} .toast .tn{font-family:'Fraunces',serif;font-size:17px;}
 .toast.plain{padding:12px 20px;} 
 .modal{position:fixed;inset:0;z-index:300;background:rgba(12,24,18,.62);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;} .modal.open{display:flex;}
@@ -262,8 +282,8 @@ a.btn,a.btn:hover{text-decoration:none;}
 }
 @media(max-width:820px){
   .nav{display:none;} .topbar-in{padding:10px 16px;} .wrap{padding:0 16px;}
-  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;background:#FFFDF8F2;backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));}
-  .tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;border-radius:12px;} .tabbar a.active{color:var(--green);background:var(--green-3);}
+  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;background:var(--topbar-bg);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));}
+  .tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;border-radius:12px;} .tabbar a.active{color:var(--accent);background:var(--green-3);}
   body{padding-bottom:70px;} .toast{bottom:84px;}
   .drawer{width:100%;top:6vh;border-radius:22px 22px 0 0;transform:translateY(104%);} .drawer.open{transform:none;} .dr-hero{height:220px;}
   .section-head h2{font-size:25px;} .stats{gap:10px;} .stat b{font-size:26px;}
@@ -271,6 +291,49 @@ a.btn,a.btn:hover{text-decoration:none;}
 }
 @media(max-width:520px){ .hero h1{font-size:30px;} .strata{flex-wrap:wrap;} .stratum{flex:1 1 33%;} .grid{grid-template-columns:1fr 1fr;gap:12px;} .pc-img{height:116px;} .pc-body{padding:10px 12px 12px;} .pc-body h3{font-size:15px;} .brand .brand-text{display:none;} }
 @media(prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}
+
+/* Fotoğrafı olan kutularda dönem simgesi görünmez; yalnızca fotoğrafı olmayanlarda arka plan simgesi kalır */
+.has-img > .pc-glyph{display:none;}
+
+/* ---------- YENİ BİLEŞENLER: beta, bant, tema düğmesi, yönetici, galeri, tehlike ---------- */
+.beta{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--gold-soft);color:var(--gold);border:1px solid var(--suggest-border);border-radius:999px;padding:2px 8px;margin-left:8px;}
+.wip{display:inline-block;background:#ffffff14;border:1px dashed #E3C46B88;color:#F4E7BE;border-radius:12px;padding:8px 14px;font-size:13px;margin:0 0 16px;}
+.icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:flex;align-items:center;justify-content:center;transition:border-color .15s,transform .15s;}
+.icon-btn:hover{border-color:var(--green-2);transform:rotate(12deg);}
+.user-menu button.danger{color:var(--danger);} .user-menu button.hidden{display:none;}
+.btn-danger{background:var(--danger);color:#fff;} .btn-danger:hover{filter:brightness(1.1);} .btn-danger[disabled]{opacity:.4;}
+.modal-box.small{max-width:480px;} .modal-box.small h2{font-size:21px;}
+.footer .contact{margin-top:10px;font-size:13.5px;} .footer .contact a{color:var(--accent);font-weight:700;}
+
+.afilters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;} .afilters .field{flex:1 1 220px;}
+.dot-s{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;} .dot-s.on{color:#1E9E5A;} .dot-s.off{color:var(--muted);font-weight:600;}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:700;margin-left:6px;} .pill.ban{background:#B3261E22;color:var(--danger);border:1px solid #B3261E55;}
+.arow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;} .auser .head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;} .g-item{border:0;padding:0;background:var(--surface);border-radius:12px;overflow:hidden;position:relative;aspect-ratio:1/1;box-shadow:var(--shadow);cursor:zoom-in;}
+.g-item img{width:100%;height:100%;object-fit:cover;display:block;} .g-item span{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,#000a);color:#fff;font-size:10.5px;padding:14px 6px 5px;text-align:left;}
+.ph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;} .ph-item{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px;font-size:12px;} .ph-item img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;display:block;margin-bottom:6px;}
+.m-msg.removed{color:var(--danger);}
+
+/* ---------- TELEFON: sayfa değil yalnızca içerik kayar, alt sekme çubuğu hep altta kalır ---------- */
+@media(max-width:820px){
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none;}
+  #app{display:flex;flex-direction:column;height:100vh;height:100dvh;}
+  .topbar{position:relative;flex:0 0 auto;}
+  .scroll-area{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+  .tabbar{display:flex;position:static;flex:0 0 auto;padding-bottom:calc(6px + env(safe-area-inset-bottom));}
+  body{padding-bottom:0;} .toast{bottom:90px;}
+}
+
+/* ---------- HAFTANIN FOTOĞRAFI YARIŞMASI ---------- */
+.contest{padding:22px;margin-bottom:22px;} .c-info{font-size:14px;color:var(--ink-2);line-height:1.65;margin-bottom:12px;}
+.c-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:6px;}
+.c-item{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:8px;} .c-item.voted{border-color:var(--gold);box-shadow:0 0 0 2px #E3C46B55;}
+.c-item img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;cursor:zoom-in;display:block;} .c-cap{display:flex;justify-content:space-between;gap:6px;font-size:12.5px;} .c-cap b{font-weight:700;} .c-cap span{color:var(--gold);font-weight:700;white-space:nowrap;}
+.c-own{font-size:12px;color:var(--muted);text-align:center;padding:6px;}
+.c-winner{display:flex;gap:14px;align-items:center;margin-top:16px;padding:12px;border-radius:14px;background:linear-gradient(135deg,var(--suggest-a),var(--suggest-b));border:1px solid var(--suggest-border);} .c-winner img{width:84px;height:84px;object-fit:cover;border-radius:12px;flex:0 0 84px;}
+
+.gate-links{margin-top:22px;font-size:12.5px;color:#BCD3C6;} .gate-links a{color:var(--gold-2);font-weight:700;}
+#a-contest .mini{flex-wrap:wrap;} #a-contest .mini .nm{white-space:normal;}
 
 </style>
 </head>
@@ -285,6 +348,7 @@ a.btn,a.btn:hover{text-decoration:none;}
     <p>Hititlerden Cumhuriyet'e, Ankara'nın 25 ilçesindeki 379 durağı keşfet. Gittiğin yerleri konumunla doğrula, fotoğraflarınla kendi Ankara anı defterini oluştur, rozetleri topla.</p>
     <button class="btn btn-gold" id="gate-auth-btn">Google ile giriş yap</button>
     <div class="err" id="gate-error"></div>
+    <p class="gate-links">Görüş ve öneriler: <a href="mailto:ankarakatmanlari@gmail.com">ankarakatmanlari@gmail.com</a> · <a href="https://instagram.com/ankarakatmanlari" target="_blank" rel="noopener noreferrer">Instagram</a></p>
   </div>
 </div>
 
@@ -294,7 +358,7 @@ a.btn,a.btn:hover{text-decoration:none;}
   <!-- ÜST MENÜ: sayfa bağlantıları, ilerleme halkası ve hesap menüsü -->
   <header class="topbar">
     <div class="topbar-in">
-      <a class="brand" href="#explore"><span class="brand-mark"><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20V10l7-6 7 6v10"/></svg></span><span class="brand-text">Ankara <b>Katmanları</b></span></a>
+      <a class="brand" href="#explore"><span class="brand-mark"><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20V10l7-6 7 6v10"/></svg></span><span class="brand-text">Ankara <b>Katmanları</b></span><span class="beta" title="Site yapım aşamasındadır">Beta</span></a>
       <nav class="nav" id="nav">
         <a href="#explore" data-view="explore"><span data-ico="map"></span>Keşfet</a>
         <a href="#places" data-view="places"><span data-ico="grid"></span>Yerler</a>
@@ -303,15 +367,22 @@ a.btn,a.btn:hover{text-decoration:none;}
         <a href="#admin" data-view="admin" id="nav-admin" class="hidden"><span data-ico="shield"></span>Yönetici</a>
       </nav>
       <div class="top-right">
+        <button class="icon-btn" id="theme-btn" aria-label="Gece modunu aç/kapat" title="Gece / gündüz modu"></button>
         <div class="top-progress"><div><span>Keşfedilen</span><br><b id="top-pct">%0</b></div><div class="ring" id="top-ring"></div></div>
         <button class="user-btn" id="user-btn" aria-haspopup="true"><img id="user-img" alt="" referrerpolicy="no-referrer"><span id="user-name">Hesap</span></button>
       </div>
     </div>
     <div class="user-menu" id="user-menu">
       <div class="um-mail" id="um-mail"></div>
+      <button id="um-admin" class="hidden"><span data-ico="shield"></span>Yönetici paneli</button>
+      <button id="um-reset"><span data-ico="refresh"></span>Verilerimi sıfırla</button>
+      <button id="um-delete" class="danger"><span data-ico="trash"></span>Hesabımı sil</button>
       <button id="signout-btn"><span data-ico="out"></span>Çıkış yap</button>
     </div>
   </header>
+
+  <!-- KAYDIRMA ALANI: telefonda yalnızca burası kayar; alt sekme çubuğu sabit kalır (bazı telefonlarda ortaya kayma sorununu önler) -->
+  <div class="scroll-area" id="scroll-area">
 
   <!-- KEŞFET: karşılama bandı, katmanlar şeridi, ilçe haritası ve ilçe paneli -->
   <section class="view" id="view-explore">
@@ -321,6 +392,7 @@ a.btn,a.btn:hover{text-decoration:none;}
           <div class="eyebrow" style="color:var(--gold-2)">Ankara'nın tarih katmanları</div>
           <h1>Şehrin altındaki <em>katmanları</em> ilçe ilçe keşfet.</h1>
           <p class="lead">Haritadan bir ilçe seç, duraklarını gez, konumunla doğrula ve her ziyareti fotoğrafınla kendi Ankara anına dönüştür.</p>
+          <div class="wip">🚧 Site yapım aşamasındadır — bazı özellikler değişebilir ya da hatalı çalışabilir.</div>
           <div class="hero-actions">
             <a class="btn btn-gold" href="#places">Tüm yerleri gör</a>
             <a class="btn btn-ghost" style="color:#fff;border-color:#ffffff44" href="#memories">Anılarım</a>
@@ -368,6 +440,7 @@ a.btn,a.btn:hover{text-decoration:none;}
   <section class="view" id="view-memories">
     <div class="wrap section">
       <div class="section-head"><div><div class="eyebrow">Gezgin pasaportu</div><h2>Ankara anılarım</h2><p>Konumunla doğruladığın her yer buraya bir anı kartı olarak eklenir. Fotoğrafını ekleyerek kartı tamamla.</p></div><div id="mem-count" class="mono" style="font-size:13px;color:var(--muted)"></div></div>
+      <div id="contest-card"></div>
       <div class="memories" id="memories"></div>
       <div id="stamps-wrap"></div>
     </div>
@@ -380,10 +453,14 @@ a.btn,a.btn:hover{text-decoration:none;}
 
   <!-- YÖNETİCİ (yalnızca yönetici hesabı) -->
   <section class="view" id="view-admin">
-    <div class="wrap section"><div class="section-head"><div><div class="eyebrow">Yönetim</div><h2>Hesaplar ve rozetler</h2></div></div><div id="admin-body"></div></div>
+    <div class="wrap section"><div class="section-head"><div><div class="eyebrow">Yönetim</div><h2>Hesaplar ve rozetler <span class="beta" style="vertical-align:middle">Yapım aşamasında</span></h2><p>Bu bölüm henüz geliştirme aşamasındadır; bazı özellikler eksik ya da hatalı olabilir.</p></div></div><div id="admin-body"></div></div>
   </section>
 
-  <div class="footer">Ankara Katmanları · Ücret ve ziyaret saatleri değişebilir, gitmeden önce ilgili kurumun resmî kanallarından kontrol edin.</div>
+  <div class="footer">Ankara Katmanları · Site yapım aşamasındadır · Ücret ve ziyaret saatleri değişebilir, gitmeden önce ilgili kurumun resmî kanallarından kontrol edin.
+    <div class="contact">Görüş ve önerileriniz için: <a href="mailto:ankarakatmanlari@gmail.com">ankarakatmanlari@gmail.com</a></div>
+    <div class="contact">Bizi takip edin: <a href="https://instagram.com/ankarakatmanlari" target="_blank" rel="noopener noreferrer">instagram.com/ankarakatmanlari</a></div>
+  </div>
+  </div><!-- /scroll-area -->
 
   <!-- ALT SEKME ÇUBUĞU (telefon) -->
   <nav class="tabbar" id="tabbar">
@@ -391,6 +468,7 @@ a.btn,a.btn:hover{text-decoration:none;}
     <a href="#places" data-view="places"><span data-ico="grid"></span>Yerler</a>
     <a href="#memories" data-view="memories"><span data-ico="camera"></span>Anılarım</a>
     <a href="#badges" data-view="badges"><span data-ico="award"></span>Rozetler</a>
+    <a href="#admin" data-view="admin" id="tab-admin" class="hidden"><span data-ico="shield"></span>Yönetici</a>
   </nav>
 </div>
 
@@ -409,6 +487,23 @@ a.btn,a.btn:hover{text-decoration:none;}
     <div class="modal-foot"><button class="btn btn-ghost" id="onboard-skip">Şimdilik geç</button><button class="btn btn-green" id="onboard-confirm">Kaydet</button></div>
   </div>
 </div>
+<div class="modal" id="photo-warn">
+  <div class="modal-box small">
+    <h2>📸 Fotoğrafın herkese görünür olacak</h2>
+    <p>Eklediğin fotoğraf, bu yerin sayfasında <b>giriş yapmış tüm kullanıcılar tarafından görülebilir</b> (adın gösterilmez, “Bir gezgin” olarak görünür). Yüz, plaka, kimlik gibi kişisel bilgiler içeren ya da uygunsuz fotoğraflar yüklememeni rica ederiz; yönetici bu tür fotoğrafları kaldırabilir ve hesabı askıya alabilir.</p>
+    <div class="modal-foot"><button class="btn btn-ghost" id="pw-cancel">Vazgeç</button><button class="btn btn-green" id="pw-ok">Anladım, fotoğraf seç</button></div>
+  </div>
+</div>
+<div class="modal" id="danger-modal">
+  <div class="modal-box small">
+    <h2 id="dg-title">Emin misin?</h2>
+    <p id="dg-text"></p>
+    <div style="padding:0 26px 6px"><label style="font-size:13px;color:var(--muted)">Onaylamak için <b id="dg-word"></b> yaz:</label><input class="input" id="dg-input" autocomplete="off" style="margin-top:8px;border-radius:12px"></div>
+    <div class="modal-foot"><button class="btn btn-ghost" id="dg-cancel">Vazgeç</button><button class="btn btn-danger" id="dg-ok" disabled>Onayla</button></div>
+  </div>
+</div>
+<div class="modal" id="admin-modal"><div class="modal-box"><h2 id="am-title">Fotoğraflar</h2><div id="am-body" style="overflow:auto;padding:0 22px 8px"></div><div class="modal-foot"><span></span><button class="btn btn-ghost" id="am-close">Kapat</button></div></div></div>
+<div class="modal" id="gal-modal"><div class="modal-box"><h2 id="gm-title">Bu yerde çekilen anılar</h2><div id="gm-body" style="overflow:auto;padding:0 22px 8px"></div><div class="modal-foot"><span></span><button class="btn btn-ghost" id="gm-close">Kapat</button></div></div></div>
 <div class="lightbox" id="lightbox"><img alt=""></div>
 <input type="file" id="mem-file" accept="image/*" class="hidden">
 
@@ -923,7 +1018,9 @@ const BADGE_IMAGES = {
 "verified-Pursaklar": "data:image/webp;base64,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",
 "verified-Sincan": "data:image/webp;base64,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",
 "verified-Şereflikoçhisar": "data:image/webp;base64,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",
-"verified-Yenimahalle": "data:image/webp;base64,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"
+"verified-Yenimahalle": "data:image/webp;base64,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",
+"photo-week-1": "data:image/webp;base64,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",
+"photo-week-3": "data:image/webp;base64,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"
 };
 
 // =====================================================================
@@ -953,6 +1050,9 @@ const ICONS = {
   arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
   image:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="m21 16-5-5-8 9"/>',
   trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  moon:'<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  refresh:'<path d="M21 12a9 9 0 0 1-15.5 6.2M3 12a9 9 0 0 1 15.5-6.2"/><path d="M18 3v4h-4M6 21v-4h4"/>',
   lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'
 };
 // SVG simgesi üretir: ico('map', 18)
@@ -998,10 +1098,34 @@ function matchesCategory(p, label){
 // =====================================================================
 // 2) SİTENİN ANLIK DURUMU VE KAYIT
 // =====================================================================
-const STORAGE_KEY = 'ankaraEnesYilmazState_v1';
-let STATE = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');   // yer adı -> {visited, visitType, visitedAt, rating, favorite}
+// DİKKAT: Kayıtlar HESABA ÖZEL anahtarla saklanır. (Eskiden tek ortak anahtar vardı; bu yüzden aynı cihazda hesap değiştirince
+// önceki hesabın yerleri yeni hesaba da yazılıyordu.) Çıkış yapılınca bellekteki tüm kullanıcı verisi temizlenir.
+let STATE = {};                 // yer adı -> {visited, visitType, visitedAt, rating, favorite, rated}
 let currentUser = null;
 let auth, db;
+function stateKey(){ return 'ankaraState_v2_' + (currentUser ? currentUser.uid : 'anon'); }
+// Bellekteki durumu bu hesabın yerel anahtarına kaydeder
+function saveLocalState(){ if(currentUser) { try { localStorage.setItem(stateKey(), JSON.stringify(STATE)); } catch(e){} } }
+// Buluttan ya da cihazdan gelen veriyi doğrular: yalnızca bilinen yerler ve beklenen türde alanlar kabul edilir
+function sanitizeState(raw){
+  const out = {}; if(!raw || typeof raw !== 'object') return out;
+  Object.keys(raw).forEach(n => {
+    if(!PLACE_MAP[n]) return; const s = raw[n]; if(!s || typeof s !== 'object') return;
+    out[n] = { visited: s.visited === true, visitType: (s.visitType === 'gps' || s.visitType === 'self') ? s.visitType : null,
+      visitedAt: (typeof s.visitedAt === 'number' && isFinite(s.visitedAt)) ? s.visitedAt : null,
+      rating: (typeof s.rating === 'number' && s.rating >= 0 && s.rating <= 5) ? s.rating : 0, favorite: s.favorite === true, rated: s.rated === true };
+  });
+  return out;
+}
+// Çıkış / hesap değişimi sırasında bellekteki bütün kullanıcıya ait veriyi sıfırlar
+function resetSessionState(){
+  STATE = {}; MEMORIES = {}; MEM_LOADED = false; COMMUNITY_VOTES = {}; window.__openPlaceName = null;
+  APP_META = { onboardingDone:false, earnedBadges:[] }; ADMIN_CACHE = null; WEEKLY_WINS = 0; CONTEST = { ws:0, entrants:0, entries:[], votes:{}, myVote:'', result:null, wins:0, loaded:false, err:'' };
+}
+// Güvenlik: yalnızca JPEG/PNG/WebP veri adreslerine izin verir (başka kullanıcıların yüklediği içerik sayfaya konulmadan önce kontrol edilir)
+function safeImg(src){ return (typeof src === 'string' && src.length < 600000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(src)) ? src : ''; }
+// Güvenlik: yalnızca https adreslerine izin verir (profil fotoğrafı vb.)
+function safeUrl(u){ return (typeof u === 'string' && /^https:\/\/[^\s"'<>]+$/.test(u)) ? u : ''; }
 
 // Bir yerin kullanıcıya ait durumunu (ziyaret, favori, puan) okur; kayıt yoksa boş bir durum döndürür
 function getPlaceState(name){ return STATE[name] || {visited:false, visitType:null, visitedAt:null, rating:0, favorite:false}; }
@@ -1012,7 +1136,7 @@ function setPlaceState(name, partial){
   // GPS ile onaylı bir ziyaret, "daha önce gittim" tıklanarak düşürülemez
   if(partial.visitType === 'self' && cur.visitType === 'gps') partial = Object.assign({}, partial, { visitType:'gps', visitedAt:cur.visitedAt });
   STATE[name] = Object.assign({}, cur, partial);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+  saveLocalState();
   updateProgress();
   checkBadges();
   if(currentUser && db){
@@ -1034,6 +1158,9 @@ const firebaseConfig = {
   appId: "1:178079559288:web:02afb601ec5df891c9478d",
   measurementId: "G-3S0VZGKGK3"
 };
+// reCAPTCHA Enterprise site anahtarı (App Check için). Bu anahtar herkese açık olacak şekilde tasarlanmıştır; güvenlik, anahtarı gizlemekten değil,
+// Firebase tarafındaki App Check zorlaması + Firestore kuralları + API anahtarı kısıtlamasından gelir.
+const RECAPTCHA_SITE_KEY = '6LeHp-MtAAAAAPd0PrZndqU9IGzQLovNpJbJsumV';
 function showGateError(msg){ const e = $('gate-error'); e.textContent = msg; e.style.display = 'block'; }
 // 'Google ile giriş yap' penceresini açar
 function doSignIn(){
@@ -1046,32 +1173,71 @@ function doSignIn(){
 }
 try {
   if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-  auth = firebase.auth(); db = firebase.firestore();
-} catch(e){ console.warn('Firebase bağlantı hatası.', e); }
 
-// Giriş yapıldığında/çıkıldığında çalışır: kapıyı açar-kapatır, hesap verisini yükler, canlı dinleyicileri başlatır
+  // App Check: isteklerin gerçekten bu siteden geldiğini doğrular (botlara ve kopya sitelere karşı koruma).
+  // Ayrı bir try içinde: App Check yüklenemezse bile giriş sistemi çalışmaya devam etsin.
+  try {
+    const appCheck = firebase.appCheck();
+    appCheck.activate(
+      new firebase.appCheck.ReCaptchaEnterpriseProvider(RECAPTCHA_SITE_KEY),
+      true
+    );
+  } catch(e){ console.warn('App Check başlatılamadı.', e); }
+
+  auth = firebase.auth();
+  db = firebase.firestore();
+} catch(e){
+  console.warn('Firebase bağlantı hatası.', e);
+}
+
+// Hesabın askıya alınıp alınmadığını kontrol eder (gerçek engelleme Firestore kurallarında yapılır; bu kontrol kullanıcıya mesaj göstermek içindir)
+async function checkBanned(user){
+  try {
+    const b = await db.collection('banned').doc(user.uid).get();
+    if(b.exists){
+      const r = (b.data() || {}).reason;
+      currentUser = null; resetSessionState();
+      $('auth-gate').classList.remove('hidden'); $('app').classList.add('hidden');
+      showGateError('Bu hesap askıya alınmıştır.' + (r ? ' Neden: ' + String(r).slice(0, 200) : '') + ' Bir hata olduğunu düşünüyorsanız ankarakatmanlari@gmail.com adresine yazın.');
+      auth.signOut(); return true;
+    }
+  } catch(e){ /* kurallar bu belgeyi okumaya izin vermiyorsa sessizce devam edilir */ }
+  return false;
+}
+// Giriş yapıldığında/çıkıldığında çalışır: kapıyı açar-kapatır, hesabın KENDİ verisini yükler, canlı dinleyicileri başlatır
 function startAuthWatcher(){
   if(!auth){ return; }
   auth.onAuthStateChanged(async user => {
+    // Her durumda önce önceki hesabın izlerini sil (hesap değişiminde veri karışmasın)
+    stopListeners(); stopPresence(); resetSessionState(); closeDrawer();
     if(user){
-      currentUser = user;
-      $('user-img').src = user.photoURL || ''; $('user-name').textContent = (user.displayName || 'Hesap').split(' ')[0]; $('um-mail').textContent = user.email || '';
-      $('auth-gate').classList.add('hidden'); $('app').classList.remove('hidden');
-      toggleAdminBtn(); maybeShowOnboarding();
-      const docRef = db.collection('users').doc(user.uid);
+      currentUser = user; const uid = user.uid;
+      if(await checkBanned(user)) return;
+      $('user-img').src = safeUrl(user.photoURL) || ''; $('user-name').textContent = (user.displayName || 'Hesap').split(' ')[0]; $('um-mail').textContent = user.email || '';
+      loadAppMeta();
+      // 1) bu hesabın cihazdaki yerel kaydı (yalnızca bu hesaba ait anahtar), 2) bulut kaydı — bulut her zaman önceliklidir
+      let local = {}; try { local = sanitizeState(JSON.parse(localStorage.getItem(stateKey()) || '{}')); } catch(e){}
+      STATE = local;
+      const docRef = db.collection('users').doc(uid);
       try {
         const snap = await docRef.get();
-        if(snap.exists){ STATE = snap.data().places || {}; localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE)); }
-        else { await docRef.set({ places: STATE }); }
+        if(!currentUser || currentUser.uid !== uid) return;           // bu sırada hesap değiştiyse bu akışı bırak
+        const cloud = snap.exists ? snap.data().places : undefined;
+        if(cloud && typeof cloud === 'object'){ STATE = sanitizeState(cloud); }
+        else if(Object.keys(local).length){ await docRef.set({ places: local }, { merge:true }); }
+        saveLocalState();
       } catch(e){ console.warn('Hesap verisi okunamadı', e); }
+      if(!currentUser || currentUser.uid !== uid) return;
+      $('auth-gate').classList.add('hidden'); $('app').classList.remove('hidden');
+      if(visitedNames().length) APP_META.onboardingDone = true;
       try { APP_META.earnedBadges = computeEarnedBadges().map(b => b.id); saveAppMeta(); } catch(e){ console.warn(e); }
-      syncProfile(); startUserListener(docRef); startRatingsListener();
-      MEM_LOADED = false; MEMORIES = {};
+      toggleAdminBtn(); maybeShowOnboarding();
+      syncProfile(); startUserListener(docRef); startRatingsListener(); startPresence();
+      loadContest().then(() => { if(isAdmin()) autoFinalizeWeeks().then(() => loadContest()); });
       routeFromHash();
     } else {
-      currentUser = null; stopListeners(); COMMUNITY_VOTES = {}; MEMORIES = {}; MEM_LOADED = false; toggleAdminBtn();
+      currentUser = null; toggleAdminBtn();
       $('auth-gate').classList.remove('hidden'); $('app').classList.add('hidden');
-      STATE = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
     }
     updateProgress(); refreshUI();
   });
@@ -1082,10 +1248,11 @@ function startAuthWatcher(){
 // =====================================================================
 // Yönetici e-postası: sadece bu hesapta 'Yönetici' sayfası görünür
 const ADMIN_EMAIL = 'yilmaz.enesankara@gmail.com';
-function isAdmin(){ return !!(currentUser && currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL); }
+// (Bu yalnızca arayüzü ayarlar; yönetici verisine gerçek erişim Firestore kurallarında aynı koşulla sınırlanır.)
+function isAdmin(){ return !!(currentUser && currentUser.emailVerified && currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL); }
 // 'Yönetici' bağlantısını yalnızca yönetici hesabında gösterir
 function toggleAdminBtn(){
-  $('nav-admin').classList.toggle('hidden', !isAdmin());
+  ['nav-admin', 'tab-admin', 'um-admin'].forEach(id => { const el = $(id); if(el) el.classList.toggle('hidden', !isAdmin()); });
   if(!isAdmin() && currentView === 'admin') location.hash = 'explore';
 }
 // Kullanıcının şu an kazandığı rozetlerin listesini hesaplar
@@ -1143,7 +1310,7 @@ function startUserListener(docRef){
     if(snap.metadata.hasPendingWrites || !snap.exists) return;
     const cloud = snap.data().places || {};
     if(JSON.stringify(cloud) === JSON.stringify(STATE)) return;
-    STATE = cloud; localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+    STATE = sanitizeState(cloud); saveLocalState();
     try { APP_META.earnedBadges = computeEarnedBadges().map(b => b.id); saveAppMeta(); } catch(e){}
     updateProgress(); refreshUI(); if(window.__openPlaceName && PLACE_MAP[window.__openPlaceName] && $('drawer').classList.contains('open')) openPlace(PLACE_MAP[window.__openPlaceName], { keepScroll:true });
   }, err => console.warn('Hesap senkronu kesildi', err));
@@ -1203,35 +1370,67 @@ async function idbAllMem(){
   catch(e){ return []; }
 }
 function memCol(){ return db.collection('users').doc(currentUser.uid).collection('memories'); }
+// Bir anı kaydını doğrular (bilinmeyen yer, bozuk fotoğraf, aşırı uzun not elenir)
+function cleanMem(x){
+  if(!x || typeof x !== 'object' || !PLACE_MAP[x.name]) return null;
+  return { name:x.name, photo: safeImg(x.photo), thumb: safeImg(x.thumb), note: String(x.note || '').slice(0, 140), removed: x.removed === true,
+    takenAt: (typeof x.takenAt === 'number') ? x.takenAt : Date.now(), updatedAt: (typeof x.updatedAt === 'number') ? x.updatedAt : 0 };
+}
 // Cihazdaki ve buluttaki anıları birleştirip yükler (oturumda bir kez)
 async function loadAllMemories(){
   if(MEM_LOADED) return;
-  const local = await idbAllMem(); local.forEach(m => { MEMORIES[m.name] = m; });
+  const local = await idbAllMem(); local.forEach(m => { const c = cleanMem(m); if(c) MEMORIES[c.name] = c; });
   if(currentUser && db){
     try {
       const snap = await memCol().get(); const cloudNames = {};
-      snap.forEach(d => { const x = d.data(); cloudNames[x.name] = true; const cur = MEMORIES[x.name]; if(!cur || (x.updatedAt || 0) > (cur.updatedAt || 0)){ MEMORIES[x.name] = x; idbPutMem(x); } });
+      snap.forEach(d => { const x = cleanMem(d.data()); if(!x) return; cloudNames[x.name] = true; const cur = MEMORIES[x.name]; if(!cur || (x.updatedAt || 0) > (cur.updatedAt || 0)){ MEMORIES[x.name] = x; idbPutMem(x); } });
       Object.values(MEMORIES).forEach(m => { if(!cloudNames[m.name]) memCol().doc(ratingDocId(m.name)).set(m).catch(() => {}); });   // yalnızca cihazda olanları buluta gönder
       MEM_CLOUD_ERR = '';
     } catch(e){ MEM_CLOUD_ERR = e.code || 'hata'; console.warn('Anılar buluttan okunamadı', e); }
   }
   MEM_LOADED = true;
 }
-// Bir anıyı kaydeder (cihaza + buluta)
+let PUBLIC_ERR = '';          // herkese açık kopyanın yazılamama hatası
+// Herkese açık anı belgesinin adı: hesap__yer
+function pubId(uid, name){ return uid + '__' + ratingDocId(name); }
+// Bir anıyı kaydeder: cihaza + hesaba (özel, tam boy) + herkese açık küçük kopya (yer sayfasındaki "Gezginlerden anılar")
 async function saveMemory(name, patch){
   const cur = MEMORIES[name] || { name:name, takenAt: (STATE[name] && STATE[name].visitedAt) || Date.now() };
   const m = Object.assign({}, cur, patch, { name:name, updatedAt: Date.now() });
+  if(patch && patch.photo){ m.removed = false; try { m.thumb = await makeThumb(patch.photo); } catch(e){ m.thumb = ''; } }
   MEMORIES[name] = m; await idbPutMem(m);
   if(currentUser && db){
     try { await memCol().doc(ratingDocId(name)).set(m); MEM_CLOUD_ERR = ''; }
     catch(e){ MEM_CLOUD_ERR = e.code || 'hata'; console.warn('Anı buluta kaydedilemedi', e); }
+    if(m.photo && m.thumb && !m.removed){
+      try { await db.collection('publicMemories').doc(pubId(currentUser.uid, name)).set({ uid: currentUser.uid, place: name, key: ratingDocId(name), thumb: m.thumb, note: String(m.note || '').slice(0, 140), takenAt: m.takenAt || Date.now(), updatedAt: m.updatedAt }); PUBLIC_ERR = ''; }
+      catch(e){ PUBLIC_ERR = e.code || 'hata'; console.warn('Herkese açık kopya yazılamadı', e); }
+      if(patch && patch.photo){ try { await publishContestEntry(m); } catch(e){ console.warn('Yarışma girişi yazılamadı', e); } }
+    }
   }
   return m;
 }
-// Bir anıyı siler (cihazdan + bulutan)
+// Bir anıyı siler (cihazdan + hesaptan + herkese açık kopyadan)
 async function deleteMemory(name){
   delete MEMORIES[name]; await idbDelMem(name);
-  if(currentUser && db){ try { await memCol().doc(ratingDocId(name)).delete(); } catch(e){ MEM_CLOUD_ERR = e.code || 'hata'; } }
+  if(currentUser && db){
+    try { await memCol().doc(ratingDocId(name)).delete(); } catch(e){ MEM_CLOUD_ERR = e.code || 'hata'; }
+    try { await db.collection('publicMemories').doc(pubId(currentUser.uid, name)).delete(); } catch(e){}
+  }
+}
+// Bir yerde çekilen herkese açık anıları getirir. Her kayıt, GERÇEKTEN bu yere ait mi diye üç şekilde doğrulanır:
+// (1) kaydın "place" alanı, (2) "key" alanı, (3) belge adı (hesap__yer) — biri bile uyuşmazsa gösterilmez.
+async function loadGallery(name, limit, includeOwn){
+  if(!db || !currentUser || !PLACE_MAP[name]) return [];
+  try {
+    const snap = await db.collection('publicMemories').where('place', '==', name).limit(limit || 12).get(); const out = [];
+    snap.forEach(d => {
+      const x = d.data(); if(!x || x.place !== name || x.key !== ratingDocId(name) || typeof x.uid !== 'string' || d.id !== pubId(x.uid, name)) return;
+      const th = safeImg(x.thumb); if(!th) return; const own = x.uid === currentUser.uid; if(own && !includeOwn) return;
+      out.push({ thumb:th, own:own, note:String(x.note || '').slice(0, 140), takenAt:(typeof x.takenAt === 'number') ? x.takenAt : 0, updatedAt:(typeof x.updatedAt === 'number') ? x.updatedAt : 0 });
+    });
+    return out.sort((a, b) => b.updatedAt - a.updatedAt);
+  } catch(e){ return []; }
 }
 function loadImageFromUrl(url){ return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => rej(new Error('Fotoğraf açılamadı')); im.src = url; }); }
 // Seçilen fotoğrafı küçültüp JPEG'e çevirir (veritabanına sığması için en uzun kenar 1000 piksel)
@@ -1247,13 +1446,28 @@ async function photoToDataUrl(file){
   } finally { URL.revokeObjectURL(url); }
 }
 
+// Fotoğrafın herkese açık küçük kopyasını üretir (en uzun kenar 360 piksel, ~20 KB)
+async function makeThumb(dataUrl){
+  const im = await loadImageFromUrl(dataUrl); const k = Math.min(1, 360 / Math.max(im.naturalWidth, im.naturalHeight));
+  const c = document.createElement('canvas'); c.width = Math.round(im.naturalWidth * k); c.height = Math.round(im.naturalHeight * k);
+  c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+  let q = 0.7, out = c.toDataURL('image/jpeg', q); while(out.length > 36000 && q > 0.35){ q -= 0.07; out = c.toDataURL('image/jpeg', q); }
+  return out;
+}
+
 // =====================================================================
 // 6) ROZETLER
 // =====================================================================
 // Cihaza özel küçük ayarlar: karşılama ekranı görüldü mü, hangi rozetler kazanıldı
-const APP_META_KEY = 'ankaraAppMeta_v1';
-let APP_META = JSON.parse(localStorage.getItem(APP_META_KEY) || 'null') || { onboardingDone:false, earnedBadges:[] };
-function saveAppMeta(){ localStorage.setItem(APP_META_KEY, JSON.stringify(APP_META)); }
+let APP_META = { onboardingDone:false, earnedBadges:[] };
+function metaKey(){ return 'ankaraAppMeta_v2_' + (currentUser ? currentUser.uid : 'anon'); }
+// Bu hesabın cihazdaki ayarlarını yükler
+function loadAppMeta(){
+  try { const m = JSON.parse(localStorage.getItem(metaKey()) || 'null'); APP_META = Object.assign({ onboardingDone:false, earnedBadges:[] }, (m && typeof m === 'object') ? m : {}); }
+  catch(e){ APP_META = { onboardingDone:false, earnedBadges:[] }; }
+  if(!Array.isArray(APP_META.earnedBadges)) APP_META.earnedBadges = [];
+}
+function saveAppMeta(){ if(currentUser){ try { localStorage.setItem(metaKey(), JSON.stringify(APP_META)); } catch(e){} } }
 // Rozet için görsel varsa küçük resmi, yoksa eski emoji simgeyi döndürür
 function badgeIconHtml(b){ return BADGE_IMAGES[b.id] ? `<img src="${BADGE_IMAGES[b.id]}" alt="${escHtml(b.name)}" loading="lazy">` : escHtml(b.icon); }
 function gpsCount(){ return Object.values(STATE).filter(s => s && s.visitType === 'gps').length; }
@@ -1281,6 +1495,10 @@ function getAllBadgeDefs(){
   });
   defs.push({ id:'gps-first', group:'gps', icon:'📍', name:'Onaylı Kaşif', desc:'GPS ile ilk konum doğrulamanı yap', progress:() => ({ cur:Math.min(gpsCount(), 1), max:1 }), check:() => gpsCount() >= 1 });
   defs.push({ id:'gps-10', group:'gps', icon:'🥇', name:'Altın Tıklı Kaşif', desc:'GPS ile 10 yeri doğrula', progress:() => ({ cur:Math.min(gpsCount(), 10), max:10 }), check:() => gpsCount() >= 10 });
+  defs.push({ id:'photo-week-1', group:'photo', icon:'📸', name:'Haftanın Fotoğrafçısı', desc:'Haftanın fotoğrafı yarışmasında (en az 10 kişinin katıldığı bir haftada) birinci ol',
+    progress:() => ({ cur:Math.min(WEEKLY_WINS, 1), max:1 }), check:() => WEEKLY_WINS >= 1 });
+  defs.push({ id:'photo-week-3', group:'photo', icon:'🏆', name:'Altın Objektif', desc:'Haftanın fotoğrafı yarışmasında 3 kez birinci ol',
+    progress:() => ({ cur:Math.min(WEEKLY_WINS, 3), max:3 }), check:() => WEEKLY_WINS >= 3 });
   return defs;
 }
 // Yeni kazanılan rozet var mı bakar; varsa bildirim gösterir
@@ -1359,6 +1577,153 @@ async function doGpsCheckin(p, statusEl){
 }
 
 // =====================================================================
+// 7b) ÇEVRİMİÇİ DURUMU, VERİLERİ SIFIRLAMA, HESABI SİLME
+// =====================================================================
+let ADMIN_CACHE = null;                         // yönetici sayfasında yüklenen hesap listesi
+let presenceTimer = null;
+const PRESENCE_EVERY = 90000, PRESENCE_TTL = 240000;   // 90 sn'de bir "buradayım" sinyali; 4 dk sinyal yoksa çevrimdışı sayılır
+// "Çevrimiçi/çevrimdışı" bilgisini kendi presence belgesine yazar (sadece yönetici okuyabilir)
+function pingPresence(online){
+  if(!currentUser || !db) return Promise.resolve();
+  return db.collection('presence').doc(currentUser.uid).set({ online: !!online, lastSeen: firebase.firestore.FieldValue.serverTimestamp() }).catch(() => {});
+}
+function stopPresence(){ if(presenceTimer){ clearInterval(presenceTimer); presenceTimer = null; } }
+function startPresence(){ stopPresence(); pingPresence(true); presenceTimer = setInterval(() => { if(document.visibilityState === 'visible') pingPresence(true); }, PRESENCE_EVERY); }
+document.addEventListener('visibilitychange', () => { if(currentUser) pingPresence(document.visibilityState === 'visible'); });
+window.addEventListener('pagehide', () => { if(currentUser) pingPresence(false); });
+// Önce çevrimdışı işaretler, sonra çıkış yapar
+async function signOutNow(){ stopPresence(); await pingPresence(false); if(auth) await auth.signOut(); }
+
+// Tehlikeli işlemler için onay penceresi: kullanıcı belirli bir kelimeyi yazmadan düğme açılmaz
+function dangerConfirm(title, text, word){
+  return new Promise(res => {
+    $('dg-title').textContent = title; $('dg-text').innerHTML = text; $('dg-word').textContent = word;
+    const inp = $('dg-input'), ok = $('dg-ok'); inp.value = ''; ok.disabled = true; $('danger-modal').classList.add('open'); setTimeout(() => inp.focus(), 50);
+    const done = v => { $('danger-modal').classList.remove('open'); inp.oninput = null; ok.onclick = null; $('dg-cancel').onclick = null; res(v); };
+    inp.oninput = () => { ok.disabled = inp.value.trim().toLocaleUpperCase('tr') !== word; };
+    ok.onclick = () => done(true); $('dg-cancel').onclick = () => done(false);
+  });
+}
+async function runBatches(items, fn){ for(let i = 0; i < items.length; i += 400){ const b = db.batch(); items.slice(i, i + 400).forEach(it => fn(b, it)); await b.commit(); } }
+// Hesabın buluttaki ve cihazdaki bütün verilerini siler: puanlar, anılar (özel + herkese açık), ilerleme
+async function wipeMyData(deleteUserDoc){
+  const uid = currentUser.uid, userRef = db.collection('users').doc(uid);
+  const rated = new Set(); Object.keys(COMMUNITY_VOTES).forEach(n => { if(COMMUNITY_VOTES[n] && COMMUNITY_VOTES[n][uid] !== undefined) rated.add(n); });
+  Object.keys(STATE).forEach(n => { if(STATE[n] && STATE[n].rating > 0) rated.add(n); });
+  await runBatches([...rated], (b, n) => b.set(db.collection('placeRatings').doc(ratingDocId(n)), { name:n, votes:{ [uid]: firebase.firestore.FieldValue.delete() } }, { merge:true }));
+  const mem = await memCol().get(); const memDocs = []; mem.forEach(d => memDocs.push(d.ref)); await runBatches(memDocs, (b, r) => b.delete(r));
+  const pub = await db.collection('publicMemories').where('uid', '==', uid).get(); const pubDocs = []; pub.forEach(d => pubDocs.push(d.ref)); await runBatches(pubDocs, (b, r) => b.delete(r));
+  try {
+    const ce = await db.collection('contestEntries').where('uid', '==', uid).get(); const ceRefs = []; ce.forEach(d => ceRefs.push(d.ref)); await runBatches(ceRefs, (b, r) => b.delete(r));
+    const pv = await db.collection('photoVotes').where('voter', '==', uid).get(); const pvRefs = []; pv.forEach(d => pvRefs.push(d.ref)); await runBatches(pvRefs, (b, r) => b.delete(r));
+  } catch(e){ console.warn('Yarışma verileri silinemedi', e); }
+  try { await db.collection('presence').doc(uid).delete(); } catch(e){}
+  if(deleteUserDoc) await userRef.delete(); else await userRef.set({ places:{}, profile: Object.assign(buildProfile(), { visitedCount:0, gpsCount:0, earnedBadges:[], earnedBadgeNames:[] }) });
+  // cihazdaki kopyalar
+  for(const n of Object.keys(MEMORIES)) await idbDelMem(n);
+  try { localStorage.removeItem(stateKey()); localStorage.removeItem(metaKey()); } catch(e){}
+  STATE = {}; MEMORIES = {}; MEM_LOADED = false; COMMUNITY_VOTES = {}; APP_META = { onboardingDone:true, earnedBadges:[] };
+}
+// "Verilerimi sıfırla": hesap kalır, gezi ilerlemesi/rozetler/puanlar/fotoğraflar silinir
+async function resetMyAccountData(){
+  if(!currentUser) return;
+  const ok = await dangerConfirm('Verilerini sıfırla', 'İşaretlediğin tüm yerler, rozetlerin, verdiğin puanlar ve eklediğin <b>fotoğraflar kalıcı olarak silinir</b>. Hesabın açık kalır ve baştan başlayabilirsin.', 'SIFIRLA');
+  if(!ok) return;
+  try { await wipeMyData(false); saveAppMeta(); showToast('<div><div class="tt">Tamamlandı</div><div class="tn">Verilerin sıfırlandı</div></div>', true); updateProgress(); refreshUI(); closeDrawer(); }
+  catch(e){ console.error(e); alert('Sıfırlama tamamlanamadı: ' + (e.code || e.message) + '. Biraz sonra tekrar dene.'); }
+}
+// "Hesabımı sil": bütün veriler ve Google ile bağlı giriş kaydı silinir
+async function deleteMyAccount(){
+  if(!currentUser) return;
+  const ok = await dangerConfirm('Hesabını sil', 'Hesabın ve ona ait <b>bütün veriler (ilerleme, rozet, puan, fotoğraf) kalıcı olarak silinir</b>. Bu işlem geri alınamaz.', 'SİL');
+  if(!ok) return;
+  try {
+    await wipeMyData(true); const u = currentUser; stopPresence();
+    try { await u.delete(); }
+    catch(e){ if(e.code === 'auth/requires-recent-login'){ await u.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider()); await u.delete(); } else throw e; }
+    alert('Hesabın ve verilerin silindi. Görüşmek üzere!');
+  } catch(e){ console.error(e); alert('Hesap silinemedi: ' + (e.code || e.message) + '. Verilerin silinmiş olabilir; tekrar giriş yapıp yeniden dene.'); }
+}
+
+// =====================================================================
+// 7c) HAFTANIN FOTOĞRAFI YARIŞMASI
+//     Hafta = Pazartesi 00:00 – Pazar 24:00 (Türkiye saati). Bir haftada EN AZ 10 farklı kişi fotoğraf yüklerse oylama başlar;
+//     haftanın sonunda en çok oyu alan fotoğraf birinci seçilir. 10 kişiden azsa sistem hiç devreye girmez.
+//     Birincilik sonucu yönetici hesabı tarafından kesinleştirilir (sunucu işlevi olmadığı için); sonuç "weeklyResults" kaydında durur.
+// =====================================================================
+const WEEK_MS = 7 * 86400000, TRT_OFFSET = 3 * 3600000, CONTEST_MIN = 10;
+let WEEKLY_WINS = 0;
+let CONTEST = { ws:0, entrants:0, entries:[], votes:{}, myVote:'', result:null, wins:0, loaded:false, err:'' };
+// Verilen zamanın ait olduğu haftanın başlangıcını (Pazartesi 00:00, Türkiye saati) milisaniye olarak verir
+function weekStartOf(ts){ const t = ts + TRT_OFFSET, day = Math.floor(t / 86400000); return (day - ((day + 3) % 7)) * 86400000 - TRT_OFFSET; }
+function weekRangeText(ws){ const o = { day:'numeric', month:'long', timeZone:'UTC' }; return new Date(ws + TRT_OFFSET).toLocaleDateString('tr-TR', o) + ' – ' + new Date(ws + TRT_OFFSET + 6 * 86400000).toLocaleDateString('tr-TR', o); }
+function entryDocId(ws, uid, name){ return ws + '__' + uid + '__' + ratingDocId(name); }
+// Yarışma girişinin gerçekten o yere ve o kişiye ait olduğunu doğrular
+function validEntry(id, x){ return !!(x && typeof x.uid === 'string' && PLACE_MAP[x.place] && x.key === ratingDocId(x.place) && typeof x.weekStart === 'number' && id === entryDocId(x.weekStart, x.uid, x.place) && safeImg(x.thumb)); }
+// Yeni yüklenen fotoğrafı bu haftanın yarışmasına ekler (hafta başına, kişi ve yer başına bir giriş)
+async function publishContestEntry(m){
+  const uid = currentUser.uid, ws = weekStartOf(Date.now());
+  await db.collection('contestEntries').doc(entryDocId(ws, uid, m.name)).set({ weekStart:ws, uid:uid, place:m.name, key:ratingDocId(m.name), thumb:m.thumb, note:String(m.note || '').slice(0, 140), at: firebase.firestore.FieldValue.serverTimestamp() });
+  await db.collection('contestStats').doc(String(ws)).set({ users:{ [uid]: true } }, { merge:true });
+  loadContest();
+}
+// Bu haftanın giriş/oy bilgilerini, son kesinleşmiş sonucu ve kullanıcının birincilik sayısını yükler
+async function loadContest(){
+  if(!db || !currentUser) return; const uid = currentUser.uid, ws = weekStartOf(Date.now());
+  const fresh = { ws:ws, entrants:0, entries:[], votes:{}, myVote:'', result:null, wins:0, loaded:false, err:'' };
+  try {
+    const [st, last, wins] = await Promise.all([
+      db.collection('contestStats').doc(String(ws)).get(),
+      db.collection('weeklyResults').orderBy('weekStart', 'desc').limit(1).get(),
+      db.collection('weeklyResults').where('winner.uid', '==', uid).get() ]);
+    fresh.entrants = st.exists ? Object.keys((st.data() || {}).users || {}).length : 0;
+    last.forEach(d => { const x = d.data(); if(x && x.state === 'done' && x.winner && safeImg(x.winner.thumb) && PLACE_MAP[x.winner.place]) fresh.result = x; });
+    let n = 0; wins.forEach(d => { const x = d.data(); if(x && x.state === 'done') n++; }); fresh.wins = n; WEEKLY_WINS = n;
+    CONTEST = fresh;
+    if(fresh.entrants >= CONTEST_MIN) await loadContestEntries();
+  } catch(e){ fresh.err = e.code || 'hata'; CONTEST = fresh; console.warn('Yarışma verisi okunamadı', e); }
+  CONTEST.loaded = true;
+  try { checkBadges(); } catch(e){}
+  if(currentView === 'memories') renderContest();
+}
+// Bu haftanın girişlerini ve oyları okur; oylar yalnızca geçerli girişlere ve başkasının fotoğrafına sayılır
+async function loadContestEntries(){
+  const ws = CONTEST.ws;
+  const [es, vs] = await Promise.all([ db.collection('contestEntries').where('weekStart', '==', ws).get(), db.collection('photoVotes').where('weekStart', '==', ws).get() ]);
+  const entries = []; es.forEach(d => { const x = d.data(); if(validEntry(d.id, x)) entries.push({ id:d.id, uid:x.uid, place:x.place, thumb:x.thumb, note:String(x.note || '').slice(0, 140) }); });
+  const ids = new Set(entries.map(e => e.id)), tally = {}; let mine = '';
+  vs.forEach(d => { const x = d.data(); if(!x || x.weekStart !== ws || !ids.has(x.entry) || d.id !== ws + '__' + x.voter) return; if(x.entry.split('__')[1] === x.voter) return; tally[x.entry] = (tally[x.entry] || 0) + 1; if(x.voter === currentUser.uid) mine = x.entry; });
+  CONTEST.entries = entries; CONTEST.votes = tally; CONTEST.myVote = mine;
+}
+// Bir fotoğrafa oy verir (haftada tek oy; hafta bitmeden değiştirilebilir)
+async function castVote(entryId){
+  const ws = CONTEST.ws; if(weekStartOf(Date.now()) !== ws){ await loadContest(); return; }
+  await db.collection('photoVotes').doc(ws + '__' + currentUser.uid).set({ weekStart:ws, voter:currentUser.uid, entry:entryId, at: firebase.firestore.FieldValue.serverTimestamp() });
+  await loadContestEntries();
+}
+// YÖNETİCİ: Biten bir haftanın sonucunu hesaplayıp kaydeder. 10'dan az kişi katıldıysa hiçbir şey yazılmaz.
+async function finalizeWeek(ws){
+  if(!isAdmin()) return 'forbidden';
+  const ref = db.collection('weeklyResults').doc(String(ws)); if((await ref.get()).exists) return 'exists';
+  if(ws + WEEK_MS > Date.now()) return 'open';
+  const es = await db.collection('contestEntries').where('weekStart', '==', ws).get(); const entries = [];
+  es.forEach(d => { const x = d.data(); if(validEntry(d.id, x)) entries.push({ id:d.id, uid:x.uid, place:x.place, thumb:x.thumb, note:String(x.note || '').slice(0, 140), at:(x.at && x.at.toMillis) ? x.at.toMillis() : 0 }); });
+  const users = new Set(entries.map(e => e.uid)); if(users.size < CONTEST_MIN) return 'inactive';
+  const vs = await db.collection('photoVotes').where('weekStart', '==', ws).get(); const byId = new Map(entries.map(e => [e.id, e])), tally = {}; let total = 0;
+  vs.forEach(d => { const x = d.data(); if(!x || x.weekStart !== ws || d.id !== ws + '__' + x.voter) return; const e = byId.get(x.entry); if(!e || e.uid === x.voter) return; tally[x.entry] = (tally[x.entry] || 0) + 1; total++; });
+  const ranked = entries.filter(e => tally[e.id]).sort((a, b) => tally[b.id] - tally[a.id] || a.at - b.at || (a.id < b.id ? -1 : 1));
+  if(!ranked.length) return 'novotes';
+  const w = ranked[0];
+  await ref.set({ weekStart:ws, state:'done', entrants:users.size, photos:entries.length, totalVotes:total, winner:{ uid:w.uid, entry:w.id, place:w.place, thumb:w.thumb, note:w.note, votes:tally[w.id] }, finalizedAt: firebase.firestore.FieldValue.serverTimestamp() });
+  return 'done';
+}
+// YÖNETİCİ: Son 6 haftayı tarar, bitmiş ve sonucu yazılmamış haftaları kesinleştirir
+async function autoFinalizeWeeks(){
+  if(!isAdmin()) return; const cur = weekStartOf(Date.now());
+  for(let i = 1; i <= 6; i++){ try { await finalizeWeek(cur - i * WEEK_MS); } catch(e){ console.warn('Hafta kesinleştirilemedi', e); } }
+}
+
+// =====================================================================
 // 8) YER FOTOĞRAFLARI (Wikipedia + Wikimedia Commons) — yalnızca ekrana girince yüklenir
 // =====================================================================
 const WIKI_IMG_CACHE_KEY = 'ankaraImgCache_v2';
@@ -1389,7 +1754,7 @@ async function fetchPlaceImage(p){
 // Fotoğrafı verilen kutunun içine yerleştirir
 function loadInto(el, p){
   if(!el || !el.isConnected) return;
-  const put = src => { if(!src || !el.isConnected || el.querySelector('img')) return; const im = new Image(); im.alt = p.name; im.loading = 'lazy'; im.onerror = () => im.remove(); im.src = src; el.prepend(im); };
+  const put = src => { if(!src || !el.isConnected || el.querySelector('img')) return; const im = new Image(); im.alt = p.name; im.loading = 'lazy'; im.onload = () => el.classList.add('has-img'); im.onerror = () => im.remove(); im.src = src; el.prepend(im); };
   if(p.img){ put(p.img); return; }
   fetchPlaceImage(p).then(r => put(r && r.src));
 }
@@ -1421,7 +1786,8 @@ function showView(v){
   currentView = v;
   VIEWS.forEach(x => $('view-' + x).classList.toggle('active', x === v));
   document.querySelectorAll('#nav a, #tabbar a').forEach(a => a.classList.toggle('active', a.dataset.view === v));
-  closeDrawer(); window.scrollTo(0, 0);
+  closeDrawer(); window.scrollTo(0, 0); $('scroll-area').scrollTop = 0;
+  if(v !== 'admin') stopAdminLive();
   if(v === 'places') syncFilterControls();
   refreshUI();
   if(v === 'admin') renderAdmin();
@@ -1484,7 +1850,7 @@ const HEX_SPLIT = { "Kahramankazan":["Kahraman-","kazan"], "Şereflikoçhisar":[
 const HEX_R = 44, HEX_W = Math.sqrt(3) * HEX_R, HEX_PAD = 12;
 function hexPoints(cx, cy, r){ const pts = []; for(let i = 0; i < 6; i++){ const a = Math.PI / 180 * (60 * i - 90); pts.push((cx + r * Math.cos(a)).toFixed(1) + ',' + (cy + r * Math.sin(a)).toFixed(1)); } return pts.join(' '); }
 // İlerleme oranına göre krem → yeşil renk üretir
-function mixColor(t){ const a = [239, 230, 210], b = [31, 107, 74]; return `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * t)).join(',')})`; }
+function mixColor(t){ const dark = document.documentElement.dataset.theme === 'dark'; const a = dark ? [34, 48, 42] : [239, 230, 210], b = dark ? [46, 154, 106] : [31, 107, 74]; return `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * t)).join(',')})`; }
 // Haritayı çizer: renk = gezilen oran, altın = tamamlandı, mühür = tamamı GPS ile onaylı
 function renderMap(){
   const svg = $('hexmap');
@@ -1495,7 +1861,7 @@ function renderMap(){
     const pos = HEX_POS[d]; if(!pos) return;
     const cx = HEX_PAD + HEX_W / 2 + pos[0] * HEX_W, cy = HEX_PAD + HEX_R + pos[1] * HEX_R * 1.5;
     const s = districtStats(d), r = s.total ? s.visited / s.total : 0, complete = s.total && s.visited >= s.total, allGps = s.total && s.gps >= s.total;
-    const fill = complete ? '#E3C46B' : mixColor(r ? Math.max(.12, Math.pow(r, .75)) : 0), txt = complete ? '#3A2705' : (r > .42 ? '#fff' : '#1A2822');
+    const fill = complete ? '#E3C46B' : mixColor(r ? Math.max(.12, Math.pow(r, .75)) : 0), txt = complete ? '#3A2705' : (document.documentElement.dataset.theme === 'dark' ? '#E8EEE9' : (r > .42 ? '#fff' : '#1A2822'));
     const lines = HEX_SPLIT[d] || [d];
     const nameSvg = lines.length === 2
       ? `<text class="hn" x="${cx}" y="${cy - 8}" fill="${txt}">${lines[0]}</text><text class="hn" x="${cx}" y="${cy + 4}" fill="${txt}">${lines[1]}</text>`
@@ -1527,7 +1893,7 @@ function selectDistrict(d){
 function renderPanel(){
   const panel = $('panel');
   const nextPlace = POPULARITY_ORDER.map(n => PLACE_MAP[n]).find(p => p && !(STATE[p.name] && STATE[p.name].visited));
-  const suggest = nextPlace ? `<div class="suggest"><div class="eyebrow">Sıradaki durak önerisi</div><b>${escHtml(nextPlace.name)}</b><div style="font-size:13px;color:#5b5230;margin-bottom:10px">${escHtml(nextPlace.district)} · ${escHtml(nextPlace.type)}</div><button class="btn btn-green btn-sm" data-open="${nextPlace.__i}">Yeri aç ${ico('arrow', 16)}</button></div>` : '';
+  const suggest = nextPlace ? `<div class="suggest"><div class="eyebrow">Sıradaki durak önerisi</div><b>${escHtml(nextPlace.name)}</b><div style="font-size:13px;color:var(--muted);margin-bottom:10px">${escHtml(nextPlace.district)} · ${escHtml(nextPlace.type)}</div><button class="btn btn-green btn-sm" data-open="${nextPlace.__i}">Yeri aç ${ico('arrow', 16)}</button></div>` : '';
   const meter = (label, cur, max, gold) => `<div class="meter"><div class="meter-row"><span>${label}</span><b>${cur} / ${max}</b></div><div class="meter-bar ${gold ? 'gold' : ''}"><i style="width:${max ? Math.round(cur / max * 100) : 0}%"></i></div></div>`;
   if(!exploreDistrict){
     const total = PLACES.length, v = visitedNames().filter(n => PLACE_MAP[n]).length, g = Object.keys(STATE).filter(n => PLACE_MAP[n] && STATE[n].visitType === 'gps' && STATE[n].visited).length;
@@ -1656,12 +2022,14 @@ function openPlace(p, opts){
       <div class="block-title">Yerin hikâyesi</div>
       <div class="story">${escHtml(p.story)}</div>
       <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.mapQuery)}" target="_blank" rel="noopener">${ico('pin', 18)}<span>Haritada aç — ${escHtml(p.mapQuery)}</span></a>
+      <div id="gallery-slot"></div>
       ${related.length ? `<div class="block-title">${escHtml(DISTRICT_ABLATIVE[p.district] || p.district)} diğer yerler</div><div class="related">${related.map(r => `<button class="mini" data-rel="${r.__i}"><span class="dot" style="background:${(ERAS[r.era] || ERAS.nature).color}"></span><span class="nm">${escHtml(r.name)}</span></button>`).join('')}</div>` : ''}
     </div>`;
   $('drawer').classList.add('open'); $('backdrop').classList.add('open'); $('drawer').setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden';
   body.scrollTop = prev;
   lazyImage($('dr-hero'), p);
   fillMemorySlot(p, false);
+  fillGallery(p);
   loadAllMemories().then(() => { if(window.__openPlaceName === p.name) fillMemorySlot(p, !!opts.flashMemory); });
   if(opts.flashMemory) setTimeout(() => { const m = $('mem-slot'); if(m) m.scrollIntoView({ behavior:'smooth', block:'center' }); }, 120);
 
@@ -1685,31 +2053,63 @@ function openPlace(p, opts){
   body.querySelectorAll('[data-rel]').forEach(b => b.addEventListener('click', () => openPlace(PLACES[+b.dataset.rel])));
 }
 
+// Bu yerde çekilen fotoğraflardan en fazla 3 gezginin fotoğrafını gösterir (adlar gizli: "Bir gezgin"). "Tümünü gör" bu yerdeki hepsini açar.
+// Fotoğraflar yalnızca TAM OLARAK bu yerin adıyla eşleşenlerdir (loadGallery doğrular); çekmece değişirse eski sonuç yok sayılır.
+async function fillGallery(p){
+  const slot = $('gallery-slot'); if(!slot) return;
+  const all = await loadGallery(p.name, 12, true);
+  if(window.__openPlaceName !== p.name || !$('gallery-slot')) return;
+  const others = all.filter(x => !x.own), shown = others.slice(0, 3);
+  if(!shown.length && !all.length){ slot.innerHTML = ''; return; }
+  slot.innerHTML = `<div class="block-title">Gezginlerden anılar</div>
+    ${shown.length ? `<div class="gallery">${shown.map((x, i) => `<button class="g-item" data-gi="${i}" aria-label="Bir gezginin anısı"><img src="${x.thumb}" alt="Bir gezginin ${escHtml(p.name)} anısı" loading="lazy"><span>${x.note ? escHtml(x.note) : 'Bir gezgin'}${x.takenAt ? ' · ' + escHtml(fmtDate(x.takenAt)) : ''}</span></button>`).join('')}</div>` : '<p style="font-size:13.5px;color:var(--muted);margin-bottom:8px">Henüz başka bir gezginin fotoğrafı yok.</p>'}
+    ${all.length > shown.length ? `<button class="btn btn-ghost btn-sm" id="gal-all" style="margin-top:10px">Tümünü gör ${ico('arrow', 16)}</button>` : ''}`;
+  slot.querySelectorAll('.g-item').forEach(b => b.addEventListener('click', () => { $('lightbox').querySelector('img').src = shown[+b.dataset.gi].thumb; $('lightbox').classList.add('open'); }));
+  const allBtn = $('gal-all'); if(allBtn) allBtn.addEventListener('click', () => openAllPhotos(p));
+}
+// Bir yerde çekilen bütün anı fotoğraflarını bir pencerede listeler
+async function openAllPhotos(p){
+  $('gm-title').textContent = `${p.name} — çekilen anılar`; $('gm-body').innerHTML = '<p style="color:var(--muted)">Yükleniyor…</p>'; $('gal-modal').classList.add('open');
+  const items = await loadGallery(p.name, 60, true);
+  if(!$('gal-modal').classList.contains('open')) return;
+  $('gm-body').innerHTML = items.length ? `<div class="ph-grid">${items.map((x, i) => `<button class="ph-item" data-pi="${i}" style="text-align:left;cursor:zoom-in"><img src="${x.thumb}" alt=""><b>${x.own ? 'Senin anın' : 'Bir gezgin'}</b>${x.takenAt ? `<div style="color:var(--muted)">${escHtml(fmtDate(x.takenAt))}</div>` : ''}${x.note ? `<div>${escHtml(x.note)}</div>` : ''}</button>`).join('')}</div>` : '<p style="color:var(--muted)">Bu yerde henüz paylaşılan fotoğraf yok.</p>';
+  $('gm-body').onclick = e => { const b = e.target.closest('[data-pi]'); if(b){ $('lightbox').querySelector('img').src = items[+b.dataset.pi].thumb; $('lightbox').classList.add('open'); } };
+}
+$('gm-close').addEventListener('click', () => $('gal-modal').classList.remove('open'));
+
 // "Ben de buradaydım" kartının HTML'ini üretir
 function memoryHtml(p){
   const st = getPlaceState(p.name), m = MEMORIES[p.name];
   if(!st.visited) return `<div class="memory locked"><div class="m-eyebrow">${ico('camera', 14)} Ben de buradaydım</div><div class="m-hint">Bu yere gittiğinde konumunla doğrula; ziyaret tarihin ve fotoğrafınla bir anı kartı oluşsun.</div></div>`;
   if(st.visitType !== 'gps') return `<div class="memory locked"><div class="m-eyebrow">${ico('lock', 14)} Ben de buradaydım</div><div class="m-hint">Bu yeri daha önce gezdiğini işaretledin. Şimdi buradaysan <b>“Şimdi buradayım (GPS)”</b> ile konumunu doğrula; tarihli anı kartın ve fotoğraf ekleme alanı açılsın.</div></div>`;
   const cloudWarn = MEM_CLOUD_ERR && m ? `<div class="m-msg warn">Fotoğraf bu cihazda saklandı ama hesabına yazılamadı (${escHtml(MEM_CLOUD_ERR)}). Yönetici Firestore kurallarını güncelleyince otomatik eşitlenecek.</div>` : '';
+  const pubWarn = PUBLIC_ERR && m ? `<div class="m-msg warn">Fotoğraf kaydedildi ancak herkese açık paylaşılamadı (${escHtml(PUBLIC_ERR)}).</div>` : '';
   const head = `<div class="m-eyebrow">${ico('camera', 14)} Ben de buradaydım</div><h4>📍 ${escHtml(p.name)}</h4><div class="m-date">Sen burada <b>${fmtDate(st.visitedAt || Date.now())}</b> tarihinde bulundun.</div>`;
-  if(m && m.photo){
-    return `<div class="memory" id="mem-card">${head}<figure class="m-photo"><img src="${m.photo}" id="mem-img" alt="${escHtml(p.name)} anısı"></figure>
+  if(m && safeImg(m.photo)){
+    return `<div class="memory" id="mem-card">${head}<figure class="m-photo"><img src="${safeImg(m.photo)}" id="mem-img" alt="${escHtml(p.name)} anısı"></figure>
       <textarea class="m-note" id="mem-note" rows="2" maxlength="140" placeholder="Bu anıya kısa bir not ekle…">${escHtml(m.note || '')}</textarea>
-      <div class="m-actions"><button class="btn btn-ghost btn-sm" id="mem-add">${ico('image', 16)} Fotoğrafı değiştir</button><button class="btn btn-ghost btn-sm" id="mem-del">${ico('trash', 16)} Kaldır</button></div>${cloudWarn}</div>`;
+      <div class="m-actions"><button class="btn btn-ghost btn-sm" id="mem-add">${ico('image', 16)} Fotoğrafı değiştir</button><button class="btn btn-ghost btn-sm" id="mem-del">${ico('trash', 16)} Kaldır</button></div>${cloudWarn}${pubWarn}</div>`;
   }
-  return `<div class="memory" id="mem-card">${head}<button class="btn btn-gold" id="mem-add">${ico('camera', 17)} Fotoğrafını ekle</button><div class="m-msg">Fotoğraf yalnızca senin hesabında saklanır.</div></div>`;
+  const removedMsg = (m && m.removed) ? `<div class="m-msg removed">Önceki fotoğrafın yönetici tarafından kaldırıldı. Kurallara uygun yeni bir fotoğraf ekleyebilirsin.</div>` : '';
+  return `<div class="memory" id="mem-card">${head}<button class="btn btn-gold" id="mem-add">${ico('camera', 17)} Fotoğrafını ekle</button>${removedMsg}<div class="m-msg">Eklediğin fotoğraf bu yerin sayfasında diğer kullanıcılara da görünür.</div></div>`;
 }
 // Anı kartını çekmecedeki yerine koyar ve düğmelerini bağlar
 function fillMemorySlot(p, flash){
   const slot = $('mem-slot'); if(!slot) return;
   slot.innerHTML = memoryHtml(p);
   const card = $('mem-card'); if(card && flash){ card.classList.add('flash'); }
-  const add = $('mem-add'); if(add) add.addEventListener('click', () => { memTargetName = p.name; $('mem-file').value = ''; $('mem-file').click(); });
+  const add = $('mem-add'); if(add) add.addEventListener('click', () => { memTargetName = p.name; openPhotoWarn(() => { $('mem-file').value = ''; $('mem-file').click(); }); });
   const img = $('mem-img'); if(img) img.addEventListener('click', () => { $('lightbox').querySelector('img').src = img.src; $('lightbox').classList.add('open'); });
   const del = $('mem-del'); if(del) del.addEventListener('click', async () => { if(!confirm('Bu anının fotoğrafı silinsin mi?')) return; await deleteMemory(p.name); fillMemorySlot(p, false); if(currentView === 'memories') renderMemories(); });
   const note = $('mem-note'); if(note) note.addEventListener('change', async () => { await saveMemory(p.name, { note:note.value.trim() }); if(currentView === 'memories') renderMemories(); });
 }
 let memTargetName = null;
+// Fotoğraf seçmeden önce "herkese görünür" uyarısını gösterir; onaylanırsa dosya seçici açılır
+function openPhotoWarn(go){
+  const m = $('photo-warn'); m.classList.add('open');
+  $('pw-cancel').onclick = () => m.classList.remove('open');
+  $('pw-ok').onclick = () => { m.classList.remove('open'); go(); };
+}
 // Seçilen fotoğrafı küçültüp anıya kaydeder
 $('mem-file').addEventListener('change', async e => {
   const file = e.target.files && e.target.files[0]; const name = memTargetName; if(!file || !name) return;
@@ -1718,6 +2118,7 @@ $('mem-file').addEventListener('change', async e => {
     const photo = await photoToDataUrl(file);
     await saveMemory(name, { photo, takenAt: (STATE[name] && STATE[name].visitedAt) || Date.now() });
     showToast(`<div><div class="tt">Anı kaydedildi</div><div class="tn">${escHtml(name)}</div></div>`);
+    if(PUBLIC_ERR) alert('Fotoğraf kaydedildi ancak herkese açık paylaşılamadı (' + PUBLIC_ERR + '). Yönetici Firestore kurallarını güncelleyince paylaşılır.');
   } catch(err){ alert('Fotoğraf eklenemedi: ' + err.message + ' (HEIC gibi bazı biçimler tarayıcıda açılamaz; JPEG ya da PNG deneyin.)'); }
   if(window.__openPlaceName === name) fillMemorySlot(PLACE_MAP[name], false);
   if(currentView === 'memories') renderMemories();
@@ -1727,17 +2128,40 @@ $('lightbox').addEventListener('click', () => $('lightbox').classList.remove('op
 // =====================================================================
 // 14) ANILARIM SAYFASI (fotoğraflı pasaport)
 // =====================================================================
+// Haftanın fotoğrafı kartı: 10 kişiden azsa yalnızca bilgi; 10 ve üstüyse oylama; son kesinleşmiş birinci
+function renderContest(){
+  const box = $('contest-card'); if(!box) return; const C = CONTEST;
+  if(!C.loaded){ box.innerHTML = ''; return; }
+  if(C.err){ box.innerHTML = ''; return; }
+  const left = Math.max(0, C.ws + WEEK_MS - Date.now()), d = Math.floor(left / 86400000), h = Math.floor(left % 86400000 / 3600000);
+  const active = C.entrants >= CONTEST_MIN;
+  const winner = C.result ? `<div class="c-winner"><img src="${safeImg(C.result.winner.thumb)}" alt="Geçen haftanın birincisi"><div><div class="eyebrow" style="margin:0 0 4px">Geçen haftanın fotoğrafı · ${escHtml(weekRangeText(C.result.weekStart))}</div><b class="serif" style="font-size:18px">${escHtml(C.result.winner.place)}</b><div style="font-size:13px;color:var(--muted)">${C.result.winner.votes} oy · Bir gezgin${C.result.winner.note ? ' · “' + escHtml(C.result.winner.note) + '”' : ''}</div></div></div>` : '';
+  let body;
+  if(!active){
+    body = `<p class="c-info">Bir haftada <b>en az ${CONTEST_MIN} farklı kişi</b> anı fotoğrafı yüklerse oylama başlar ve hafta sonunda en çok oy alan fotoğraf birinci seçilir; kazanan <b>Haftanın Fotoğrafçısı</b> rozetini alır. Daha az kişi katılırsa yarışma yapılmaz.</p>
+      <div class="meter"><div class="meter-row"><span>Bu hafta (${escHtml(weekRangeText(C.ws))}) fotoğraf yükleyen</span><b>${C.entrants} / ${CONTEST_MIN}</b></div><div class="meter-bar gold"><i style="width:${Math.min(100, C.entrants / CONTEST_MIN * 100)}%"></i></div></div>`;
+  } else {
+    const me = currentUser.uid, list = C.entries.slice().sort((a, b) => (a.id < b.id ? -1 : 1));
+    body = `<p class="c-info"><b>Oylama açık!</b> ${escHtml(weekRangeText(C.ws))} haftasında ${C.entrants} kişi fotoğraf yükledi. Haftada <b>tek oy</b> hakkın var, hafta bitmeden değiştirebilirsin. Kalan süre: <b>${d} gün ${h} saat</b>.</p>
+      <div class="c-grid">${list.map(e => { const own = e.uid === me, voted = C.myVote === e.id;
+        return `<div class="c-item ${voted ? 'voted' : ''}"><img src="${e.thumb}" alt="${escHtml(e.place)} anısı" loading="lazy" data-zoom><div class="c-cap"><b>${escHtml(e.place)}</b><span>${C.votes[e.id] || 0} oy</span></div>${own ? '<div class="c-own">Senin fotoğrafın</div>' : `<button class="btn ${voted ? 'btn-gold' : 'btn-ghost'} btn-sm" data-vote="${escHtml(e.id)}">${voted ? '✓ Oyun bu' : 'Oy ver'}</button>`}</div>`; }).join('')}</div>`;
+  }
+  box.innerHTML = `<div class="contest card"><div class="section-head" style="margin-bottom:10px"><div><div class="eyebrow">Haftanın fotoğrafı</div><h3 class="serif" style="font-size:22px">📸 Haftalık fotoğraf yarışması <span class="beta">Yeni</span></h3></div></div>${body}${winner}</div>`;
+  box.querySelectorAll('[data-zoom]').forEach(im => im.addEventListener('click', () => { $('lightbox').querySelector('img').src = im.src; $('lightbox').classList.add('open'); }));
+  box.querySelectorAll('[data-vote]').forEach(b => b.addEventListener('click', async () => { b.disabled = true; try { await castVote(b.dataset.vote); showToast('<div><div class="tt">Oyun kaydedildi</div><div class="tn">Teşekkürler!</div></div>', true); } catch(e){ alert('Oy verilemedi: ' + (e.code || e.message)); } renderContest(); }));
+}
 async function renderMemories(){
+  renderContest();
   const box = $('memories');
   const entries = Object.keys(STATE).filter(n => PLACE_MAP[n] && STATE[n].visited);
   const verified = entries.filter(n => STATE[n].visitType === 'gps').sort((a, b) => (STATE[b].visitedAt || 0) - (STATE[a].visitedAt || 0));
   const others = entries.filter(n => STATE[n].visitType !== 'gps');
   if(!MEM_LOADED){ box.innerHTML = '<div class="empty" style="grid-column:1/-1">Anıların yükleniyor…</div>'; await loadAllMemories(); if(currentView !== 'memories') return; }
-  const photos = verified.filter(n => MEMORIES[n] && MEMORIES[n].photo).length;
+  const photos = verified.filter(n => MEMORIES[n] && safeImg(MEMORIES[n].photo)).length;
   $('mem-count').textContent = `${verified.length} onaylı anı · ${photos} fotoğraf`;
   box.innerHTML = verified.length ? verified.map(n => {
     const p = PLACE_MAP[n], m = MEMORIES[n], era = ERAS[p.era] || ERAS.nature;
-    return `<div class="polaroid" data-i="${p.__i}" tabindex="0" role="button"><div class="po-img" style="--era:${era.color}">${m && m.photo ? `<img src="${m.photo}" alt="${escHtml(n)}">` : `<div class="po-stamp"><div class="g">${era.glyph}</div><span>Fotoğraf ekle</span></div>`}<div class="po-seal">${ico('check', 16)}</div></div>
+    return `<div class="polaroid" data-i="${p.__i}" tabindex="0" role="button"><div class="po-img" style="--era:${era.color}">${m && safeImg(m.photo) ? `<img src="${safeImg(m.photo)}" alt="${escHtml(n)}">` : `<div class="po-stamp"><div class="g">${era.glyph}</div><span>Fotoğraf ekle</span></div>`}<div class="po-seal">${ico('check', 16)}</div></div>
       <div class="po-cap"><h4>${escHtml(n)}</h4><div class="d">📍 ${fmtDate(STATE[n].visitedAt || Date.now())}</div>${m && m.note ? `<div class="n">“${escHtml(m.note)}”</div>` : ''}</div></div>`;
   }).join('') : `<div class="empty" style="grid-column:1/-1"><b style="display:block;font-size:18px;color:var(--ink);margin-bottom:6px">Henüz anı kartın yok</b>Bir yere gittiğinde yer sayfasındaki <b>“Şimdi buradayım (GPS)”</b> düğmesine bas. Konumun doğrulanınca tarihli anı kartın açılır, fotoğrafını ekleyebilirsin.<div style="margin-top:14px"><a class="btn btn-green" href="#places">Yerlere göz at</a></div></div>`;
   $('stamps-wrap').innerHTML = others.length ? `<div class="block-title" style="margin-top:36px">Daha önce gezdiğin yerler (${others.length})</div><div class="stamp-row">${others.map(n => `<button class="stamp-chip" data-i="${PLACE_MAP[n].__i}">${escHtml(n)}</button>`).join('')}</div>` : '';
@@ -1755,7 +2179,8 @@ function renderBadges(){
     ['era', 'Dönem rozetleri', 'Her dönemden 10 durak (ya da dönemdeki tüm duraklar) işaretle.'],
     ['district', 'İlçe uzmanları', 'Bir ilçedeki tüm durakları gezdiğini işaretle.'],
     ['verified', 'Onaylı ilçe uzmanları', 'Bir ilçedeki tüm durakları konumunla (GPS) doğrula. Altın mühürlü bordo rozetler.'],
-    ['gps', 'Konum doğrulama', 'GPS ile doğruladığın yerlerin sayısına göre kazanılır.']
+    ['gps', 'Konum doğrulama', 'GPS ile doğruladığın yerlerin sayısına göre kazanılır.'],
+    ['photo', 'Haftanın fotoğrafı', 'Bir haftada en az 10 kişinin katıldığı fotoğraf yarışmasında oylamayla birinci olunca kazanılır.']
   ];
   $('badges-body').innerHTML = `<div class="section-head"><div><div class="eyebrow">Koleksiyon</div><h2>Rozetlerim</h2></div></div>
     <div class="b-summary"><div class="ring-wrap"><div class="ring" style="--p:${pct}"></div><b>${n}</b></div><div><div class="serif" style="font-size:22px">${n} / ${defs.length} rozet kazandın</div><div style="color:var(--muted);font-size:14px">Gittiğin ve konumla doğruladığın yerlerle yeni rozetler açılır.</div></div></div>`
@@ -1768,36 +2193,154 @@ function renderBadges(){
 }
 
 // =====================================================================
-// 16) YÖNETİCİ SAYFASI: tüm hesaplar, kazandıkları rozetler ve ziyaret sayıları
+// 16) YÖNETİCİ SAYFASI (yapım aşamasında): hesaplar, çevrimiçi durumu, rozet filtresi, yasaklama, fotoğraf kaldırma
+//     NOT: Buradaki her işlem Firestore kurallarında da yalnızca yönetici hesabına açıktır; arayüzü gizlemek tek başına koruma sağlamaz.
 // =====================================================================
+const ADMIN = { users:[], presence:{}, banned:{}, f:{ q:'', badge:'', status:'' }, unsub:null, tick:null };
+// Bir hesap şu an çevrimiçi mi? (son sinyal 4 dakikadan yeni ve "online" işaretli)
+function isOnline(uid){ const p = ADMIN.presence[uid]; return !!(p && p.online && Date.now() - p.last < PRESENCE_TTL); }
+function ago(ms){ if(!ms) return 'bilinmiyor'; const m = Math.max(0, Math.round((Date.now() - ms) / 60000)); if(m < 1) return 'az önce'; if(m < 60) return m + ' dk önce'; const h = Math.round(m / 60); if(h < 24) return h + ' sa önce'; return Math.round(h / 24) + ' gün önce'; }
+// Canlı çevrimiçi dinleyicisini ve zamanlayıcıyı kapatır
+function stopAdminLive(){ if(ADMIN.unsub){ ADMIN.unsub(); ADMIN.unsub = null; } if(ADMIN.tick){ clearInterval(ADMIN.tick); ADMIN.tick = null; } }
+// Yönetici sayfasını açar: hesapları ve yasak listesini yükler, çevrimiçi durumunu canlı dinler
 async function renderAdmin(){
   if(!isAdmin()) return;
   const box = $('admin-body'); box.innerHTML = '<div class="empty">Yükleniyor…</div>';
   try {
-    const snap = await db.collection('users').get(); const total = getAllBadgeDefs().length; const users = [];
-    snap.forEach(d => { const x = d.data(), pr = x.profile || {};
-      users.push({ uid:d.id, hasProfile:!!x.profile, email:pr.email || '', name:pr.displayName || '', photo:pr.photoURL || '', badges:pr.earnedBadgeNames || [], count:(pr.earnedBadges || []).length,
+    const [us, bs] = await Promise.all([db.collection('users').get(), db.collection('banned').get()]);
+    ADMIN.users = [];
+    us.forEach(d => { const x = d.data(), pr = x.profile || {};
+      ADMIN.users.push({ uid:d.id, hasProfile:!!x.profile, email:String(pr.email || ''), name:String(pr.displayName || ''), photo:safeUrl(pr.photoURL),
+        badgeIds:Array.isArray(pr.earnedBadges) ? pr.earnedBadges : [], badgeNames:Array.isArray(pr.earnedBadgeNames) ? pr.earnedBadgeNames : [],
         visited:(pr.visitedCount != null) ? pr.visitedCount : Object.values(x.places || {}).filter(s => s && s.visited).length, gps:pr.gpsCount || 0 }); });
-    users.sort((a, b) => b.count - a.count || b.visited - a.visited);
-    const withBadge = users.filter(u => u.count > 0).length;
-    box.innerHTML = `<p style="margin-bottom:16px;color:var(--muted)">${users.length} hesap · ${withBadge} hesabın rozeti var</p>` + (users.map(u => `<div class="auser">${u.photo ? `<img src="${escHtml(u.photo)}" alt="" referrerpolicy="no-referrer">` : '<div class="av">👤</div>'}<div style="flex:1;min-width:0">
-      ${u.hasProfile ? `<div class="nm">${escHtml(u.name || '(isimsiz)')}</div><div class="ml">${escHtml(u.email)}</div>` : `<div class="nm">(profil bilgisi henüz yok)</div><div class="ml">uid: ${escHtml(u.uid)} — kullanıcı siteye bir kez daha girince e-postası dolar</div>`}
-      <div class="mt">${u.count} / ${total} rozet · ${u.visited} durak · ${u.gps} onaylı</div>
-      <div class="bs">${u.badges.length ? u.badges.map(n => `<span>🏅 ${escHtml(n)}</span>`).join('') : '<span style="color:var(--muted)">Henüz rozet yok</span>'}</div></div></div>`).join('') || '<div class="empty">Henüz kayıtlı kullanıcı yok.</div>');
+    ADMIN.banned = {}; bs.forEach(d => { ADMIN.banned[d.id] = d.data(); });
+    buildAdminShell(); paintAdminList(); renderAdminContest();
+    stopAdminLive();
+    ADMIN.unsub = db.collection('presence').onSnapshot(snap => {
+      ADMIN.presence = {}; snap.forEach(d => { const x = d.data(); ADMIN.presence[d.id] = { online:x.online === true, last:(x.lastSeen && x.lastSeen.toMillis) ? x.lastSeen.toMillis() : 0 }; });
+      paintAdminList();
+    }, () => {});
+    ADMIN.tick = setInterval(paintAdminList, 30000);
   } catch(e){ box.innerHTML = `<div class="empty">Veriler okunamadı. Firestore güvenlik kuralları yönetici okumasına izin vermiyor olabilir.<br><span class="mono" style="font-size:12px">${escHtml(e.message || e)}</span></div>`; }
 }
+// Filtre çubuğunu bir kez kurar
+function buildAdminShell(){
+  const defs = getAllBadgeDefs();
+  $('admin-body').innerHTML = `<div id="a-contest" class="contest card" style="margin-bottom:18px"></div><p id="a-sum" style="margin-bottom:14px;color:var(--muted)"></p>
+    <div class="afilters">
+      <label class="field"><span data-ico="search"></span><input class="input" id="a-q" type="search" placeholder="Ad veya e-posta ara…" autocomplete="off"></label>
+      <select class="select" id="a-badge" aria-label="Rozet filtresi"><option value="">Rozet: hepsi</option><option value="__any">Herhangi bir rozeti olanlar</option><option value="__none">Hiç rozeti olmayanlar</option>${defs.map(b => `<option value="${escHtml(b.id)}">${escHtml(b.name)}</option>`).join('')}</select>
+      <select class="select" id="a-status" aria-label="Durum filtresi"><option value="">Durum: hepsi</option><option value="on">● Çevrimiçi</option><option value="off">○ Çevrimdışı</option><option value="ban">Yasaklılar</option></select>
+    </div><div id="a-list"></div>`;
+  paintIcons($('admin-body'));
+  $('a-q').value = ADMIN.f.q; $('a-badge').value = ADMIN.f.badge; $('a-status').value = ADMIN.f.status;
+  $('a-q').addEventListener('input', e => { ADMIN.f.q = e.target.value; paintAdminList(); });
+  $('a-badge').addEventListener('change', e => { ADMIN.f.badge = e.target.value; paintAdminList(); });
+  $('a-status').addEventListener('change', e => { ADMIN.f.status = e.target.value; paintAdminList(); });
+  $('a-list').addEventListener('click', onAdminAction);
+}
+// Hesap listesini filtrelere göre çizer
+function paintAdminList(){
+  const list = $('a-list'); if(!list || currentView !== 'admin') return;
+  const f = ADMIN.f, q = trLower(f.q).trim(), total = getAllBadgeDefs().length;
+  let rows = ADMIN.users.filter(u => {
+    if(q && !(trLower(u.name).includes(q) || trLower(u.email).includes(q))) return false;
+    if(f.badge === '__any' && !u.badgeIds.length) return false;
+    if(f.badge === '__none' && u.badgeIds.length) return false;
+    if(f.badge && f.badge[0] !== '_' && !u.badgeIds.includes(f.badge)) return false;
+    if(f.status === 'on' && !isOnline(u.uid)) return false;
+    if(f.status === 'off' && isOnline(u.uid)) return false;
+    if(f.status === 'ban' && !ADMIN.banned[u.uid]) return false;
+    return true;
+  });
+  rows.sort((a, b) => (isOnline(b.uid) - isOnline(a.uid)) || (b.badgeIds.length - a.badgeIds.length) || (b.visited - a.visited));
+  const online = ADMIN.users.filter(u => isOnline(u.uid)).length, banned = ADMIN.users.filter(u => ADMIN.banned[u.uid]).length;
+  $('a-sum').innerHTML = `${ADMIN.users.length} hesap · <b style="color:#1E9E5A">● ${online} çevrimiçi</b> · ${banned} yasaklı · gösterilen: ${rows.length}`;
+  list.innerHTML = rows.map(u => {
+    const on = isOnline(u.uid), pr = ADMIN.presence[u.uid], me = (u.uid === currentUser.uid) || u.email.toLowerCase() === ADMIN_EMAIL, bn = ADMIN.banned[u.uid];
+    const status = on ? '<span class="dot-s on">● Çevrimiçi</span>' : `<span class="dot-s off">○ Çevrimdışı${pr && pr.last ? ' · ' + ago(pr.last) : ''}</span>`;
+    return `<div class="auser">${u.photo ? `<img src="${escHtml(u.photo)}" alt="" referrerpolicy="no-referrer">` : '<div class="av">👤</div>'}<div style="flex:1;min-width:0">
+      <div class="head"><span class="nm">${escHtml(u.name || '(isimsiz)')}</span>${status}${bn ? '<span class="pill ban">Yasaklı</span>' : ''}</div>
+      <div class="ml">${u.hasProfile ? escHtml(u.email) : 'uid: ' + escHtml(u.uid) + ' (profil henüz yok)'}</div>
+      <div class="mt">${u.badgeIds.length} / ${total} rozet · ${u.visited} durak · ${u.gps} onaylı</div>
+      <div class="bs">${u.badgeNames.length ? u.badgeNames.slice(0, 12).map(n => `<span>🏅 ${escHtml(n)}</span>`).join('') + (u.badgeNames.length > 12 ? `<span>+${u.badgeNames.length - 12}</span>` : '') : '<span style="color:var(--muted)">Henüz rozet yok</span>'}</div>
+      ${bn && bn.reason ? `<div class="ml" style="margin-top:6px;color:var(--danger)">Yasak nedeni: ${escHtml(String(bn.reason).slice(0, 200))}</div>` : ''}
+      ${me ? '' : `<div class="arow"><button class="btn btn-ghost btn-sm" data-act="photos" data-uid="${escHtml(u.uid)}">${ico('image', 15)} Fotoğrafları incele</button>${bn ? `<button class="btn btn-ghost btn-sm" data-act="unban" data-uid="${escHtml(u.uid)}">Yasağı kaldır</button>` : `<button class="btn btn-danger btn-sm" data-act="ban" data-uid="${escHtml(u.uid)}">Yasakla</button>`}</div>`}
+    </div></div>`;
+  }).join('') || '<div class="empty">Bu filtrelerle eşleşen hesap yok.</div>';
+}
+// Yönetici: haftalık yarışmanın durumu ve bitmiş haftaları kesinleştirme
+async function renderAdminContest(){
+  const box = $('a-contest'); if(!box) return; box.innerHTML = '<div class="eyebrow">Haftalık fotoğraf yarışması</div><p class="c-info">Yükleniyor…</p>';
+  try {
+    const cur = weekStartOf(Date.now()), weeks = [0, 1, 2, 3, 4, 5].map(i => cur - i * WEEK_MS);
+    const [stats, results] = await Promise.all([ Promise.all(weeks.map(w => db.collection('contestStats').doc(String(w)).get())), Promise.all(weeks.map(w => db.collection('weeklyResults').doc(String(w)).get())) ]);
+    box.innerHTML = `<div class="eyebrow">Haftalık fotoğraf yarışması</div><p class="c-info">En az ${CONTEST_MIN} farklı kişi fotoğraf yüklerse hafta sonunda oylamayla birinci seçilir. Biten haftalar sen siteyi açınca otomatik kesinleştirilir; istersen buradan elle de yapabilirsin.</p>
+      <div class="mini-list">${weeks.map((w, i) => { const n = stats[i].exists ? Object.keys((stats[i].data() || {}).users || {}).length : 0, r = results[i].exists ? results[i].data() : null, over = w + WEEK_MS <= Date.now();
+        const state = r ? `Kesinleşti · ${r.winner ? r.winner.votes : 0} oyla ${r.winner ? escHtml(r.winner.place) : ''}` : (!over ? 'Devam ediyor' : (n < CONTEST_MIN ? 'Yarışma yapılmadı (10 kişiden az)' : 'Kesinleştirilmedi'));
+        return `<div class="mini" style="cursor:default"><span class="nm">${escHtml(weekRangeText(w))} · ${n} kişi</span><span class="st ${r ? 'ok' : ''}">${state}</span>${(!r && over && n >= CONTEST_MIN) ? `<button class="btn btn-green btn-sm" data-fin="${w}">Kesinleştir</button>` : ''}</div>`; }).join('')}</div>`;
+    box.onclick = async e => { const b = e.target.closest('[data-fin]'); if(!b) return; b.disabled = true; try { const r = await finalizeWeek(+b.dataset.fin); alert(r === 'done' ? 'Sonuç kaydedildi.' : r === 'novotes' ? 'Bu hafta hiç oy verilmemiş; birinci seçilemedi.' : 'Sonuç: ' + r); } catch(err){ alert('Hata: ' + (err.code || err.message)); } renderAdminContest(); };
+  } catch(e){ box.innerHTML = `<div class="eyebrow">Haftalık fotoğraf yarışması</div><p class="c-info">Okunamadı: ${escHtml(e.code || e.message)}</p>`; }
+}
+// Listedeki düğmeler: fotoğraf inceleme, yasaklama, yasağı kaldırma
+async function onAdminAction(e){
+  const b = e.target.closest('[data-act]'); if(!b || !isAdmin()) return;
+  const u = ADMIN.users.find(x => x.uid === b.dataset.uid); if(!u) return;
+  if(b.dataset.act === 'photos') return openAdminPhotos(u);
+  if(b.dataset.act === 'ban'){
+    const reason = prompt(`${u.name || u.email} yasaklansın mı? Nedenini yaz (isteğe bağlı), kullanıcıya gösterilir:`, ''); if(reason === null) return;
+    try {
+      await db.collection('banned').doc(u.uid).set({ uid:u.uid, email:u.email, reason:String(reason).slice(0, 200), at: firebase.firestore.FieldValue.serverTimestamp(), by: currentUser.email });
+      const pub = await db.collection('publicMemories').where('uid', '==', u.uid).get(); const refs = []; pub.forEach(d => refs.push(d.ref)); await runBatches(refs, (bt, r) => bt.delete(r));   // herkese açık fotoğrafları kaldır
+      const ce = await db.collection('contestEntries').where('uid', '==', u.uid).get(); const cr = []; ce.forEach(d => cr.push(d.ref)); await runBatches(cr, (bt, r) => bt.delete(r));   // yarışma girişlerini kaldır
+      ADMIN.banned[u.uid] = { reason:String(reason).slice(0, 200) }; paintAdminList();
+    } catch(err){ alert('Yasaklanamadı: ' + (err.code || err.message)); }
+  } else if(b.dataset.act === 'unban'){
+    if(!confirm(`${u.name || u.email} için yasak kaldırılsın mı?`)) return;
+    try { await db.collection('banned').doc(u.uid).delete(); delete ADMIN.banned[u.uid]; paintAdminList(); } catch(err){ alert('İşlem yapılamadı: ' + (err.code || err.message)); }
+  }
+}
+// Bir kullanıcının herkese açık fotoğraflarını listeler; uygunsuz olanlar kaldırılabilir
+async function openAdminPhotos(u){
+  $('am-title').textContent = `${u.name || u.email} — fotoğraflar`; $('am-body').innerHTML = '<p style="color:var(--muted)">Yükleniyor…</p>'; $('admin-modal').classList.add('open');
+  try {
+    const snap = await db.collection('publicMemories').where('uid', '==', u.uid).get(); const items = [];
+    snap.forEach(d => { const x = d.data(); const th = safeImg(x.thumb); if(th) items.push({ place:String(x.place || ''), thumb:th, note:String(x.note || '').slice(0, 140) }); });
+    $('am-body').innerHTML = items.length ? `<div class="ph-grid">${items.map((x, i) => `<div class="ph-item"><img src="${x.thumb}" alt=""><b>${escHtml(x.place)}</b><div style="color:var(--muted)">${escHtml(x.note)}</div><button class="btn btn-danger btn-sm" style="margin-top:6px" data-rm="${i}">Kaldır</button></div>`).join('')}</div>` : '<p style="color:var(--muted)">Bu kullanıcının herkese açık fotoğrafı yok.</p>';
+    $('am-body').onclick = async ev => {
+      const r = ev.target.closest('[data-rm]'); if(!r || !isAdmin()) return; const it = items[+r.dataset.rm]; if(!it || !confirm('Bu fotoğraf kaldırılsın mı?')) return;
+      try { await adminRemovePhoto(u.uid, it.place); r.closest('.ph-item').remove(); } catch(err){ alert('Kaldırılamadı: ' + (err.code || err.message)); }
+    };
+  } catch(err){ $('am-body').innerHTML = `<p style="color:var(--danger)">Okunamadı: ${escHtml(err.code || err.message)}</p>`; }
+}
+// Fotoğrafı herkese açık listeden siler ve kullanıcının kaydını "kaldırıldı" olarak işaretler
+async function adminRemovePhoto(uid, place){
+  await db.collection('publicMemories').doc(pubId(uid, place)).delete();
+  const ce = await db.collection('contestEntries').where('uid', '==', uid).get(); const cr = []; ce.forEach(d => { if(d.data().place === place) cr.push(d.ref); }); await runBatches(cr, (bt, r) => bt.delete(r));
+  await db.collection('users').doc(uid).collection('memories').doc(ratingDocId(place)).set({ name:place, removed:true, updatedAt:Date.now(), takenAt:Date.now() });
+}
+$('am-close').addEventListener('click', () => $('admin-modal').classList.remove('open'));
 
 // =====================================================================
 // 17) HESAP MENÜSÜ, KISAYOLLAR VE AÇILIŞ
 // =====================================================================
 $('user-btn').addEventListener('click', e => { e.stopPropagation(); $('user-menu').classList.toggle('open'); });
 document.addEventListener('click', e => { if(!e.target.closest('#user-menu')) $('user-menu').classList.remove('open'); });
-$('signout-btn').addEventListener('click', () => { $('user-menu').classList.remove('open'); if(auth) auth.signOut(); });
+$('signout-btn').addEventListener('click', () => { $('user-menu').classList.remove('open'); signOutNow(); });
+$('um-admin').addEventListener('click', () => { $('user-menu').classList.remove('open'); location.hash = 'admin'; });
+$('um-reset').addEventListener('click', () => { $('user-menu').classList.remove('open'); resetMyAccountData(); });
+$('um-delete').addEventListener('click', () => { $('user-menu').classList.remove('open'); deleteMyAccount(); });
 $('gate-auth-btn').addEventListener('click', doSignIn);
-document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeDrawer(); $('lightbox').classList.remove('open'); $('user-menu').classList.remove('open'); } });
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeDrawer(); $('lightbox').classList.remove('open'); $('user-menu').classList.remove('open'); $('photo-warn').classList.remove('open'); $('admin-modal').classList.remove('open'); $('gal-modal').classList.remove('open'); } });
+
+// ----- Gece / gündüz modu: seçim cihazda saklanır; seçim yoksa telefonun/bilgisayarın ayarı kullanılır -----
+function paintThemeBtn(){ const dark = document.documentElement.dataset.theme === 'dark'; $('theme-btn').innerHTML = ico(dark ? 'sun' : 'moon', 18); $('theme-btn').title = dark ? 'Gündüz moduna geç' : 'Gece moduna geç'; const m = document.querySelector('meta[name=theme-color]'); if(m) m.content = dark ? '#0E1613' : '#14452F'; }
+function setTheme(t){ document.documentElement.dataset.theme = t; try { localStorage.setItem('ankaraTheme', t); } catch(e){} paintThemeBtn(); if(currentView === 'explore') renderMap(); }
+$('theme-btn').addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => { if(!localStorage.getItem('ankaraTheme')){ document.documentElement.dataset.theme = e.matches ? 'dark' : 'light'; paintThemeBtn(); if(currentView === 'explore') renderMap(); } }); } catch(e){}
 
 // ----- Sayfa açılış komutları -----
-paintIcons();
+paintIcons(); paintThemeBtn();
 initControls();
 renderStrata(); renderMap(); renderPanel(); updateProgress();
 if(!auth) showGateError('Giriş sistemi şu an başlatılamadı. Sayfayı internet üzerinden (GitHub Pages) açtığınızdan emin olun.');
