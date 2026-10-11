@@ -2340,7 +2340,7 @@ async function onAdminAction(e){
 // e-posta şifresi/anahtarı sitede TUTULMAZ; script yalnızca geçerli yönetici oturumu (Firebase kimlik jetonu) gelirse gönderir.
 // Kurulumdan sonra script adresi (https://script.google.com/macros/s/.../exec) aşağıya yapıştırılır.
 // Boşsa "Gmail'de aç (yedek)" yolu kullanılır: alıcı listesi kopyalanır, Gmail yazma penceresi hazır metinle açılır.
-const MAIL_ENDPOINT = '';
+const MAIL_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxKKWr32cmW2YP6JFWXxk3mni_WXKgHs5Fs8gqlME9lavxPtST1uNv6C3WcDAhaH128bg/exec';
 const MAIL_FROM = 'ankarakatmanlari@gmail.com';
 const MAIL_FOOTER = 'Bu iletiyi Ankara Katmanları hesabınız bulunduğu için aldınız. Bu tür iletileri almak istemiyorsanız bu e-postayı “çık” yazarak yanıtlamanız yeterlidir.';
 const MAIL_TEMPLATES = {
