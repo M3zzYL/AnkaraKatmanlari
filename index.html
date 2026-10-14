@@ -2411,6 +2411,9 @@ async function onAdminAction(e){
 // Boşsa "Gmail'de aç (yedek)" yolu kullanılır: alıcı listesi kopyalanır, Gmail yazma penceresi hazır metinle açılır.
 const MAIL_ENDPOINT = '';
 const MAIL_FROM = 'ankarakatmanlari@gmail.com';
+// Adres panelden de girilebilir (bu cihazda saklanır, site güncellemelerinde silinmez); dosyadaki sabit değer yedektir.
+function mailEndpoint(){ try { return (localStorage.getItem('ankaraMailEndpoint') || '').trim() || MAIL_ENDPOINT; } catch(e){ return MAIL_ENDPOINT; } }
+function mailEndpointOk(u){ return /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_\-]+\/exec$/.test(String(u || '').trim()); }
 const MAIL_FOOTER = 'Bu iletiyi Ankara Katmanları hesabınız bulunduğu için aldınız. Bu tür iletileri almak istemiyorsanız bu e-postayı “çık” yazarak yanıtlamanız yeterlidir.';
 const MAIL_TEMPLATES = {
   update:{ label:'Site güncellendi', subject:'Ankara Katmanları güncellendi',
@@ -2468,6 +2471,7 @@ function mailboxHtml(defs){
     <div class="mb-row"><label for="m-sub">Konu</label><input class="input" id="m-sub" maxlength="150" autocomplete="off" placeholder="Örn. Ankara Katmanları güncellendi"></div>
     <div class="mb-row"><label for="m-body">İleti</label><textarea id="m-body" rows="10" maxlength="5000" placeholder="İletinizi yazın…"></textarea><small>Hitap (“Sayın …”) ile imza ve alt bilgi otomatik eklenir. <b>{ad}</b> kişinin adıyla değişir; satırı “- ” ile başlatırsanız madde işareti olur.</small></div>
     <div class="mb-row"><label for="m-ex">Gönderilmeyecek adresler (isteğe bağlı)</label><textarea id="m-ex" rows="2" placeholder="E-posta listesinden çıkmak isteyenleri buraya yazın (virgül ya da satır ile ayırın)"></textarea></div>
+    <div class="mb-row"><label for="m-ep">Gönderim servisi adresi (Apps Script)</label><input class="input" id="m-ep" autocomplete="off" inputmode="url" placeholder="https://script.google.com/macros/s/.../exec"><small id="m-ep-note"></small><div class="mb-actions" style="margin-top:8px"><button class="btn btn-ghost btn-sm" id="m-ep-save" type="button">Adresi kaydet</button></div></div>
     <div class="mb-actions"><button class="btn btn-ghost btn-sm" id="m-prev" type="button">Önizle</button><button class="btn btn-green btn-sm" id="m-send" type="button">${ico('mail', 15)} Gönder</button><button class="btn btn-ghost btn-sm" id="m-gmail" type="button">Gmail'de aç (yedek)</button></div>
     <div class="mb-status" id="m-status" role="status"></div><div id="m-preview"></div><div id="m-log"></div>
   </div></details>`;
@@ -2499,6 +2503,14 @@ function initMailbox(){
   sub.addEventListener('input', save); body.addEventListener('input', save);
   tpl.addEventListener('change', () => { const t = MAIL_TEMPLATES[tpl.value]; if(t){ sub.value = t.subject; body.value = t.body; } save(); });
   $('m-prev').addEventListener('click', mailPreview); $('m-send').addEventListener('click', mailSend); $('m-gmail').addEventListener('click', mailGmail);
+  const ep = $('m-ep'), epNote = () => { $('m-ep-note').textContent = mailEndpointOk(mailEndpoint()) ? 'Adres kayıtlı. Şimdi gönderebilirsiniz.' : 'Henüz geçerli bir adres yok. Apps Script → Dağıt → Dağıtımları yönet bölümündeki “Web uygulaması URL’si”ni yapıştırın (/exec ile biter).'; };
+  ep.value = mailEndpoint(); epNote();
+  $('m-ep-save').addEventListener('click', () => {
+    const v = ep.value.replace(/\s+/g, '');
+    if(v && !mailEndpointOk(v)){ mailStatus('Adres geçersiz görünüyor: https://script.google.com/macros/s/…/exec biçiminde ve tam olmalı.', true); return; }
+    try { if(v) localStorage.setItem('ankaraMailEndpoint', v); else localStorage.removeItem('ankaraMailEndpoint'); } catch(e){}
+    ep.value = mailEndpoint(); epNote(); mailStatus(v ? 'Adres kaydedildi.' : 'Adres silindi.');
+  });
   paintMailCount(); loadMailLog();
 }
 function mailForm(){ return { subject:$('m-sub').value.replace(/[\r\n]+/g, ' ').trim(), body:$('m-body').value.trim(), list:mailAudienceUsers() }; }
@@ -2510,7 +2522,7 @@ async function mailSend(){
   const f = mailForm();
   if(!f.subject || !f.body){ mailStatus('Konu ve ileti boş olamaz.', true); return; }
   if(!f.list.length){ mailStatus('Seçili gruba uyan alıcı yok.', true); return; }
-  if(!MAIL_ENDPOINT){ mailStatus('Gönderim servisi henüz bağlanmadı (MAIL_ENDPOINT boş). Şimdilik "Gmail\'de aç (yedek)" düğmesini kullanabilirsiniz.', true); return; }
+  const EP = mailEndpoint(); if(!mailEndpointOk(EP)){ mailStatus('Gönderim servisi adresi girilmemiş ya da geçersiz. Yukarıdaki "Gönderim servisi adresi" alanına Apps Script adresini yapıştırıp kaydedin.', true); return; }
   const label = $('m-aud').selectedOptions[0] ? $('m-aud').selectedOptions[0].textContent : '';
   const ok = await dangerConfirm('E-posta gönder', `<b>${f.list.length} kişiye</b> “${escHtml(f.subject)}” konulu e-posta ${MAIL_FROM} adresinden gönderilecek. Bu işlem geri alınamaz.`, 'GÖNDER');
   if(!ok) return;
@@ -2519,7 +2531,7 @@ async function mailSend(){
   try {
     for(let i = 0; i < f.list.length && !stopped; i += 50){
       const chunk = f.list.slice(i, i + 50), idToken = await currentUser.getIdToken(true);
-      const r = await fetch(MAIL_ENDPOINT, { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body:JSON.stringify({ idToken, subject:f.subject, body:f.body, recipients:chunk.map(u => ({ email:u.email, name:u.name })) }) });
+      const r = await fetch(EP, { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body:JSON.stringify({ idToken, subject:f.subject, body:f.body, recipients:chunk.map(u => ({ email:u.email, name:u.name })) }) });
       let d = null; try { d = await r.json(); } catch(e){ throw new Error('Gönderim servisi yanıt vermedi (Apps Script dağıtım ayarlarını kontrol edin).'); }
       if(!d || !d.ok) throw new Error((d && d.error) || 'Bilinmeyen hata');
       sent += d.sent || 0; failed += d.failed || 0; if(d.stoppedByQuota) stopped = true;
