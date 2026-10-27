@@ -706,5 +706,98 @@
     "ses": ""
    }
   }
+ },
+ "turkuler": {
+  "baslik": "Ankara'nın Sesi",
+  "not": "Ankara yöresi türkülerinin büyük bölümü oyunlu türkülerdir ve bu icralar geleneksel olarak 'Seymen Meclisleri' denen ortamlarda yapılır. Ankara türkülerini derleyenler arasında Muzaffer Sarısözen, Nida Tüfekçi ve Yücel Paşmakçı anılır. Sitede ses dosyası barındırılmaz; dinleme, yasal platformlar üzerinden (isteğe bağlı oynatıcı ya da arama bağlantısı) yapılır.",
+  "kaynak": "Folklor/Edebiyat dergisi incelemesi, Evrensel (Hayri Tunç, 2017), Yavuz Hakan Tok'un yazısı, Yeni Ankara (Seyit Çevik), Ankara yöresi türküleri üzerine akademik çalışmalar ve TRT sanatçısı Gülşen Kutlu'nun röportajı",
+  "liste": [
+   {
+    "ad": "Ankara'nın Taşına Bak",
+    "tur": "Marş havasında Ankara türküsü",
+    "yore": "Ankara",
+    "derleyen": "Kesin derleyeni ve sahibi belirsiz; kaynaklarda farklı iddialar var",
+    "yorumcular": [
+     "Ruhi Su",
+     "Zülfü Livaneli (düzenleme)"
+    ],
+    "ara": "Ankara'nın Taşına Bak Ruhi Su",
+    "baglanti": "Kentin adını taşıyan ve Ankara'yı Millî Mücadele dönemiyle anan en bilinen türkülerden.",
+    "hikaye": "Millî Mücadele yıllarında Ankara çevresinde söylendiği anlatılır ve Millî Mücadele'yi konu alan türküler arasında incelenir. Sözleri zamanla değişmiştir: dönemin nüshalarında savaşı, Gazi Mustafa Kemal'i ve düşman karşısındaki ordunun hâlini anlatan dizeler bulunur; 1966 yapımı 'Bir Millet Uyanıyor' filminde bazı değişikliklerle söylenmiş, daha sonra aşk şarkısına, ardından yeniden marş biçimine ve siyasî sloganlara dönüşen farklı sözlerle yayılmıştır. Ruhi Su ve Zülfü Livaneli yorumlarıyla geniş kitlelere ulaştı. Bestecisi konusunda kaynaklar ayrışıyor: MESAM kayıtlarında Ali Cihat Taşkın gösterilirken başka bir kitapta türkünün 1930'larda Ankara bölgesinde derlendiği yazılıyor.",
+    "video": ""
+   },
+   {
+    "ad": "Ankara'nın Bağları",
+    "tur": "Oyun havası (Ankara havası)",
+    "yore": "Ankara (özgün hâli Keskin yöresinden)",
+    "derleyen": "Seyit Çevik (özgün türkü 'İp Attım Ucu Kaldı' adıyla)",
+    "yorumcular": [
+     "Coşkun Direk (Ankaralı Coşkun)",
+     "İsmail Altunsaray ve İsmail Tunçbilek ('İp Attım')"
+    ],
+    "ara": "Ankara'nın Bağları Coşkun Direk",
+    "baglanti": "Bugün bir Ankara oyun havası olarak bilinse de özgün hâli Ankara'ya değil, Keskin yöresine dayanan hüzünlü bir türküdür.",
+    "hikaye": "Orta Anadolu abdal geleneğinin son temsilcilerinden Seyit Çevik'in Keskin yöresinden derlediği türkü, uzun süre 'İp Attım Ucu Kaldı' adıyla biliniyordu ve sözleri acıklıydı. Seyit Çevik 1941'de Keskin'e bağlı Hacıali Obası köyünde doğdu; keman çalışı, Hacı Taşan'ın kendisine Ankara'dan bir keman temin etmesiyle gelişti. 2010'ların başında Ankaralı Coşkun olarak bilinen Coşkun Direk, türküye var olmayan bir nakarat ekleyerek onu bir oyun havasına çevirdi; bu hâliyle düğünlerin ve sahnelerin vazgeçilmez eseri oldu. Sonraki yıllarda İsmail Altunsaray ve İsmail Tunçbilek, türküyü özgün hâline yakın biçimde 'İp Attım' adıyla yeniden seslendirdi.",
+    "video": ""
+   },
+   {
+    "ad": "Misket (Güvercin Uçuverdi)",
+    "tur": "Oyun havası",
+    "yore": "Ankara",
+    "derleyen": "Belirtilmemiş",
+    "yorumcular": [],
+    "ara": "Misket Güvercin Uçuverdi Ankara oyun havası",
+    "baglanti": "Ankara oyun havalarının en yaygın klasiklerinden biri; 'Güvercin Uçuverdi' adıyla da bilinir.",
+    "hikaye": "Misket ve Fidayda, Ankara oyun havaları arasında en yaygınlaşan klasikler olarak anılır. Ankara düğünlerinde ve eğlencelerinde, Seymen Meclisleri geleneğinden gelen oyunlu türküler çalınır; Misket bu repertuvarın başında gelir. Halk arasında Misket için hüzünlü bir aşk hikâyesi anlatılır; bu anlatı kaynakça ile doğrulanmış değildir.",
+    "video": ""
+   },
+   {
+    "ad": "Fidayda",
+    "tur": "Oyun havası",
+    "yore": "Ankara",
+    "derleyen": "Belirtilmemiş",
+    "yorumcular": [],
+    "ara": "Fidayda Ankara oyun havası",
+    "baglanti": "Misket ile birlikte en yaygın Ankara oyun havaları arasında anılır.",
+    "hikaye": "",
+    "video": ""
+   },
+   {
+    "ad": "Erik Dalı",
+    "tur": "Oyun havası",
+    "yore": "Ankara oyun havası repertuvarı",
+    "derleyen": "Belirtilmemiş",
+    "yorumcular": [],
+    "ara": "Erik Dalı Ankara oyun havası",
+    "baglanti": "2010'lu yıllarda Ankara oyun havalarına eklenen ve kısa sürede yaygınlaşan eserlerden.",
+    "hikaye": "",
+    "video": ""
+   },
+   {
+    "ad": "Halkalı Şeker",
+    "tur": "Ankara türküsü",
+    "yore": "Ankara",
+    "derleyen": "Belirtilmemiş",
+    "yorumcular": [],
+    "ara": "Halkalı Şeker Ankara türküsü",
+    "baglanti": "TRT sanatçısı Gülşen Kutlu'nun Ankara türküleri arasında andığı eserlerden.",
+    "hikaye": "",
+    "video": ""
+   },
+   {
+    "ad": "Bozlak",
+    "tur": "Uzun hava türü",
+    "yore": "Ankara ve İç Anadolu",
+    "derleyen": "—",
+    "yorumcular": [
+     "Hacı Taşan",
+     "Çekiç Ali"
+    ],
+    "ara": "Bozlak Hacı Taşan",
+    "baglanti": "Ankara'nın ve İç Anadolu'nun ayırt edici türkü türlerinden biri.",
+    "hikaye": "Bozlak sözcüğü feryat, figan anlamına gelir; bu türde söylenen uzun havalarda hayatın sevinci de acısı da yer alır. Hacı Taşan ve Çekiç Ali, bozlağın tanınmış icracıları arasında anılır. TRT sanatçısı Gülşen Kutlu'ya göre bozlak, Ankara'nın ve İç Anadolu'nun olmazsa olmazıdır.",
+    "video": ""
+   }
+  ]
  }
 }

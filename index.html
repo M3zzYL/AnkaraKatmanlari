@@ -10,7 +10,7 @@
 <meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ankara Katmanları"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <!-- GÜVENLİK: İçerik Güvenliği Politikası (CSP) — sayfaya yalnızca bilinen kaynaklardan betik yüklenmesine izin verir, eklenti/nesne gömmeyi ve dış formları kapatır.
      (Giriş ya da veritabanı beklenmedik biçimde çalışmazsa tarayıcı konsolunda "Content Security Policy" uyarısı aranır.) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://www.google.com https://www.recaptcha.net https://recaptcha.net https://*.firebaseapp.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https: wss:; frame-src https://*.firebaseapp.com https://accounts.google.com https://www.google.com https://recaptcha.google.com https://www.recaptcha.net; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://www.google.com https://www.recaptcha.net https://recaptcha.net https://*.firebaseapp.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https: wss:; frame-src https://www.youtube-nocookie.com https://*.firebaseapp.com https://accounts.google.com https://www.google.com https://recaptcha.google.com https://www.recaptcha.net; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; manifest-src 'self'">
 <!-- GÜVENLİK: Site başka bir sayfanın içine gömülürse (tıklama kandırma / clickjacking) gizlenir -->
 <script>if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.self.location; } catch (e) {} }</script>
 <!-- Tema (gece/gündüz) sayfa çizilmeden önce uygulanır, böylece ekran yanıp sönmez -->
@@ -437,6 +437,9 @@ a.btn,a.btn:hover{text-decoration:none;}
 .dx-time{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--muted);white-space:nowrap;}
 .dx-text{display:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px;max-height:220px;overflow:auto;}
 .dx-text.show{display:block;}
+.dx-embed{margin-top:8px;}
+.dx-embed-btn{border:0;cursor:pointer;background:var(--green);color:#fff;border-radius:999px;padding:10px 18px;font:inherit;font-weight:700;font-size:13.5px;min-height:44px;}
+.dx-embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000;}
 
 </style>
 </head>
@@ -650,6 +653,7 @@ a.btn,a.btn:hover{text-decoration:none;}
       <p>Veriler satılmaz. Hizmetin çalışması için şu hizmet sağlayıcılar kullanılır; bunların sunucuları yurt dışında olabilir:</p>
       <ul>
         <li><b>Google (Firebase Authentication, Firestore, App Check/reCAPTCHA):</b> giriş, veritabanı ve bot koruması.</li>
+        <li><b>YouTube (Google) — isteğe bağlı:</b> türkü bölümündeki oynatıcı yalnızca sen “Oynat”a bastığında yüklenir (gizlilik geliştirilmiş youtube-nocookie.com); o ana kadar YouTube'a veri gönderilmez. Oynatıcı yüklendiğinde IP adresin ve cihaz bilgilerin Google tarafından işlenir.</li>
         <li><b>Google (Gmail / Google Apps Script):</b> yönetici duyuru e-postalarının gönderilmesi; bu sırada ad ve e-posta adresin yalnızca ileti göndermek için işlenir.</li>
         <li><b>GitHub Pages:</b> sitenin barındırılması.</li>
         <li><b>Wikipedia / Wikimedia Commons:</b> yer fotoğraflarının getirilmesi (yalnızca yer adı sorgulanır).</li>
@@ -2085,7 +2089,7 @@ function renderPanel(){
     const going = DISTRICTS.map(d => ({ d, s:districtStats(d) })).filter(x => x.s.visited > 0 && x.s.visited < x.s.total).sort((a, b) => b.s.visited / b.s.total - a.s.visited / a.s.total).slice(0, 4);
     panel.innerHTML = `<div class="p-eyebrow">Genel bakış</div><h3>Ankara</h3>${meter('Gezilen yerler', v, total)}${meter('Konumla onaylı', g, total, true)}
       <div class="mini-title">${going.length ? 'Devam ettiğin ilçeler' : 'Başlamak için'}</div>
-      <div class="mini-list">${going.length ? going.map(x => `<button class="mini" data-d="${x.d}"><span class="dot" style="background:var(--green-2)"></span><span class="nm">${x.d}</span><span class="st ok">${x.s.visited}/${x.s.total}</span></button>`).join('') : '<p style="font-size:14px;color:var(--muted)">Haritadan bir ilçe seç ve duraklarını keşfetmeye başla.</p>'}</div>${suggest}`;
+      <div class="mini-list">${going.length ? going.map(x => `<button class="mini" data-d="${x.d}"><span class="dot" style="background:var(--green-2)"></span><span class="nm">${x.d}</span><span class="st ok">${x.s.visited}/${x.s.total}</span></button>`).join('') : '<p style="font-size:14px;color:var(--muted)">Haritadan bir ilçe seç ve duraklarını keşfetmeye başla.</p>'}</div>${suggest}${dxAnkaraTurku()}`;
   } else {
     const d = exploreDistrict, s = districtStats(d), list = (PLACES_BY_DISTRICT[d] || []).slice().sort((a, b) => getPopularityRank(a) - getPopularityRank(b));
     const info = DISTRICT_INFOS[d] || `${d} ilçesinin tarihi içeriği hazırlanıyor.`;
@@ -2113,13 +2117,13 @@ $('panel').addEventListener('click', e => {
 // İçerik data/<il>.json dosyasından gelir (ilçe adına göre). Boş ya da eksik alan = bölüm gösterilmez; bilgi uydurulmaz.
 // Yeni il/ilçe eklemek için aynı yapıda yeni bir JSON dosyası hazırlamak yeterlidir (DX_URL).
 const DX_URL = 'data/ankara.json';
-let DX = null, DX_PROMISE = null;
+let DX = null, DX_PROMISE = null, DX_TURKU = null;
 function loadDX(){
   if(DX_PROMISE) return DX_PROMISE;
-  DX_PROMISE = fetch(DX_URL).then(r => r.ok ? r.json() : null).then(j => { DX = (j && j.ilceler) || {}; return DX; }).catch(() => { DX = {}; return DX; });
+  DX_PROMISE = fetch(DX_URL).then(r => r.ok ? r.json() : null).then(j => { DX = (j && j.ilceler) || {}; DX_TURKU = (j && j.turkuler) || null; return DX; }).catch(() => { DX = {}; return DX; });
   return DX_PROMISE;
 }
-const DXOPEN = { kimlik:true, dinle:true, unluler:false, turku:false, kultur:false };
+const DXOPEN = { kimlik:true, dinle:true, unluler:false, turku:false, kultur:false, ankturku:true };
 const DX_KAT = { yemek:['🍲','Yemek'], elsanati:['🧶','El sanatı'], halkoyunu:['🥁','Halk oyunu'], gelenek:['🏺','Gelenek'], tarim:['🌾','Tarım'], hayvancilik:['🐑','Hayvancılık'], etkinlik:['🎭','Etkinlik'], diger:['✨','Diğer'] };
 // Yıldız ölçütleri tüm ilçelerde aynıdır ve sitedeki yer listesine dayanır (rastgele puan yoktur)
 const dxBand = c => c >= 16 ? 5 : c >= 10 ? 4 : c >= 6 ? 3 : c >= 3 ? 2 : c >= 1 ? 1 : 0;
@@ -2179,6 +2183,21 @@ function dxDinle(d, x){
   const est = dxEst(txt);
   const body = `<div class="dx-player"><button class="dx-play" data-dx-play aria-label="İlçeyi dinle">▶</button><div class="dx-bar"><i id="dx-prog"></i></div><span class="dx-time" id="dx-time">0:00 / ~${dxFmt(est)}</span></div><p class="dx-small"><button class="dx-link" data-dx-text>Metni göster</button></p><div class="dx-text" id="dx-txt">${escHtml(txt)}</div><p class="dx-small" id="dx-note">Kayıtlı ses dosyası eklenene kadar anlatım cihazınızın Türkçe sesiyle okunur.</p>`;
   return dxSec('dinle', '🎙️', 'İlçeyi 60 Saniyede Dinle', body);
+}
+// Ankara geneli türküler: ilçe seçilmediğinde Genel bakış panelinde gösterilir
+function dxAnkaraTurku(){
+  if(DX === null){ loadDX().then(() => { if(currentView === 'explore' && !exploreDistrict) renderPanel(); }); return ''; }
+  const T = DX_TURKU; if(!T || !T.liste || !T.liste.length) return '';
+  const q = ad => encodeURIComponent(ad + ' türküsü');
+  const body = T.liste.map(t => {
+    const vid = /^[A-Za-z0-9_-]{11}$/.test(t.video || '') ? t.video : '';
+    const qs = encodeURIComponent((t.ara || (t.ad + ' türküsü')));
+    const row = (k, v) => v ? `<div class="dx-row"><span class="k">${k}</span><span class="v">${escHtml(v)}</span></div>` : '';
+    const player = vid ? `<div class="dx-embed" data-dx-vid="${vid}" data-dx-title="${escHtml(t.ad)}"><button class="dx-embed-btn" data-dx-load>▶ Oynat</button><p class="dx-small">Oynat'a basınca YouTube'un (Google) gizlilik geliştirilmiş oynatıcısı yüklenir; o ana kadar YouTube'a veri gönderilmez.${t.yorumcular && t.yorumcular.length ? ' Söyleyen: ' + escHtml(t.yorumcular.join(', ')) + '.' : ''} <a class="dx-link" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener noreferrer">YouTube'da aç ↗</a></p></div>` : '';
+    return `<div class="dx-item"><span class="dx-tag">🎵 ${escHtml(t.tur || 'Türkü')}</span><b>${escHtml(t.ad)}</b>${row('Yöresi', t.yore)}${t.derleyen && t.derleyen !== '—' ? row('Derleyen / kaynak', t.derleyen) : ''}${t.yorumcular && t.yorumcular.length ? row('Bilinen yorumcular', t.yorumcular.join(', ')) : ''}${t.baglanti ? `<p style="margin:6px 0 0">${escHtml(t.baglanti)}</p>` : ''}${t.hikaye ? `<p style="margin:6px 0 0">${escHtml(t.hikaye)}</p>` : ''}${player}<p class="dx-small" style="margin-top:6px"><a class="dx-link" href="https://www.youtube.com/results?search_query=${qs}" target="_blank" rel="noopener noreferrer">YouTube'da ara ↗</a> &nbsp; <a class="dx-link" href="https://open.spotify.com/search/${qs}" target="_blank" rel="noopener noreferrer">Spotify'da ara ↗</a></p></div>`;
+  }).join('')
+    + (T.not ? `<p class="dx-small">${escHtml(T.not)}</p>` : '') + (T.kaynak ? `<p class="dx-small">Kaynaklar: ${escHtml(T.kaynak)}.</p>` : '');
+  return `<div class="dx">${dxSec('ankturku', '🎵', escHtml(T.baslik || 'Ankara\'nın Sesi'), body)}</div>`;
 }
 function dxSections(d){
   if(DX === null){ loadDX().then(() => { if(currentView === 'explore' && exploreDistrict === d) renderPanel(); }); }
@@ -2250,6 +2269,8 @@ function dxPanelClick(e){
   if(tg){ const k = tg.dataset.dxToggle; DXOPEN[k] = !DXOPEN[k]; const card = tg.closest('.dx-card'); card.classList.toggle('open', DXOPEN[k]); tg.setAttribute('aria-expanded', DXOPEN[k]); return true; }
   if(e.target.closest('[data-dx-play]')){ dxTogglePlay(); return true; }
   if(e.target.closest('[data-dx-text]')){ const t = $('dx-txt'); if(t){ t.classList.toggle('show'); e.target.closest('[data-dx-text]').textContent = t.classList.contains('show') ? 'Metni gizle' : 'Metni göster'; } return true; }
+  const ld = e.target.closest('[data-dx-load]');
+  if(ld){ const box = ld.closest('.dx-embed'), id = box && box.dataset.dxVid; if(id && /^[A-Za-z0-9_-]{11}$/.test(id)){ const f = document.createElement('iframe'); f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0'; f.title = box.dataset.dxTitle || 'Türkü'; f.allow = 'autoplay; encrypted-media; picture-in-picture'; f.referrerPolicy = 'strict-origin-when-cross-origin'; f.loading = 'lazy'; f.allowFullscreen = true; ld.replaceWith(f); } return true; }
   if(e.target.closest('[data-dx-how]')){ const t = $('dx-how'); if(t) t.classList.toggle('show'); return true; }
   return false;
 }
