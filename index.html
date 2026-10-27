@@ -437,6 +437,16 @@ a.btn,a.btn:hover{text-decoration:none;}
 .dx-time{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--muted);white-space:nowrap;}
 .dx-text{display:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px;max-height:220px;overflow:auto;}
 .dx-text.show{display:block;}
+.dx-sel{width:100%;margin:0 0 8px;}
+.dx-tlist{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);}
+.dx-t{border-top:1px solid var(--line);} .dx-t:first-child{border-top:0;}
+.dx-t-row{width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;background:none;border:0;cursor:pointer;color:var(--ink);font:inherit;font-size:14px;text-align:left;min-height:44px;}
+.dx-t-row .nm{font-weight:700;flex:1;min-width:0;}
+.dx-t-meta{font-size:11.5px;color:var(--muted);white-space:nowrap;}
+.dx-t-row .dx-chev{color:var(--muted);transition:transform .2s;font-size:11px;}
+.dx-t.open .dx-t-row .dx-chev{transform:rotate(90deg);} .dx-t.open .dx-t-row{background:var(--surface-2);}
+.dx-t-detail{display:none;padding:4px 14px 14px;background:var(--surface-2);font-size:13.5px;line-height:1.65;color:var(--ink-2);}
+.dx-t.open .dx-t-detail{display:block;}
 .dx-embed{margin-top:8px;}
 .dx-embed-btn{border:0;cursor:pointer;background:var(--green);color:#fff;border-radius:999px;padding:10px 18px;font:inherit;font-weight:700;font-size:13.5px;min-height:44px;}
 .dx-embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000;}
@@ -2102,6 +2112,10 @@ function renderPanel(){
     dxAfterRender(d);
   }
 }
+$('panel').addEventListener('change', e => {
+  const f = e.target.closest('[data-dx-filter]'); if(!f) return;
+  const v = f.value; f.closest('.dx-card').querySelectorAll('.dx-t').forEach(r => { const on = !v || (r.dataset.ilce || '').split('|').includes(v); r.style.display = on ? '' : 'none'; if(!on) r.classList.remove('open'); });
+});
 $('panel').addEventListener('click', e => {
   if(dxPanelClick(e)) return;
   if(e.target.closest('[data-reroll]')){ pickNextStop(true); renderPanel(); return; }
@@ -2158,11 +2172,26 @@ function dxUnluler(d, x){
   const body = L.map(u => `<div class="dx-person"><div class="dx-av">${u.foto ? `<img src="${escHtml(u.foto)}" alt="${escHtml(u.ad)}" loading="lazy">` : escHtml((u.ad || '?').trim()[0])}</div><div><b>${escHtml(u.ad)}</b><div class="t">${escHtml(u.unvan || '')}</div><div><b style="font-size:12.5px">İlçeyle bağlantısı:</b> ${escHtml(u.baglanti || '')}</div><p>${escHtml(u.bilgi || '')}</p></div></div>`).join('');
   return dxSec('unluler', '📜', 'Bu İlçeden Çıkan Ünlüler', body);
 }
+// Türkü listesi: önce yalnızca adlar görünür; birine dokununca ayrıntı, hikâye ve dinleme bağlantıları açılır
+function dxTurkuDetail(t){
+  const vid = /^[A-Za-z0-9_-]{11}$/.test(t.video || '') ? t.video : '';
+  const qs = encodeURIComponent(t.ara || (t.ad + ' türküsü'));
+  const row = (k, v) => v ? `<div class="dx-row"><span class="k">${k}</span><span class="v">${escHtml(v)}</span></div>` : '';
+  const yer = ['Ankara'].concat(t.ilce && t.ilce.length ? [t.ilce.join(' / ')] : []).concat(t.koy ? [t.koy + ' köyü'] : []).join(' · ');
+  const player = vid ? `<div class="dx-embed" data-dx-vid="${vid}" data-dx-title="${escHtml(t.ad)}"><button class="dx-embed-btn" data-dx-load>▶ Oynat</button><p class="dx-small">Oynat'a basınca YouTube'un (Google) gizlilik geliştirilmiş oynatıcısı yüklenir; o ana kadar YouTube'a veri gönderilmez.${t.yorumcular && t.yorumcular.length ? ' Söyleyen: ' + escHtml(t.yorumcular.join(', ')) + '.' : ''} <a class="dx-link" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener noreferrer">YouTube'da aç ↗</a></p></div>` : '';
+  return `${row('Türü', t.tur)}${row('Yöresi', yer)}${row('TRT repertuvar no', t.trt)}${row('Kaynak kişi', t.kaynakKisi)}${t.derleyen && t.derleyen !== '—' ? row('Derleyen', t.derleyen) : ''}${row('Notaya alan', t.notaya)}${t.yorumcular && t.yorumcular.length ? row('Bilinen yorumcular', t.yorumcular.join(', ')) : ''}${t.baglanti ? `<p style="margin:8px 0 0">${escHtml(t.baglanti)}</p>` : ''}${t.hikaye ? `<p style="margin:8px 0 0">${escHtml(t.hikaye)}</p>` : '<p class="dx-small">Bu türkünün hikâyesi için güvenilir bir kaynak bulunamadığından yalnızca kayıt bilgileri gösteriliyor.</p>'}${player}<p class="dx-small" style="margin-top:8px"><a class="dx-link" href="https://www.youtube.com/results?search_query=${qs}" target="_blank" rel="noopener noreferrer">YouTube'da dinle ↗</a> &nbsp; <a class="dx-link" href="https://open.spotify.com/search/${qs}" target="_blank" rel="noopener noreferrer">Spotify'da ara ↗</a></p>`;
+}
+function dxTurkuBlock(items, scope){
+  if(!items.length) return '';
+  const ilceler = [...new Set(items.flatMap(t => t.ilce || []))].sort((a, b) => a.localeCompare(b, 'tr'));
+  const sel = scope === 'ank' && ilceler.length ? `<select class="select dx-sel" data-dx-filter="1" aria-label="İlçeye göre filtrele"><option value="">Tüm türküler (${items.length})</option>${ilceler.map(i => `<option value="${escHtml(i)}">${escHtml(i)} (${items.filter(t => (t.ilce || []).includes(i)).length})</option>`).join('')}</select>` : '';
+  const rows = items.map(t => `<div class="dx-t" data-ilce="${escHtml((t.ilce || []).join('|'))}"><button class="dx-t-row" data-dx-t><span class="nm">${escHtml(t.ad)}</span><span class="dx-t-meta">${escHtml((t.ilce && t.ilce.length) ? t.ilce.join(', ') : 'Ankara')}</span><span class="dx-chev">▶</span></button><div class="dx-t-detail">${dxTurkuDetail(t)}</div></div>`).join('');
+  return `<p class="dx-small" style="margin:0 0 8px">${items.length} türkü. Birine dokununca kayıt bilgileri, hikâyesi ve dinleme bağlantıları açılır.</p>${sel}<div class="dx-tlist">${rows}</div>`;
+}
 function dxTurku(d, x){
-  const t = x && x.turku; if(!t || !t.ad) return '';
-  const link = t.dinle && t.dinle.url ? `<p><a class="dx-link" href="${escHtml(t.dinle.url)}" target="_blank" rel="noopener noreferrer">${escHtml(t.dinle.platform || 'Dinle')} üzerinde dinle ↗</a></p>` : '';
-  const body = `<div class="dx-item"><b>${escHtml(t.ad)}</b></div>${t.yore ? `<div class="dx-row"><span class="k">Yöresi</span><span class="v">${escHtml(t.yore)}</span></div>` : ''}${t.derleyen ? `<div class="dx-row"><span class="k">Derleyen / kaynak kişi</span><span class="v">${escHtml(t.derleyen)}</span></div>` : ''}${t.baglanti ? `<p><b>İlçeyle bağlantısı:</b> ${escHtml(t.baglanti)}</p>` : ''}${t.hikaye ? `<p>${escHtml(t.hikaye)}</p>` : ''}${link}`;
-  return dxSec('turku', '🎵', 'Bu Toprağın Sesi', body);
+  const items = ((DX_TURKU && DX_TURKU.liste) || []).filter(t => (t.ilce || []).includes(d));
+  if(!items.length) return '';
+  return dxSec('turku', '🎵', 'Bu Toprağın Sesi', dxTurkuBlock(items, 'ilce') + `<p class="dx-small">Kayıtlar TRT repertuvar bilgilerine dayanır; derleme, kaynak kişi ve repertuvar numaraları kayıt sahiplerine aittir. Sitede ses dosyası ya da şarkı sözü barındırılmaz.</p>`);
 }
 function dxKultur(d, x){
   const L = x && x.kultur; if(!L || !L.length) return '';
@@ -2188,15 +2217,7 @@ function dxDinle(d, x){
 function dxAnkaraTurku(){
   if(DX === null){ loadDX().then(() => { if(currentView === 'explore' && !exploreDistrict) renderPanel(); }); return ''; }
   const T = DX_TURKU; if(!T || !T.liste || !T.liste.length) return '';
-  const q = ad => encodeURIComponent(ad + ' türküsü');
-  const body = T.liste.map(t => {
-    const vid = /^[A-Za-z0-9_-]{11}$/.test(t.video || '') ? t.video : '';
-    const qs = encodeURIComponent((t.ara || (t.ad + ' türküsü')));
-    const row = (k, v) => v ? `<div class="dx-row"><span class="k">${k}</span><span class="v">${escHtml(v)}</span></div>` : '';
-    const player = vid ? `<div class="dx-embed" data-dx-vid="${vid}" data-dx-title="${escHtml(t.ad)}"><button class="dx-embed-btn" data-dx-load>▶ Oynat</button><p class="dx-small">Oynat'a basınca YouTube'un (Google) gizlilik geliştirilmiş oynatıcısı yüklenir; o ana kadar YouTube'a veri gönderilmez.${t.yorumcular && t.yorumcular.length ? ' Söyleyen: ' + escHtml(t.yorumcular.join(', ')) + '.' : ''} <a class="dx-link" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener noreferrer">YouTube'da aç ↗</a></p></div>` : '';
-    return `<div class="dx-item"><span class="dx-tag">🎵 ${escHtml(t.tur || 'Türkü')}</span><b>${escHtml(t.ad)}</b>${row('Yöresi', t.yore)}${t.derleyen && t.derleyen !== '—' ? row('Derleyen / kaynak', t.derleyen) : ''}${t.yorumcular && t.yorumcular.length ? row('Bilinen yorumcular', t.yorumcular.join(', ')) : ''}${t.baglanti ? `<p style="margin:6px 0 0">${escHtml(t.baglanti)}</p>` : ''}${t.hikaye ? `<p style="margin:6px 0 0">${escHtml(t.hikaye)}</p>` : ''}${player}<p class="dx-small" style="margin-top:6px"><a class="dx-link" href="https://www.youtube.com/results?search_query=${qs}" target="_blank" rel="noopener noreferrer">YouTube'da ara ↗</a> &nbsp; <a class="dx-link" href="https://open.spotify.com/search/${qs}" target="_blank" rel="noopener noreferrer">Spotify'da ara ↗</a></p></div>`;
-  }).join('')
-    + (T.not ? `<p class="dx-small">${escHtml(T.not)}</p>` : '') + (T.kaynak ? `<p class="dx-small">Kaynaklar: ${escHtml(T.kaynak)}.</p>` : '');
+  const body = dxTurkuBlock(T.liste, 'ank') + (T.not ? `<p class="dx-small">${escHtml(T.not)}</p>` : '') + (T.kaynak ? `<p class="dx-small">Kaynaklar: ${escHtml(T.kaynak)}.</p>` : '');
   return `<div class="dx">${dxSec('ankturku', '🎵', escHtml(T.baslik || 'Ankara\'nın Sesi'), body)}</div>`;
 }
 function dxSections(d){
@@ -2269,6 +2290,8 @@ function dxPanelClick(e){
   if(tg){ const k = tg.dataset.dxToggle; DXOPEN[k] = !DXOPEN[k]; const card = tg.closest('.dx-card'); card.classList.toggle('open', DXOPEN[k]); tg.setAttribute('aria-expanded', DXOPEN[k]); return true; }
   if(e.target.closest('[data-dx-play]')){ dxTogglePlay(); return true; }
   if(e.target.closest('[data-dx-text]')){ const t = $('dx-txt'); if(t){ t.classList.toggle('show'); e.target.closest('[data-dx-text]').textContent = t.classList.contains('show') ? 'Metni gizle' : 'Metni göster'; } return true; }
+  const tr = e.target.closest('[data-dx-t]');
+  if(tr){ const item = tr.closest('.dx-t'), was = item.classList.contains('open'); item.closest('.dx-tlist').querySelectorAll('.dx-t.open').forEach(x => x.classList.remove('open')); if(!was) item.classList.add('open'); return true; }
   const ld = e.target.closest('[data-dx-load]');
   if(ld){ const box = ld.closest('.dx-embed'), id = box && box.dataset.dxVid; if(id && /^[A-Za-z0-9_-]{11}$/.test(id)){ const f = document.createElement('iframe'); f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0'; f.title = box.dataset.dxTitle || 'Türkü'; f.allow = 'autoplay; encrypted-media; picture-in-picture'; f.referrerPolicy = 'strict-origin-when-cross-origin'; f.loading = 'lazy'; f.allowFullscreen = true; ld.replaceWith(f); } return true; }
   if(e.target.closest('[data-dx-how]')){ const t = $('dx-how'); if(t) t.classList.toggle('show'); return true; }
