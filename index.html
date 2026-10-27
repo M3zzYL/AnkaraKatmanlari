@@ -400,6 +400,44 @@ a.btn,a.btn:hover{text-decoration:none;}
   html.app-mode .drawer{top:4vh;} html.app-mode .drawer::before{content:'';display:block;flex:0 0 auto;width:42px;height:4px;border-radius:2px;background:var(--line);margin:8px auto 0;position:absolute;left:50%;transform:translateX(-50%);z-index:5;}
 }
 
+/* ---------- İLÇE EK BÖLÜMLERİ: kimlik, dinle, ünlüler, türkü, kültür ---------- */
+.dx{display:grid;gap:10px;margin:0 0 16px;}
+.dx-card{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+.dx-head{width:100%;display:flex;align-items:center;gap:10px;padding:12px 14px;background:none;border:0;cursor:pointer;color:var(--ink);font:inherit;font-weight:700;font-size:14px;text-align:left;min-height:44px;}
+.dx-head .dx-em{font-size:17px;line-height:1;}
+.dx-head .dx-chev{margin-left:auto;color:var(--muted);transition:transform .2s;font-size:12px;}
+.dx-card.open .dx-chev{transform:rotate(90deg);}
+.dx-body{display:none;padding:2px 14px 14px;font-size:13.5px;line-height:1.65;color:var(--ink-2);}
+.dx-card.open .dx-body{display:block;}
+.dx-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--line);}
+.dx-row:first-of-type{border-top:0;}
+.dx-row .k{color:var(--ink);font-weight:600;white-space:nowrap;}
+.dx-row .v{text-align:right;color:var(--ink-2);}
+.dx-stars{letter-spacing:.1em;color:var(--gold);font-size:15px;white-space:nowrap;}
+.dx-stars i{font-style:normal;color:var(--line);}
+.dx-sum{margin:2px 0 10px;color:var(--ink);}
+.dx-small{font-size:12px;color:var(--muted);line-height:1.55;margin-top:8px;}
+.dx-link{background:none;border:0;padding:0;color:var(--green-2);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+.dx-person{display:flex;gap:11px;padding:11px 0;border-top:1px solid var(--line);}
+.dx-person:first-of-type{border-top:0;}
+.dx-av{flex:0 0 42px;height:42px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px;overflow:hidden;font-family:Georgia,'Times New Roman',serif;}
+.dx-av img{width:100%;height:100%;object-fit:cover;}
+.dx-person b{display:block;color:var(--ink);font-size:14px;}
+.dx-person .t{font-size:12.5px;color:var(--gold);font-weight:600;margin-bottom:3px;}
+.dx-person p{margin:3px 0 0;}
+.dx-item{padding:9px 0;border-top:1px solid var(--line);}
+.dx-item:first-of-type{border-top:0;}
+.dx-item b{color:var(--ink);font-size:13.5px;}
+.dx-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--green-2);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-right:6px;vertical-align:1px;}
+.dx-player{display:flex;align-items:center;gap:12px;margin:2px 0 8px;}
+.dx-play{flex:0 0 46px;height:46px;border-radius:50%;border:0;cursor:pointer;background:var(--green);color:#fff;font-size:17px;display:grid;place-items:center;box-shadow:var(--shadow);}
+.dx-play:disabled{opacity:.5;cursor:default;}
+.dx-bar{flex:1;height:6px;border-radius:3px;background:var(--line);overflow:hidden;}
+.dx-bar i{display:block;height:100%;width:0;background:var(--gold);border-radius:3px;transition:width .25s linear;}
+.dx-time{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--muted);white-space:nowrap;}
+.dx-text{display:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px;max-height:220px;overflow:auto;}
+.dx-text.show{display:block;}
+
 </style>
 </head>
 <body>
@@ -1921,7 +1959,7 @@ function showView(v){
   VIEWS.forEach(x => $('view-' + x).classList.toggle('active', x === v));
   document.querySelectorAll('#nav a, #tabbar a').forEach(a => a.classList.toggle('active', a.dataset.view === v));
   const at = $('app-title'); if(at) at.textContent = VIEW_TITLES[v] || '';
-  window.__drawerPushed = false; closeDrawer(); window.scrollTo(0, 0); $('scroll-area').scrollTop = 0;
+  dxStop(); window.__drawerPushed = false; closeDrawer(); window.scrollTo(0, 0); $('scroll-area').scrollTop = 0;
   if(v !== 'admin') stopAdminLive();
   if(v === 'places') syncFilterControls();
   refreshUI();
@@ -2020,6 +2058,7 @@ $('hexmap').addEventListener('mousemove', e => {
 $('hexmap').addEventListener('mouseleave', () => tipEl.classList.remove('show'));
 // Haritadan ilçe seçer; panel güncellenir
 function selectDistrict(d){
+  dxStop();
   exploreDistrict = (exploreDistrict === d) ? '' : d;
   renderMap(); renderPanel();
   if(exploreDistrict && window.innerWidth < 1020) $('panel').scrollIntoView({ behavior:'smooth', block:'start' });
@@ -2053,17 +2092,167 @@ function renderPanel(){
     panel.innerHTML = `<div class="p-eyebrow">İlçe</div><h3>${d}</h3>${meter('Gezilen yerler', s.visited, s.total)}${meter('Konumla onaylı', s.gps, s.total, true)}
       <div class="panel-actions"><button class="btn btn-green btn-sm" id="pd-list">Tüm yerleri gör ${ico('arrow', 16)}</button><button class="btn btn-ghost btn-sm" id="pd-hist">${historyOpen ? 'İlçe tarihini gizle' : 'İlçe tarihini oku'}</button></div>
       <div class="history ${historyOpen ? '' : 'collapsed'}">${escHtml(info)}</div>
+      ${dxSections(d)}
       <div class="mini-title">Öne çıkan yerler</div>
       <div class="mini-list">${list.slice(0, 6).map(p => { const st = STATE[p.name] || {}; return `<button class="mini" data-open="${p.__i}"><span class="dot" style="background:${(ERAS[p.era] || ERAS.nature).color}"></span><span class="nm">${escHtml(p.name)}</span><span class="st ${st.visited ? (st.visitType === 'gps' ? 'gps' : 'ok') : ''}">${st.visited ? (st.visitType === 'gps' ? 'onaylı' : 'gezildi') : ''}</span></button>`; }).join('')}</div>`;
+    dxAfterRender(d);
   }
 }
 $('panel').addEventListener('click', e => {
+  if(dxPanelClick(e)) return;
   if(e.target.closest('[data-reroll]')){ pickNextStop(true); renderPanel(); return; }
   const open = e.target.closest('[data-open]'); if(open){ openPlace(PLACES[+open.dataset.open]); return; }
   const dd = e.target.closest('[data-d]'); if(dd){ selectDistrict(dd.dataset.d); return; }
   if(e.target.closest('#pd-hist')){ historyOpen = !historyOpen; renderPanel(); return; }
   if(e.target.closest('#pd-list')){ F.district = exploreDistrict; F.era = ''; F.cat = ''; F.special = ''; F.q = ''; location.hash = 'places'; }
 });
+
+// =====================================================================
+// 11b) İLÇE EK BÖLÜMLERİ (kimlik kartı, 60 saniyede dinle, ünlüler, türkü, kültür)
+// =====================================================================
+// İçerik data/<il>.json dosyasından gelir (ilçe adına göre). Boş ya da eksik alan = bölüm gösterilmez; bilgi uydurulmaz.
+// Yeni il/ilçe eklemek için aynı yapıda yeni bir JSON dosyası hazırlamak yeterlidir (DX_URL).
+const DX_URL = 'data/ankara.json';
+let DX = null, DX_PROMISE = null;
+function loadDX(){
+  if(DX_PROMISE) return DX_PROMISE;
+  DX_PROMISE = fetch(DX_URL).then(r => r.ok ? r.json() : null).then(j => { DX = (j && j.ilceler) || {}; return DX; }).catch(() => { DX = {}; return DX; });
+  return DX_PROMISE;
+}
+const DXOPEN = { kimlik:true, dinle:true, unluler:false, turku:false, kultur:false };
+const DX_KAT = { yemek:['🍲','Yemek'], elsanati:['🧶','El sanatı'], halkoyunu:['🥁','Halk oyunu'], gelenek:['🏺','Gelenek'], tarim:['🌾','Tarım'], hayvancilik:['🐑','Hayvancılık'], etkinlik:['🎭','Etkinlik'], diger:['✨','Diğer'] };
+// Yıldız ölçütleri tüm ilçelerde aynıdır ve sitedeki yer listesine dayanır (rastgele puan yoktur)
+const dxBand = c => c >= 16 ? 5 : c >= 10 ? 4 : c >= 6 ? 3 : c >= 3 ? 2 : c >= 1 ? 1 : 0;
+function dxMetrics(d){
+  const L = PLACES_BY_DISTRICT[d] || [];
+  const eras = new Set(L.filter(p => p.era && p.era !== 'nature').map(p => p.era));
+  const old = L.filter(p => ['s1', 's2', 's3', 's4', 's5'].includes(p.era)).length;
+  const cult = L.filter(p => /Müze|Kültür|Sanat|Çarşı|Kütüphane|Tiyatro|Etnografya/i.test(p.type || '')).length;
+  const nat = L.filter(p => p.era === 'nature' || /Park|Göl|Mağara|Şelale|Orman|Tabiat|Vadi|Baraj|Kaplıca|Mesire|Yayla/i.test(p.type || '')).length;
+  const x = DX && DX[d]; const extra = x && x.kultur ? x.kultur.length : 0;
+  return { total:L.length, eras:eras.size, old, cult, nat, extra, tarih:Math.min(5, eras.size), eser:dxBand(old), kultur:dxBand(cult + extra), doga:dxBand(nat) };
+}
+function dxStars(n){ n = Math.max(0, Math.min(5, n)); return `<span class="dx-stars" aria-label="5 üzerinden ${n}">${'★'.repeat(n)}<i>${'★'.repeat(5 - n)}</i></span>`; }
+function dxSec(key, em, title, body, cls){
+  const open = !!DXOPEN[key];
+  return `<div class="dx-card ${open ? 'open' : ''} ${cls || ''}" data-dxk="${key}"><button class="dx-head" data-dx-toggle="${key}" aria-expanded="${open}"><span class="dx-em">${em}</span>${title}<span class="dx-chev">▶</span></button><div class="dx-body">${body}</div></div>`;
+}
+function dxKimlik(d, x, m){
+  const rows = [
+    ['🏛️ Tarih', dxStars(m.tarih)], ['🎵 Kültür', dxStars(m.kultur)], ['🏺 Tarihî Eser', dxStars(m.eser)], ['🌿 Doğa', dxStars(m.doga)]
+  ].map(r => `<div class="dx-row"><span class="k">${r[0]}</span><span class="v">${r[1]}</span></div>`).join('');
+  const info = [];
+  if(x && x.konum) info.push(`<div class="dx-row"><span class="k">📍 Konum</span><span class="v">Ankara'nın ${escHtml(x.konum)}</span></div>`);
+  if(x && x.nufus && x.nufus.deger) info.push(`<div class="dx-row"><span class="k">👥 Nüfus</span><span class="v">${x.nufus.deger.toLocaleString('tr-TR')} <span style="color:var(--muted);font-size:12px">(${escHtml(x.nufus.kaynak || x.nufus.yil)})</span></span></div>`);
+  if(x && x.ozellik) info.push(`<div class="dx-row"><span class="k">⭐ Öne çıkan</span><span class="v">${escHtml(x.ozellik)}</span></div>`);
+  const sum = x && x.ozet ? `<p class="dx-sum">${escHtml(x.ozet)}</p>` : '';
+  const how = `<p class="dx-small"><button class="dx-link" data-dx-how>Yıldızlar nasıl hesaplanıyor?</button></p><div class="dx-text" id="dx-how"><b>Ölçütler (tüm ilçelerde aynı):</b><br>🏛️ <b>Tarih:</b> ilçede kaç farklı dönem katmanı var (Hitit-Frig, Galat, Roma, Selçuklu, Osmanlı, Cumhuriyet) — her katman 1 yıldız, en çok 5.<br>🏺 <b>Tarihî Eser:</b> Cumhuriyet öncesi yer sayısı (1–2: 1★, 3–5: 2★, 6–9: 3★, 10–15: 4★, 16+: 5★).<br>🎵 <b>Kültür:</b> müze, kültür merkezi, sanat sokağı gibi kültür-sanat mekânları ile “İlçenin Kültürü” kayıtlarının toplamı (aynı eşikler).<br>🌿 <b>Doğa:</b> park, göl, mağara, şelale, vadi, orman gibi doğa duraklarının sayısı (aynı eşikler).<br>Puanlar sitedeki ${m.total} durağa dayanır; bilimsel bir derecelendirme değil, sitenin kapsamına göre bir özettir.</div>`;
+  return dxSec('kimlik', '🏛️', 'İlçenin Kimliği', `${sum}${rows}${info.join('')}${how}`);
+}
+function dxUnluler(d, x){
+  const L = x && x.unluler; if(!L || !L.length) return '';
+  const body = L.map(u => `<div class="dx-person"><div class="dx-av">${u.foto ? `<img src="${escHtml(u.foto)}" alt="${escHtml(u.ad)}" loading="lazy">` : escHtml((u.ad || '?').trim()[0])}</div><div><b>${escHtml(u.ad)}</b><div class="t">${escHtml(u.unvan || '')}</div><div><b style="font-size:12.5px">İlçeyle bağlantısı:</b> ${escHtml(u.baglanti || '')}</div><p>${escHtml(u.bilgi || '')}</p></div></div>`).join('');
+  return dxSec('unluler', '📜', 'Bu İlçeden Çıkan Ünlüler', body);
+}
+function dxTurku(d, x){
+  const t = x && x.turku; if(!t || !t.ad) return '';
+  const link = t.dinle && t.dinle.url ? `<p><a class="dx-link" href="${escHtml(t.dinle.url)}" target="_blank" rel="noopener noreferrer">${escHtml(t.dinle.platform || 'Dinle')} üzerinde dinle ↗</a></p>` : '';
+  const body = `<div class="dx-item"><b>${escHtml(t.ad)}</b></div>${t.yore ? `<div class="dx-row"><span class="k">Yöresi</span><span class="v">${escHtml(t.yore)}</span></div>` : ''}${t.derleyen ? `<div class="dx-row"><span class="k">Derleyen / kaynak kişi</span><span class="v">${escHtml(t.derleyen)}</span></div>` : ''}${t.baglanti ? `<p><b>İlçeyle bağlantısı:</b> ${escHtml(t.baglanti)}</p>` : ''}${t.hikaye ? `<p>${escHtml(t.hikaye)}</p>` : ''}${link}`;
+  return dxSec('turku', '🎵', 'Bu Toprağın Sesi', body);
+}
+function dxKultur(d, x){
+  const L = x && x.kultur; if(!L || !L.length) return '';
+  const body = L.map(k => { const c = DX_KAT[k.kategori] || DX_KAT.diger; return `<div class="dx-item"><span class="dx-tag">${c[0]} ${c[1]}</span><b>${escHtml(k.baslik)}</b><div>${escHtml(k.aciklama)}</div></div>`; }).join('') + (x.kulturKaynak ? `<p class="dx-small">Kaynaklar: ${escHtml(x.kulturKaynak)}.</p>` : '');
+  return dxSec('kultur', '🧑‍🌾', 'İlçenin Kültürü', body);
+}
+// 60 saniyelik anlatım: ilçeye özel metin + sitedeki verilerden otomatik üretilen kapanış cümlesi
+function dxNarration(d, x){
+  if(!x || !x.anlatim || !x.anlatim.metin) return '';
+  const m = dxMetrics(d);
+  const stat = m.total ? `Ankara Katmanları'nda ${d} için ${m.total} durak listeleniyor; bunların ${m.old} tanesi Cumhuriyet öncesine, ${m.nat} tanesi doğaya ait.` : '';
+  return `${x.anlatim.metin} ${stat} Haritadan bir durak seçin ve bu toprakların katmanlarını keşfetmeye başlayın.`.replace(/\s+/g, ' ').trim();
+}
+const dxEst = txt => Math.max(10, Math.round(txt.split(/\s+/).length / 2.3));   // tahmini süre (sn)
+const dxFmt = s => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+function dxDinle(d, x){
+  const txt = dxNarration(d, x); if(!txt) return '';
+  const est = dxEst(txt);
+  const body = `<div class="dx-player"><button class="dx-play" data-dx-play aria-label="İlçeyi dinle">▶</button><div class="dx-bar"><i id="dx-prog"></i></div><span class="dx-time" id="dx-time">0:00 / ~${dxFmt(est)}</span></div><p class="dx-small"><button class="dx-link" data-dx-text>Metni göster</button></p><div class="dx-text" id="dx-txt">${escHtml(txt)}</div><p class="dx-small" id="dx-note">Kayıtlı ses dosyası eklenene kadar anlatım cihazınızın Türkçe sesiyle okunur.</p>`;
+  return dxSec('dinle', '🎙️', 'İlçeyi 60 Saniyede Dinle', body);
+}
+function dxSections(d){
+  if(DX === null){ loadDX().then(() => { if(currentView === 'explore' && exploreDistrict === d) renderPanel(); }); }
+  const x = DX && DX[d], m = dxMetrics(d);
+  return `<div class="dx">${dxKimlik(d, x, m)}${dxDinle(d, x)}${dxUnluler(d, x)}${dxTurku(d, x)}${dxKultur(d, x)}</div>`;
+}
+// ---- Sesli anlatım: kayıtlı dosya varsa onu, yoksa cihazın Türkçe sesini kullanır
+const DXA = { d:'', mode:'', el:null, playing:false, prog:0, dur:0, t0:0, timer:0 };
+function dxStop(){
+  try { if(DXA.el){ DXA.el.pause(); DXA.el.src = ''; } } catch(e){}
+  try { if('speechSynthesis' in window) speechSynthesis.cancel(); } catch(e){}
+  clearInterval(DXA.timer); DXA.el = null; DXA.playing = false; DXA.prog = 0; DXA.mode = ''; DXA.d = '';
+  dxPaintPlayer();
+}
+function dxPaintPlayer(){
+  const b = document.querySelector('[data-dx-play]'), bar = $('dx-prog'), tm = $('dx-time'); if(!b) return;
+  b.textContent = DXA.playing ? '⏸' : '▶'; b.setAttribute('aria-label', DXA.playing ? 'Duraklat' : 'İlçeyi dinle');
+  if(bar) bar.style.width = (DXA.prog * 100).toFixed(1) + '%';
+  if(tm && DXA.dur) tm.textContent = `${dxFmt(DXA.prog * DXA.dur)} / ${DXA.mode === 'audio' ? '' : '~'}${dxFmt(DXA.dur)}`;
+}
+function dxTrVoice(){ try { return (speechSynthesis.getVoices() || []).find(v => /^tr/i.test(v.lang)); } catch(e){ return null; } }
+function dxSpeak(txt, d){
+  if(!('speechSynthesis' in window)){ const n = $('dx-note'); if(n) n.textContent = 'Bu tarayıcı sesli okumayı desteklemiyor; metni okuyabilirsiniz.'; const t = $('dx-txt'); if(t) t.classList.add('show'); return; }
+  const go = () => {
+    const v = dxTrVoice();
+    if(!v){ const n = $('dx-note'); if(n) n.textContent = 'Cihazınızda Türkçe ses bulunamadı; şimdilik metni okuyabilirsiniz. Kayıtlı ses dosyası eklendiğinde burada çalacak.'; const t = $('dx-txt'); if(t) t.classList.add('show'); return; }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(txt); u.lang = 'tr-TR'; u.voice = v; u.rate = 0.95;
+    DXA.mode = 'tts'; DXA.d = d; DXA.dur = dxEst(txt) / 0.95; DXA.prog = 0; DXA.playing = true; DXA.t0 = Date.now();
+    u.onboundary = ev => { if(ev && ev.charIndex != null) DXA.prog = Math.min(1, ev.charIndex / txt.length); };
+    u.onend = () => { DXA.playing = false; DXA.prog = 1; clearInterval(DXA.timer); dxPaintPlayer(); setTimeout(() => { if(!DXA.playing){ DXA.prog = 0; dxPaintPlayer(); } }, 1200); };
+    u.onerror = () => { DXA.playing = false; clearInterval(DXA.timer); dxPaintPlayer(); };
+    clearInterval(DXA.timer);
+    DXA.timer = setInterval(() => { if(DXA.playing && DXA.mode === 'tts'){ const est = Math.min(1, (Date.now() - DXA.t0) / 1000 / DXA.dur); if(est > DXA.prog) DXA.prog = est; dxPaintPlayer(); } }, 500);
+    speechSynthesis.speak(u); dxPaintPlayer();
+  };
+  if((speechSynthesis.getVoices() || []).length) go(); else { speechSynthesis.onvoiceschanged = () => { speechSynthesis.onvoiceschanged = null; go(); }; setTimeout(go, 800); }
+}
+function dxTogglePlay(){
+  const d = exploreDistrict, x = DX && DX[d]; if(!d || !x) return;
+  if(DXA.playing && DXA.d === d){   // duraklat (sesli okumada durdurup başa sarar)
+    if(DXA.mode === 'audio' && DXA.el){ DXA.el.pause(); DXA.playing = false; }
+    else { try { speechSynthesis.cancel(); } catch(e){} clearInterval(DXA.timer); DXA.playing = false; DXA.prog = 0; }
+    dxPaintPlayer(); return;
+  }
+  if(DXA.el && DXA.d === d && DXA.mode === 'audio'){ DXA.el.play(); DXA.playing = true; dxPaintPlayer(); return; }
+  dxStop();
+  const txt = dxNarration(d, x), ses = x.anlatim && x.anlatim.ses;
+  const startTts = () => dxSpeak(txt, d);
+  if(ses){
+    const a = new Audio(ses); DXA.el = a; DXA.mode = 'audio'; DXA.d = d; DXA.playing = true;
+    a.addEventListener('loadedmetadata', () => { DXA.dur = a.duration || 0; dxPaintPlayer(); });
+    a.addEventListener('timeupdate', () => { if(a.duration){ DXA.dur = a.duration; DXA.prog = a.currentTime / a.duration; dxPaintPlayer(); } });
+    a.addEventListener('ended', () => { DXA.playing = false; DXA.prog = 0; dxPaintPlayer(); });
+    a.addEventListener('error', () => { DXA.el = null; DXA.playing = false; DXA.mode = ''; startTts(); });
+    a.play().catch(() => { DXA.el = null; DXA.playing = false; startTts(); });
+    dxPaintPlayer();
+  } else startTts();
+}
+// Panel her çizildiğinde oynatıcının durumunu geri yükler
+function dxAfterRender(d){
+  if(DXA.d && DXA.d !== d) dxStop();
+  const x = DX && DX[d];
+  if(x && x.anlatim && x.anlatim.ses){ const n = $('dx-note'); if(n) n.textContent = 'Bu anlatım kayıtlı ses dosyasından çalınır.'; }
+  dxPaintPlayer();
+}
+function dxPanelClick(e){
+  const tg = e.target.closest('[data-dx-toggle]');
+  if(tg){ const k = tg.dataset.dxToggle; DXOPEN[k] = !DXOPEN[k]; const card = tg.closest('.dx-card'); card.classList.toggle('open', DXOPEN[k]); tg.setAttribute('aria-expanded', DXOPEN[k]); return true; }
+  if(e.target.closest('[data-dx-play]')){ dxTogglePlay(); return true; }
+  if(e.target.closest('[data-dx-text]')){ const t = $('dx-txt'); if(t){ t.classList.toggle('show'); e.target.closest('[data-dx-text]').textContent = t.classList.contains('show') ? 'Metni gizle' : 'Metni göster'; } return true; }
+  if(e.target.closest('[data-dx-how]')){ const t = $('dx-how'); if(t) t.classList.toggle('show'); return true; }
+  return false;
+}
 
 // =====================================================================
 // 12) YERLER SAYFASI: ARAMA, FİLTRE, KARTLAR

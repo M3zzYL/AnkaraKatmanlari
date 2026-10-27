@@ -1,0 +1,710 @@
+{
+ "il": "Ankara",
+ "surum": 1,
+ "aciklama": "İlçe ek içerikleri. Boş liste/alan = bölüm sitede görünmez. Doğrulanamayan bilgi yazılmaz.",
+ "ilceler": {
+  "Akyurt": {
+   "konum": "kuzeydoğusunda",
+   "ozet": "Uluslararası fuar alanı ve fabrikalarıyla hızla büyüyen; adı eski bir Oğuz boyunun hatırasını yaşatan ilçe.",
+   "ozellik": "Uluslararası fuar alanı",
+   "nufus": {
+    "deger": 44541,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [],
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Akyurt, Ankara'nın kuzeydoğusunda yer alıyor. Bugünkü adı oldukça yeni: 1961'de verilen bu ad, ilçenin eski adı Ravlı'nın hikâyesinden türetildi. Ravlı, eski kaynaklarda geçen bir Oğuz boyunun adıydı; boyun adındaki Alka'dan Ak, Ravlı'nın taşıdığı anlamdan da yurt sözcüğü alınarak Akyurt ortaya çıktı. Yani ilçenin adı, kayıp bir Oğuz boyunun hâlâ yaşayan son izi. Bölgede Kızıleşik Tümülüsü ve Balıkhisar Köyü Höyüğü gibi eski yerleşimlerin izleri bulunuyor; Atini Mağaraları ise kayalık bir yamacın yüzüne açılmış mağaralarıyla keşfedilmeyi bekliyor. Bugün Akyurt, uluslararası fuar alanı ve fabrikalarıyla hızla büyüyen bir ilçe. Kısacası Akyurt'ta tarih ile yeni Ankara yan yana duruyor.",
+    "ses": ""
+   }
+  },
+  "Altındağ": {
+   "konum": "merkezinde",
+   "ozet": "Ankara Kalesi, Hacı Bayram Veli Camii ve restore edilen Hamamönü evleriyle Ankara'nın doğduğu, Osmanlı ve erken Cumhuriyet dokusunu koruyan ilçe.",
+   "ozellik": "Ankara Kalesi ve Hamamönü",
+   "nufus": {
+    "deger": 414893,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [],
+   "unluler": [
+    {
+     "ad": "Hacı Bayram-ı Veli",
+     "unvan": "Mutasavvıf, Bayramiyye tarikatının kurucusu",
+     "baglanti": "Ankara'da yaşadı ve vefat etti; türbesi ve adını taşıyan cami Altındağ'dadır.",
+     "bilgi": "15. yüzyılın en etkili mutasavvıflarından biri olarak anılır. Cami, Augustus Tapınağı'nın yanında yükselir ve Ankara'nın en çok ziyaret edilen yerlerinden biridir.",
+     "foto": ""
+    }
+   ],
+   "turku": null,
+   "anlatim": {
+    "metin": "Altındağ, Ankara'nın doğduğu topraktır. Kentin en eski yerleşim çekirdeği olan Ankara Kalesi'nin tepesi burada yükselir. Bu topraklarda önce Frigler, sonra Galatlar yaşadı; Roma İmparatoru Augustus'un Galatya'yı Roma'ya katmasının ardından kent Ankyra adıyla eyalet başkenti oldu. Augustus Tapınağı, Roma Hamamı ve Antik Roma Tiyatrosu bu çağın tanıkları. Selçuklu ve Osmanlı katmanları ise Hacı Bayram Camii, Alaaddin Camii ve restore edilmiş Hamamönü evlerinde yaşıyor. Anadolu Medeniyetleri Müzesi bu uzun yolculuğu eserlerle anlatıyor; Ulucanlar Sanat Sokağı ise geçmişin cezaevini bugün sanat atölyelerine dönüştürüyor.",
+    "ses": ""
+   }
+  },
+  "Ayaş": {
+   "konum": "batı-kuzeybatısında",
+   "ozet": "Sulu domatesi, dutu ve şifalı içmeceleriyle bilinen, tarihî Hac Yolu üzerindeki ilçe.",
+   "ozellik": "Ayaş domatesi",
+   "nufus": {
+    "deger": 13670,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "tarim",
+     "baslik": "Ayaş domatesi",
+     "aciklama": "Temmuz ve ağustosta hasat edilen, ince kabuklu ve yoğun aromalı domates; serin geceler ile sıcak gündüzler arasındaki fark lezzeti artıran etken olarak gösteriliyor."
+    },
+    {
+     "kategori": "tarim",
+     "baslik": "Dut",
+     "aciklama": "Ayaş, dutuyla tanınan ilçelerden biri."
+    },
+    {
+     "kategori": "diger",
+     "baslik": "Şifalı içmeceler",
+     "aciklama": "İlçe, şifalı içmeceleriyle anılır."
+    },
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Ayaş, Ankara'nın batı-kuzeybatısında bir ilçe. Adı öz Türkçe: parlak, aydınlık gece anlamına geliyor. Bölgenin bilinen en eski adları Mnizos ve Prasmon. Hititler, Frigler, Galatlar, Romalılar ve Bizanslılar sırasıyla bu topraklarda hüküm sürdü. Ayaş, Roma'nın İstanbul'dan Kudüs'e uzanan tarihî Hac Yolu üzerinde bulunduğu için yüzyıllar boyunca ordulara ve kervanlara yol oldu. Bugün ilçede Şeyh Muhyiddin Camii ve Türbesi, Sadullah Paşa Hanımlar Konağı ve Tarihi Paşa Hamamı gibi Osmanlı izleri görülüyor; Ayaş Kaplıcaları ise şifalı sularıyla biliniyor. Sulu domatesi ve dutuyla da tanınan Ayaş, tarih ile lezzeti bir araya getiriyor.",
+    "ses": ""
+   }
+  },
+  "Bala": {
+   "konum": "güneydoğusunda",
+   "ozet": "Beynam Ormanları'yla ekolojik turizme destek veren, Türkmen aşiretlerinin 17. yüzyıl göçüne dayanan ilçe.",
+   "ozellik": "Beynam Ormanları",
+   "nufus": {
+    "deger": 21893,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Bala'nın hikâyesi, Ankara'nın en ilginç göç hikâyelerinden birine dayanıyor. 17. yüzyılın sonlarında Oğuzların Bayındır boyuna bağlı Bozulus Türkmenleri'nin Tabanlı aşireti, 1690-91'de bu bölgeye göç edip yerleşik hayata geçti. İlçenin adı da bu topluluğun adı Bozulus'tan esinlenerek verildi. Bala bugün Ankara'nın güneydoğusunda, Beynam Atatürk Ormanları'yla doğa turizmine destek veren sakin bir ilçe. Antik tarafında ise Aliassos Antik Kenti, Roma dönemi izlerini taşıyor. Kesikköprü Barajı ve Kızılırmak havzasının manzarası, doğa yürüyüşü sevenlere güzel bir mola sunuyor.",
+    "ses": ""
+   }
+  },
+  "Beypazarı": {
+   "konum": "kuzeybatısında",
+   "ozet": "Geleneksel ahşap konakları, telkari gümüş işçiliği ve coğrafi işaretli kurusuyla iç turizmin en güçlü duraklarından biri.",
+   "ozellik": "Beypazarı kurusu ve ahşap konaklar",
+   "nufus": {
+    "deger": 48445,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "yemek",
+     "baslik": "Beypazarı kurusu",
+     "aciklama": "Coğrafi işaretli, uzun süre saklanabilen geleneksel bir hamur işi; çayın yanında yenir."
+    },
+    {
+     "kategori": "yemek",
+     "baslik": "El açması baklava",
+     "aciklama": "Kooperatif üretiminde 80 kat el açması baklava hazırlanıyor."
+    },
+    {
+     "kategori": "yemek",
+     "baslik": "Tarhana",
+     "aciklama": "Fermente yoğurt ve un karışımından yapılan kurutulmuş tarhana, ilçenin bilinen yöresel ürünlerinden."
+    },
+    {
+     "kategori": "diger",
+     "baslik": "Beypazarı maden suyu",
+     "aciklama": "Yüksek kaliteli doğal maden suyuyla anılır."
+    },
+    {
+     "kategori": "elsanati",
+     "baslik": "Telkari gümüş işçiliği",
+     "aciklama": "Gümüş telkâri, ilçenin geleneksel el sanatları arasında sayılır."
+    },
+    {
+     "kategori": "gelenek",
+     "baslik": "Düğün gelenekleri ve el sanatları",
+     "aciklama": "Evliya Çelebi Seyahatname'sinde Beypazarı'nın köklü düğün gelenekleri ve gelişmiş el sanatlarından söz eder."
+    },
+    {
+     "kategori": "diger",
+     "baslik": "Ahşap konaklar",
+     "aciklama": "Geleneksel ahşap konak mimarisi ilçenin kimliğini belirler; ilçe UNESCO listesine aday gösterilme arayışına konu olmuştur."
+    },
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    },
+    {
+     "kategori": "yemek",
+     "baslik": "Ankara Tava",
+     "aciklama": "Coğrafi işaretli Ankara Tava'da kullanılan koyun ve kuzu eti; Çubuk, Beypazarı, Kalecik, Polatlı ve Haymana'da yetiştirilen hayvanlardan sağlanır."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [
+    {
+     "ad": "Karadavut",
+     "unvan": "Mutasavvıf",
+     "baglanti": "Türbesi Beypazarı'ndaki Kuyumcutekke köyünde bulunur.",
+     "bilgi": "Hacı Bayram Veli'nin halifelerinden olup Fatih Sultan Mehmet döneminde yaşamış bir mutasavvıf olarak anılır.",
+     "foto": ""
+    }
+   ],
+   "turku": null,
+   "anlatim": {
+    "metin": "Beypazarı, Ankara'nın kuzeybatısında, Hitit'ten Osmanlı'ya birçok uygarlığın izini taşıyan bir ilçe. Rivayete göre Bizans İmparatoru Anastasios kentin adını Lagania-Anastasiopolis olarak değiştirmiş; Türklerin bölgeye ilk yerleşimi ise Germiyanoğlu Yakup Şah'ın veziri Dinar Hezar ile başlamış. Bugün Beypazarı, ahşap konakları, Tarihi Gümüşçüler Çarşısı ve telkari gümüş işçiliğiyle iç turizmin en güçlü duraklarından biri. Coğrafi işaretli Beypazarı kurusu, el açması baklavası ve tarhanası yöresel lezzetlerin başında geliyor. Kelebekler Vadisi, İnözü Vadisi ve Beypazarı Yaşayan Müze ise ilçeyi gezerken mutlaka uğranacak noktalar.",
+    "ses": ""
+   }
+  },
+  "Elmadağ": {
+   "konum": "doğusunda",
+   "ozet": "Kayak merkeziyle başkentin en yakın kar tatili adresi; Hasanoğlan Köy Enstitüsü'nün kurulduğu ilçe.",
+   "ozellik": "Elmadağ Kayak Merkezi",
+   "nufus": {
+    "deger": 45133,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Elmadağ'ın adı, ilçenin kuzeyinde yükselen ve eskiden yamaçlarında yabani elma ağaçlarının yetiştiği anlatılan dağdan geliyor. Bölge, Ankara'yı Sivas ve Kayseri'ye bağlayan tarihî kervan yolunun üzerinde olduğu için Selçuklu ve Osmanlı dönemlerinde önemli bir geçiş ve konaklama noktası oldu; Elmadağ Kalesi bu stratejik konumun izini taşıyor. Cumhuriyet döneminde ilçenin kaderini değiştiren gelişme ise 1940'ta Hasanoğlan'da kurulan Yüksek Köy Enstitüsü oldu. Kış aylarında Elmadağ Kayak Merkezi başkentin en yakın kar tatili adresi. Elmadağ Tabiat Parkı ve Sele Vadisi ise yaz aylarında doğaseverlere yürüyüş imkânı sunuyor.",
+    "ses": ""
+   }
+  },
+  "Etimesgut": {
+   "konum": "batısında",
+   "ozet": "Eryaman bölgesi ve Göksu Parkı'yla genç nüfusun tercih ettiği; adı Ahi Mesud'dan gelen ilçe.",
+   "ozellik": "Göksu Parkı",
+   "nufus": {
+    "deger": 629112,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [],
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Etimesgut'un adı, ilginç bir dönüşümün sonucu. Bölge kaynaklarda sırasıyla Amaksis, Amaksuz, Akmasus gibi adlarla anılmış; zamanla bu eski ad Ahi Mesud biçimine dönüşmüş. Ahi Mesud, Osmanlı döneminde Ankara'da yaşamış, deri tabaklama mesleğiyle anılan bir ahi reisi. Bugün ilçede Ahi Mesud Türbesi ve Ahi Elvan Türbesi bu geleneği yaşatıyor. Etimesgut, Eryaman bölgesi ve Göksu Parkı'yla genç nüfusun tercih ettiği modern bir ilçe; Türk Tarih Müzesi, Türk Hava Kuvvetleri Müzesi ve Eski Tren İstasyonu ise ilçenin tarih ve ulaşım hafızasını gözler önüne seriyor.",
+    "ses": ""
+   }
+  },
+  "Evren": {
+   "konum": "güneydoğusunda, Hirfanlı Baraj Gölü kıyısında",
+   "ozet": "Hirfanlı Baraj Gölü'nün sularında kalan köyün yeniden kurulmasıyla doğan, Ankara'nın en küçük nüfuslu ilçesi.",
+   "ozellik": "Hirfanlı Baraj Gölü",
+   "nufus": {
+    "deger": 3096,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [],
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Evren'in hikâyesi, bir köyün suların altında kalıp yeniden doğuşuyla başlıyor. İlçenin eski adı Çıkınağıl olan yerleşim, Kızılırmak üzerine kurulan Hirfanlı Barajı'nın suları 1957'de yükselince tamamen sular altında kaldı; halk 1958'de bugünkü yerinde planlı biçimde yeniden kuruldu. 1982'de dönemin Cumhurbaşkanı Kenan Evren'in soyadını alan yerleşim, 20 Mayıs 1990'da ilçe oldu. Bugün Evren, Ankara'nın en az nüfuslu ilçesi ve Hirfanlı Baraj Gölü kıyısında tatil beldesi havasında. Evren Seyir Tepesi göl manzarasını, Semizbağı Höyük ise bölgenin eski yerleşim izlerini sunuyor.",
+    "ses": ""
+   }
+  },
+  "Gölbaşı": {
+   "konum": "güneyinde",
+   "ozet": "Mogan ve Eymir göllerinin kıyısındaki, başkentin en önemli rekreasyon alanlarından biri.",
+   "ozellik": "Mogan ve Eymir gölleri",
+   "nufus": {
+    "deger": 165201,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [],
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Gölbaşı, adını yamaçlarına kurulduğu Mogan ve Eymir göllerinden alıyor. Kültür ve Turizm Bakanlığı'nca yürütülen kazı ve araştırmalar, bölgenin Tunç Devri'nden itibaren iskân edildiğini, ardından Hititler, Frigler, Persler, Romalılar, Bizanslılar, Selçuklular ve Osmanlılar döneminde de yerleşim özelliğini koruduğunu ortaya koyuyor. İlçe olarak tarihi çok daha yakın: bir zamanlar Örencik Köyü'ne bağlı Gölhanı adlı küçük bir mahalleyken, 1923'ten sonra büyüdü. Bugün Mogan Gölü ve Eymir Gölü, başkentin en önemli rekreasyon alanları. Tulumtaş Mağarası, Bezirhane Kalesi ve Gölbaşı Somut Olmayan Kültürel Miras Müzesi de ilçeyi tarih ve kültürle buluşturuyor.",
+    "ses": ""
+   }
+  },
+  "Güdül": {
+   "konum": "kuzeybatısında",
+   "ozet": "Sakin Şehir (Cittaslow) unvanlı; leblebisi ve İnönü Mağaraları'yla bilinen, adını Selçuklu emirinden alan ilçe.",
+   "ozellik": "Cittaslow (Sakin Şehir) unvanı",
+   "nufus": {
+    "deger": 8521,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "yemek",
+     "baslik": "Güdül leblebisi",
+     "aciklama": "İlçenin meşhur leblebisi, Sakin Şehir kimliğinin parçası olarak anılıyor."
+    },
+    {
+     "kategori": "diger",
+     "baslik": "Cittaslow (Sakin Şehir)",
+     "aciklama": "Güdül, Sakin Şehir (Cittaslow) unvanına sahip."
+    },
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Güdül'ün kuruluşu, 1071 Malazgirt Zaferi'nin hemen ardından bölgenin Anadolu Selçuklu egemenliğine girmesiyle başlıyor. İlçenin adı, o dönemde bölgeyi yöneten Ankara Emiri Güdül Bey'den geliyor; yaklaşık 850 yıllık bu isim, Ankara ilçeleri arasında doğrudan bir Selçuklu beyinin adını taşıyan nadir örneklerden biri. Kirmir Çayı vadisine kurulan yerleşim, yamaç mağaraları ve Salihler köyündeki kaya yazıtlarının gösterdiği gibi çok daha eski çağlardan beri iskân edilmiş. Bugün Güdül, Sakin Şehir unvanıyla, meşhur leblebisiyle ve İnönü Mağaraları'yla kendine has bir kimlik sunuyor. Mnizos Antik Kenti ise ilçenin antik yüzünü temsil ediyor.",
+    "ses": ""
+   }
+  },
+  "Haymana": {
+   "konum": "güneybatısında",
+   "ozet": "Şifalı kaplıca suları ve geniş otlaklarıyla bilinen, Sakarya Meydan Muharebesi izlerini taşıyan ilçe.",
+   "ozellik": "Kaplıca suları",
+   "nufus": {
+    "deger": 27241,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Haymana meraları",
+     "aciklama": "Akademik çalışmalarda Haymana Meraları, Ankara'nın en önemli mera alanı olarak anılır."
+    },
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    },
+    {
+     "kategori": "yemek",
+     "baslik": "Ankara Tava",
+     "aciklama": "Coğrafi işaretli Ankara Tava'da kullanılan koyun ve kuzu eti; Çubuk, Beypazarı, Kalecik, Polatlı ve Haymana'da yetiştirilen hayvanlardan sağlanır."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Haymana adının kökeni için birkaç rivayet var: biri Osman Gazi'nin büyükannesi Hayme Ana'ya, biri Kaşgarlı Mahmud'un Divanü Lügati't-Türk'ünde geçen mera ve otlak anlamındaki haymana sözcüğüne, bir diğeri ise çadır anlamındaki hayme kökünden türeyen konar-göçer aşiretlerin bölgesi anlamına dayanıyor. Ankara'nın güneybatısındaki Haymana, kaya mezarları, kaleleri ve kaplıcalarıyla zengin bir ilçe. Gavur Kalesi, Ammuriye Kalesi ve Sındıran Kaya Mezarları eski çağların izini taşıyor; Medrese Kaplıcası ve Seyran Kaplıcası ise şifalı sularıyla biliniyor. Çaldağ Müzesi de Sakarya Meydan Muharebesi'nin Haymana'daki izlerini anlatıyor.",
+    "ses": ""
+   }
+  },
+  "Kahramankazan": {
+   "konum": "kuzeybatısında",
+   "ozet": "Adını 15 Temmuz 2016 direnişinden alan; sanayi tesisleri ve meşhur kavunuyla bilinen ilçe.",
+   "ozellik": "15 Temmuz direnişi",
+   "nufus": {
+    "deger": 62060,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "tarim",
+     "baslik": "Kazan kavunu",
+     "aciklama": "Coğrafi işaretli Kazan kavunu, ilçenin en bilinen tarım ürünüdür."
+    },
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Kahramankazan, 2016'ya kadar sadece Kazan adıyla biliniyordu. 15 Temmuz 2016 gecesi Akıncı Üssü çevresinde yaşanan sivil direniş ve verilen şehitler nedeniyle ilçenin adı Kahramankazan oldu. Eski adın, çevresi yüksek tepelerle çevrili çukur ovanın bir kazanı andırmasından geldiği anlatılır. Bölge çok daha eski çağlara uzanır: Bitik Höyük'ten çıkan ve Anadolu Medeniyetleri Müzesi'nde sergilenen kabartmalı Hitit vazosu Bakır-Tunç Çağı'nın izini taşır; Asarkaya gibi Roma dönemi izleri ise antik yol ve yerleşimlere işaret eder. Bugün ilçede 15 Temmuz Şehitleri ve Demokrasi Müzesi ile Çimşit Şelalesi ziyaretçileri bekliyor.",
+    "ses": ""
+   }
+  },
+  "Kalecik": {
+   "konum": "kuzeydoğusunda",
+   "ozet": "Kalecik Karası üzümü ve butik şarapçılığıyla, volkanik tepedeki kalesiyle tanınan ilçe.",
+   "ozellik": "Kalecik Karası",
+   "nufus": {
+    "deger": 12801,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "tarim",
+     "baslik": "Kalecik Karası üzümü",
+     "aciklama": "İnce kabuklu, aromatik bir üzüm çeşidi; ilçe adını dünyaca bilinen bu üzümle birlikte anıyor."
+    },
+    {
+     "kategori": "yemek",
+     "baslik": "Kalecik çöreği",
+     "aciklama": "Coğrafi işaretli; Şeyh Mahmut ve Gölköy köylerinde yetişen yağlı cevizlerin fırında erimemesiyle ünlü."
+    },
+    {
+     "kategori": "yemek",
+     "baslik": "Ekşi mayalı köy ekmeği",
+     "aciklama": "Coğrafi işaretli Kalecik ekşi mayalı köy ekmeği Türkiye'nin çeşitli yerlerine dağıtılıyor."
+    },
+    {
+     "kategori": "diger",
+     "baslik": "Butik şarapçılık",
+     "aciklama": "Kalecik Karası üzümünden yapılan butik şarapçılık ilçenin kimliğinin parçası."
+    },
+    {
+     "kategori": "yemek",
+     "baslik": "Ankara Tava",
+     "aciklama": "Coğrafi işaretli Ankara Tava'da kullanılan koyun ve kuzu eti; Çubuk, Beypazarı, Kalecik, Polatlı ve Haymana'da yetiştirilen hayvanlardan sağlanır."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Kalecik, Kızılırmak'ın kıvrılarak aktığı vadide, volkanik bir tepenin üzerindeki kalesinden adını alıyor. Bölge Hitit, Frig ve Galat dönemlerinden sonra Roma ve Bizans egemenliğine girmiş; Anadolu'nun Türkleşmesiyle önce Selçuklu, ardından Osmanlı yönetiminde kalmış. Kızılırmak üzerindeki Selçuklu dönemi köprüsü, ilçenin Ankara-Çankırı-Kastamonu hattında bir geçiş noktası olduğunu gösteriyor. Osmanlı döneminde bağcılığıyla tanınan Kalecik'in üzümü bugün dünyaca ünlü Kalecik Karası. Kalecik Kalesi, Kızılırmak Köprüsü ve Karahan Konağı ve Müzesi tarihi; coğrafi işaretli Kalecik çöreği ve ekşi mayalı köy ekmeği ise damak tadını anlatıyor.",
+    "ses": ""
+   }
+  },
+  "Keçiören": {
+   "konum": "kuzeyinde",
+   "ozet": "Bağ evleri geleneğinden büyüyen, Estergon Kalesi replikasıyla tanınan, Ankara'nın en kalabalık ilçelerinden biri.",
+   "ozellik": "Estergon Kalesi replikası",
+   "nufus": {
+    "deger": 932128,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [],
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Keçiören bugün Ankara'nın en kalabalık ilçelerinden biri olsa da yakın zamana kadar bağ ve bahçelerle kaplı bir yazlık semt görünümündeydi. Osmanlı döneminde Ankaralılar sıcak aylarda buradaki bağ evlerine çıkardı. Cumhuriyet'in ilk yıllarında Etlik ve çevresi hızla gelişti; ziraat okulları, veteriner ve araştırma kurumları bu çevrede kuruldu. Bugün Keçiören, Estergon Kültür Merkezi'yle Estergon Kalesi'nin bir replikasını barındırıyor. Ankara Bağ Evi eski bağ evi geleneğini, Keçiören Belediyesi Etnografya Müzesi ve Çocuk Sanat Müzesi ise kültürü ve sanatı anlatıyor. Atatürk Cumhuriyet Kulesi ilçenin yeni simgelerinden.",
+    "ses": ""
+   }
+  },
+  "Kızılcahamam": {
+   "konum": "kuzeybatısında",
+   "ozet": "Şifalı sıcak suları, çam ormanları ve 1959'da ilan edilen Soğuksu Milli Parkı'yla doğa ve sağlık turizminin merkezi.",
+   "ozellik": "Soğuksu Milli Parkı",
+   "nufus": {
+    "deger": 28823,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Kızılcahamam'ın kimliğini şifalı sıcak suları, geniş çam ormanları ve volkanik jeolojisi belirliyor. Kaplıca sularının kullanımı çok eskiye uzanıyor; Osmanlı döneminde sıcak su kaynakları hamam ve tedavi amacıyla kullanıldı ve Kızılcahamam adı da bu sıcak sulu hamam yerleşiminden türedi. Bölge, 1959'da ilan edilen Soğuksu Milli Parkı ile Cumhuriyet döneminin ilk korunan alanlarından birine ev sahipliği yapıyor. Park, kamp, yürüyüş ve piknik için Ankara'nın en çok ziyaret edilen doğa alanlarından biri. Seyhamamı Tarihi Kaplıca, Karagöl Orman Parkı, Gelin Kayası ve Abacı Peribacaları ise ilçeyi gezerken görülmesi gereken noktalar.",
+    "ses": ""
+   }
+  },
+  "Mamak": {
+   "konum": "doğusunda",
+   "ozet": "Hüseyin Gazi Dağı'nın eteğinde, Şehitler Anıtı ve Ali Kuşçu Astronomi Merkezi'yle öne çıkan ilçe.",
+   "ozellik": "Hüseyin Gazi Dağı",
+   "nufus": {
+    "deger": 686777,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [],
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Mamak, Ankara'nın doğu girişinde, Hüseyin Gazi Dağı'nın eteklerinde yer alıyor. Dağın adı, yöre halkının Hüseyin Gazi'ye atfettiği türbe ve efsanelerle anılıyor; ziyaretçiler bugün hem türbeyi hem de dağın seyir noktalarını geziyor. Osmanlı döneminde Ankara'nın bağ-bahçe alanlarından olan bölge, Cumhuriyet'le birlikte Kayaş'taki sanayi ve demiryolu tesisleri sayesinde işçi mahallelerine dönüştü; 1950'lerden sonra gelen göç dalgası ilçenin bugünkü yoğun yapısını oluşturdu. Kayaş Tarihi Çınaraltı Millet Kıraathanesi, Ali Kuşçu Gökbilim Merkezi ve Mamak Bilim Merkezi ilçenin bugünkü kültür ve bilim yüzünü temsil ediyor.",
+    "ses": ""
+   }
+  },
+  "Nallıhan": {
+   "konum": "batısında",
+   "ozet": "191 kuş türüne ev sahipliği yapan Kuş Cenneti ve Tapduk Emre Türbesi'yle bilinen, adı Köroğlu efsanesine bağlanan ilçe.",
+   "ozellik": "Kuş Cenneti",
+   "nufus": {
+    "deger": 26488,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "diger",
+     "baslik": "Kuş Cenneti",
+     "aciklama": "191 kuş türüne ev sahipliği yapan Nallıhan Kuş Cenneti, doğa ve kuş gözlemi için bilinir."
+    },
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [
+    {
+     "ad": "Tapduk Emre",
+     "unvan": "Mutasavvıf",
+     "baglanti": "Türbesi Nallıhan'dadır.",
+     "bilgi": "Yunus Emre'nin mürşidi (şeyhi) olarak bilinir. Nallıhan'daki türbesi ilçenin en tanınan ziyaret yerlerinden biridir.",
+     "foto": ""
+    }
+   ],
+   "turku": null,
+   "anlatim": {
+    "metin": "Nallıhan, Osmanlı döneminde Karahisar-ı Naallu adıyla kayıtlara geçmişti. Adının kökeni için iki rivayet var; daha yaygın olanı halk hikâyesine bağlı: Köroğlu buradaki bir handa konaklarken atının nalı düşmüş, bu nal han kapısına asılmış ve zamanla nalı olan han tabiri yerleşmiş. İpek Yolu'nun İstanbul-Bağdat hattı üzerindeki konumu, ilçeyi yüzyıllar boyunca bir ticaret ve konaklama noktası yapmış. Bugün Nallıhan, 191 kuş türüne ev sahipliği yapan Kuş Cenneti ile Tapduk Emre Türbesi'yle tanınıyor. Juliopolis Antik Kenti, Sarıyar Hasan Polatkan Barajı ve Kız Tepesi de ilçenin tarih ve doğa zenginliğini tamamlıyor.",
+    "ses": ""
+   }
+  },
+  "Polatlı": {
+   "konum": "batı-güneybatısında",
+   "ozet": "Frigya'nın başkenti Gordion ile Sakarya Meydan Muharebesi'nin izlerini birlikte taşıyan ilçe.",
+   "ozellik": "Gordion Antik Kenti",
+   "nufus": {
+    "deger": 130515,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "tarim",
+     "baslik": "Polatlı soğanı",
+     "aciklama": "Coğrafi işaretli Polatlı soğanı, ilçenin tanınan tarım ürünlerinden."
+    },
+    {
+     "kategori": "tarim",
+     "baslik": "Hububat",
+     "aciklama": "Polatlı Ticaret Borsası hububat ticaretine yön veren kurumdur; Ankara'da lisanslı depoculuk burada başlamıştır."
+    },
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    },
+    {
+     "kategori": "yemek",
+     "baslik": "Ankara Tava",
+     "aciklama": "Coğrafi işaretli Ankara Tava'da kullanılan koyun ve kuzu eti; Çubuk, Beypazarı, Kalecik, Polatlı ve Haymana'da yetiştirilen hayvanlardan sağlanır."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [
+    {
+     "ad": "Halide Edip Adıvar",
+     "unvan": "Yazar, öğretmen, Millî Mücadele gazisi",
+     "baglanti": "Millî Mücadele'de cephede görev yaptı; Polatlı'daki Halide Edip Adıvar ve Kadın Kahramanlar Müzesi adını taşır.",
+     "bilgi": "1884–1964 yılları arasında yaşadı. Roman ve hatıratlarıyla Türk edebiyatının önemli isimlerinden biridir.",
+     "foto": ""
+    }
+   ],
+   "turku": null,
+   "anlatim": {
+    "metin": "Polatlı, Türk tarihinin iki büyük sayfasına birden ev sahipliği yapıyor. Antik tarafında Frigya'nın başkenti Gordion yer alıyor: MÖ 8. yüzyılda yükselen kent Kral Midas'ın efsanesiyle anılıyor. Midas Tümülüsü, Anadolu'nun bilinen en büyük tümülüslerinden biri; içindeki ahşap mezar odası dünyanın günümüze ulaşan en eski ahşap yapılarından sayılıyor. Yakın tarihte ise Polatlı, Sakarya Meydan Muharebesi'nin yaşandığı topraklar. Duatepe, Sakarya Şehitliği ve Sakarya Zafer Anıtı, Millî Mücadele'nin kaderini belirleyen savaşı hatırlatıyor; Halide Edip Adıvar ve Kadın Kahramanlar Müzesi ise cephedeki kadınların emeğini anlatıyor.",
+    "ses": ""
+   }
+  },
+  "Pursaklar": {
+   "konum": "kuzeyinde",
+   "ozet": "2008'de ayrı ilçe olan, millet bahçeleri ve kent ormanıyla bilinen 'Tebessüm Şehri'.",
+   "ozellik": "Millet bahçeleri",
+   "nufus": {
+    "deger": 165665,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [],
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Pursaklar, uzun süre Ankara'nın kuzeyinde Esenboğa yolu üzerinde bir köy-kasaba yerleşimiydi; 2008'de ayrı bir ilçe olarak örgütlendi ve Ankara'nın en genç ilçelerinden biri oldu. Eski çağlardaki yerleşimin izi, ilçe sınırlarındaki Sirkeli Höyüğü gibi arkeolojik noktalarda aranıyor; Pursaklar Kaplıcaları da Roma Dönemi'ne uzanan izlerle ilçenin su geleneğini temsil ediyor. Yakın tarihte nüfusun hızla artmasıyla birlikte ilçe, belediyenin yaptığı millet bahçeleri, kent ormanı ve kültür bahçeleriyle tanınır oldu. Saray Kent Ormanı, Pursaklar Millet Bahçesi ve Tebessüm Kahvesi ve Kültür Bahçesi ilçenin yeni yüzünü gösteriyor.",
+    "ses": ""
+   }
+  },
+  "Sincan": {
+   "konum": "batısında",
+   "ozet": "Harikalar Diyarı'yla ve lojistik-sanayi kimliğiyle öne çıkan, adı 'şen insanların yurdu' anlamına gelen ilçe.",
+   "ozellik": "Harikalar Diyarı",
+   "nufus": {
+    "deger": 590309,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Sincan adının kökeni, ilçenin karakterine dair güzel bir ipucu veriyor: kelimenin anlamı şen, canlı insanların yurdu. 17. yüzyıl arşivlerinde bir köy olarak geçen Sincan, İpek Yolu'na yakın konumu sayesinde tarihî çağlarda önem kazanmış bir yerleşim. Osmanlı döneminde küçük bir tarım köyü olarak varlığını sürdüren ilçe, Cumhuriyet'in ardından Ankara'nın batıya doğru büyümesiyle hızla nüfuslandı; Ankara-Eskişehir demiryolu hattı ve karayolu üzerinde olması Sincan'ı lojistik ve sanayi için önemli kıldı. Bugün Harikalar Diyarı, Sincan Kent Müzesi ve Matematik Müzesi ilçeyi eğlence, tarih ve bilimle buluşturuyor. Zir Vadisi Mağara Evleri de doğal ve tarihî bir durak.",
+    "ses": ""
+   }
+  },
+  "Yenimahalle": {
+   "konum": "kuzeybatısında",
+   "ozet": "Atatürk Orman Çiftliği ve teleferik hattıyla Cumhuriyet'in planlı başkent kurma çabasının izlerini taşıyan ilçe.",
+   "ozellik": "Atatürk Orman Çiftliği",
+   "nufus": {
+    "deger": 714866,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [],
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Yenimahalle'nin hikâyesi, Cumhuriyet'in başkenti inşa etme çabasıyla iç içe. 1925'te kurulan Atatürk Orman Çiftliği, Atatürk'ün Ankara'nın bozkır iklimine karşı yeşil bir model tarım ve dinlenme alanı yaratma isteğiyle ilçenin sınırlarında şekillendi ve bugün hâlâ Ankara'nın en büyük kamusal yeşil alanlarından biri. Ankara'nın batıya doğru planlı büyümesinde Demetevler, Batıkent ve Yenimahalle mahalleleri önemli rol oynadı; Macunköy, İvedik ve Ostim ise ilçenin sanayi ve ticaret yönünü temsil ediyor. Bugün ilçede Nazım Hikmet Kültür Merkezi, Evrensel Değerler Çocuk Müzesi ve MKE Sanayi ve Teknoloji Müzesi kültür ve bilim hayatına katkı sunuyor.",
+    "ses": ""
+   }
+  },
+  "Çamlıdere": {
+   "konum": "kuzeyinde",
+   "ozet": "Aluçdağı'nın fosil ormanları ve temalı küçük müzeleriyle tanınan ilçe.",
+   "ozellik": "Aluçdağı fosil ormanları",
+   "nufus": {
+    "deger": 10475,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [],
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Çamlıdere'nin bilinen en eski adı Kuzveren ya da Kuzucular. Halk arasında rivayete göre mutasavvıf Şeyh Ali Semerkandi'nin bölgeye gelip yerleşmesiyle köy önce Şeyh Ali Köyü, sonra Şeyhler olarak anıldı; bugünkü Çamlıdere adı ise yoğun çam ormanları ve içinden geçen dereden esinlenerek verildi. İlçede Selçuklu dönemine ait Peçenek Camii bulunuyor. Bugün Çamlıdere, Ankara'nın kuzeyinde doğa ve müzelerle öne çıkan bir ilçe: Aluçdağı Tabiat Parkı ve Dosil Fosil Ormanı doğaseverleri, Soba Müzesi, Terazi Müzesi ve Oyun ve Oyuncak Müzesi gibi temalı küçük müzeler ise meraklı gezginleri çekiyor.",
+    "ses": ""
+   }
+  },
+  "Çankaya": {
+   "konum": "merkezinde (güney kesiminde)",
+   "ozet": "TBMM'yi, bakanlıkları, büyükelçilikleri ve Anıtkabir'i barındıran siyasi ve kültürel merkez.",
+   "ozellik": "Anıtkabir ve TBMM",
+   "nufus": {
+    "deger": 947330,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [],
+   "unluler": [
+    {
+     "ad": "Mustafa Kemal Atatürk",
+     "unvan": "Türkiye Cumhuriyeti'nin kurucusu ve ilk Cumhurbaşkanı",
+     "baglanti": "1921'den itibaren Çankaya Köşkü'nde yaşadı; Anıtkabir de Çankaya'dadır.",
+     "bilgi": "Ankara'yı Millî Mücadele'nin merkezi ve Cumhuriyet'in başkenti yaptı. Yaşadığı köşk bugün Atatürk Müze Köşkü olarak ziyarete açıktır.",
+     "foto": ""
+    }
+   ],
+   "turku": null,
+   "anlatim": {
+    "metin": "Çankaya'nın adı, bölgedeki yosunlu bir kayadan fışkıran, şifalı sayılan pınardan geliyor: canlara can katan kaya, yani Can-Kaya. Cumhuriyet'ten önce Ankara'nın bağ ve bahçelerle kaplı sakin bir sırtıydı. Mustafa Kemal Atatürk'ün 1921'de burada bir köşke yerleşmesiyle Çankaya, Cumhuriyet'in kalbi oldu. Bugün ilçede Anıtkabir, Atatürk Müze Köşkü, Pembe Köşk ve TBMM Binası var. Ankara'nın simgelerinden Atakule ve Kocatepe Camii de buradadır. Çankaya, aynı zamanda müzeleriyle de zengin: ODTÜ Arkeoloji Müzesi, Haritacılık Müzesi, Abidin Paşa Köşkü Millî Mücadele Müzesi ve Polis Müzesi bunların yalnızca birkaçı.",
+    "ses": ""
+   }
+  },
+  "Çubuk": {
+   "konum": "kuzeyinde",
+   "ozet": "Meşhur turşusu, Karagöl'ü ve agat taşı işlemeciliğiyle tanınan ilçe.",
+   "ozellik": "Çubuk turşusu",
+   "nufus": {
+    "deger": 100750,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "yemek",
+     "baslik": "Çubuk turşusu",
+     "aciklama": "Salatalık, biber, fasulye, lahana ve pancar gibi sebzeler ilçenin kaynak suyuyla geleneksel yöntemlerle turşuya dönüştürülür; ürün mahreç işaretiyle tescillidir."
+    },
+    {
+     "kategori": "etkinlik",
+     "baslik": "Uluslararası Çubuk Kültür ve Turşu Festivali",
+     "aciklama": "Turşu üreticilerine satış imkânı sağlayan festival her yıl düzenleniyor."
+    },
+    {
+     "kategori": "elsanati",
+     "baslik": "Agat taşı işleme",
+     "aciklama": "Ankara Kalkınma Ajansı ve Çubuk Belediyesi iş birliğiyle agat taşı işleme ve hediyelik eşya atölyeleri kuruldu."
+    },
+    {
+     "kategori": "hayvancilik",
+     "baslik": "Ankara keçisi (tiftik)",
+     "aciklama": "Ankara keçisi yetiştiriciliğinin yoğun olduğu ilçelerden biri (TürkPatent kayıtlarındaki 2016 verileri)."
+    },
+    {
+     "kategori": "yemek",
+     "baslik": "Ankara Tava",
+     "aciklama": "Coğrafi işaretli Ankara Tava'da kullanılan koyun ve kuzu eti; Çubuk, Beypazarı, Kalecik, Polatlı ve Haymana'da yetiştirilen hayvanlardan sağlanır."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Çubuk, Anadolu'nun Selçuklular tarafından fethi sırasında ilk ele geçirilen bölgelerden biri. Adının, bölgeyi fetheden Selçuklu komutanı Çubuk Bey'den geldiği düşünülüyor; ilk adı olan Çubukabad da bunu destekliyor. Fetihle birlikte bölgeye yoğun bir Oğuz Türkmen iskânı yaşanmış. Bugün Çubuk, Ankara'nın kuzeyinde doğa ve yöresel lezzetin buluştuğu bir ilçe. Ünlü Çubuk turşusu ilçenin kaynak suyuyla hazırlanıyor, her yıl düzenlenen turşu festivali ise ilçeye canlılık getiriyor. Karagöl, onlarca yayla ve gölet ile Hacılar Şelalesi doğa gezginlerini, Çubuk Şehir Müzesi ise tarih meraklılarını bekliyor.",
+    "ses": ""
+   }
+  },
+  "Şereflikoçhisar": {
+   "konum": "güneydoğusunda, Tuz Gölü kıyısında",
+   "ozet": "Tuz Gölü kıyısında, Türkiye'nin tuz ihtiyacının önemli bölümünü karşılayan ilçe.",
+   "ozellik": "Tuz Gölü",
+   "nufus": {
+    "deger": 33316,
+    "yil": 2024,
+    "kaynak": "TÜİK ADNKS 2024"
+   },
+   "kultur": [
+    {
+     "kategori": "tarim",
+     "baslik": "Tuz üretimi",
+     "aciklama": "Tuz Gölü kıyısındaki ilçe, Türkiye'nin tuz ihtiyacının önemli bir bölümünü karşılar."
+    }
+   ],
+   "kulturKaynak": "Yeni Ankara (Ağustos 2026), TürkPatent coğrafi işaret kayıtları, ATO ve basın haberleri",
+   "unluler": [],
+   "turku": null,
+   "anlatim": {
+    "metin": "Şereflikoçhisar, Türkiye'nin ikinci büyük gölü olan Tuz Gölü'nün batı kıyısında yer alıyor. Göl yüzyıllardır tuz üretimiyle anılıyor ve bugün Türkiye'nin tuz ihtiyacının önemli bir bölümünü karşılıyor; bölge aynı zamanda flamingolar ve diğer su kuşları için önemli bir üreme ve konaklama alanı. Tarih boyunca Hitit, Frig, Roma ve Bizans yönetimlerini görmüş. Kül Höyük ve Akin Höyüğü gibi Tunç Çağı yerleşmeleri, Parnassos ve Sadagoltina gibi antik kentler Roma-Bizans dönemlerinde bu yoldaki hac ve ticaret rotasının duraklarıydı. Koçhisar Kalesi, Sultan Alaeddin Camii ve Kent Müzesi ise ilçenin tarihini bugüne taşıyor.",
+    "ses": ""
+   }
+  }
+ }
+}
