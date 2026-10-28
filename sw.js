@@ -3,7 +3,7 @@
    - Sayfa ve simgeler: önce cihazdaki kopya (anında açılır), arka planda yenisini kontrol eder; yeni sürüm bulunursa sayfaya haber verir.
    - Firebase giriş betikleri (gstatic): çevrimdışı açılışta oturum yönetimi çalışsın diye saklanır.
    - Veritabanı, giriş, Wikipedia, Nominatim vb. diğer bütün istekler ELLENMEZ (doğrudan ağa gider); kişisel veri bu katmanda saklanmaz. */
-const VERSION = 'v10-2026-10-30';
+const VERSION = 'v11-2026-10-31';
 const SHELL_CACHE = 'ankara-shell-' + VERSION, EXT_CACHE = 'ankara-ext-' + VERSION;
 const SHELL = ['./', './index.html', './manifest.webmanifest', './gizlilik.html', './data/ankara.json', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'];
 const EXT = ['https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js', 'https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js', 'https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js', 'https://www.gstatic.com/firebasejs/8.10.1/firebase-app-check.js'];

@@ -2137,7 +2137,7 @@ function loadDX(){
   DX_PROMISE = fetch(DX_URL).then(r => r.ok ? r.json() : null).then(j => { DX = (j && j.ilceler) || {}; DX_TURKU = (j && j.turkuler) || null; return DX; }).catch(() => { DX = {}; return DX; });
   return DX_PROMISE;
 }
-const DXOPEN = { kimlik:true, dinle:true, unluler:false, turku:false, kultur:false, ankturku:true };
+const DXOPEN = { kimlik:true, dinle:true, unluler:false, turku:false, kultur:false, ankturku:false };
 const DX_KAT = { yemek:['🍲','Yemek'], elsanati:['🧶','El sanatı'], halkoyunu:['🥁','Halk oyunu'], gelenek:['🏺','Gelenek'], tarim:['🌾','Tarım'], hayvancilik:['🐑','Hayvancılık'], etkinlik:['🎭','Etkinlik'], diger:['✨','Diğer'] };
 // Yıldız ölçütleri tüm ilçelerde aynıdır ve sitedeki yer listesine dayanır (rastgele puan yoktur)
 const dxBand = c => c >= 16 ? 5 : c >= 10 ? 4 : c >= 6 ? 3 : c >= 3 ? 2 : c >= 1 ? 1 : 0;
