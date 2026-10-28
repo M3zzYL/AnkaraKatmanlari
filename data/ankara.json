@@ -709,8 +709,8 @@
  },
  "turkuler": {
   "baslik": "Ankara'nın Sesi",
-  "not": "Ankara yöresi türkülerinin büyük bölümü oyunlu türkülerdir ve bu icralar geleneksel olarak 'Seymen Meclisleri' denen ortamlarda yapılır. Ankara türkülerini derleyenler arasında Muzaffer Sarısözen, Nida Tüfekçi ve Yücel Paşmakçı anılır. Sitede ses dosyası ve şarkı sözü barındırılmaz; dinleme, yasal platformlar üzerinden yapılır.",
-  "kaynak": "TRT repertuvar kayıtları (turkuler.com TRT türküleri veri tabanı: repertuvar numarası, kaynak kişi, derleyen), Folklor/Edebiyat dergisi incelemesi, Evrensel (Hayri Tunç, 2017), Yavuz Hakan Tok'un yazısı, Yeni Ankara (Seyit Çevik), Ankara yöresi türküleri üzerine akademik çalışmalar, TRT sanatçısı Gülşen Kutlu'nun röportajı",
+  "not": "Ankara yöresi türkülerinin büyük bölümü oyunlu türkülerdir ve bu icralar geleneksel olarak 'Seymen Meclisleri' denen ortamlarda yapılır. Ankara türkülerini derleyenler arasında Muzaffer Sarısözen, Nida Tüfekçi ve Yücel Paşmakçı anılır. Sitede ses dosyası ve şarkı sözü barındırılmaz; dinleme, yasal platformlar üzerinden yapılır. Sümer Ezgü'nün 'Hakiki Angara Havaları' (2015) albümünde 11 Ankara türküsü yer alır; kaynak kişi ve derleyen bilgileri albüm kredilerine dayanır.",
+  "kaynak": "TRT repertuvar kayıtları (turkuler.com TRT türküleri veri tabanı: repertuvar numarası, kaynak kişi, derleyen), Folklor/Edebiyat dergisi incelemesi, Evrensel (Hayri Tunç, 2017), Yavuz Hakan Tok'un yazısı, Yeni Ankara (Seyit Çevik), Ankara yöresi türküleri üzerine akademik çalışmalar, TRT sanatçısı Gülşen Kutlu'nun röportajı, Sümer Ezgü albüm tanıtımları (Hakiki Angara Havaları, 2015), Türkü Dostları ve Repertükül kayıtları",
   "liste": [
    {
     "ad": "Ankara'nın Taşına Bak",
@@ -755,10 +755,12 @@
     "tur": "Oyun havası",
     "yore": "Ankara",
     "derleyen": "Muzaffer Sarısözen",
-    "yorumcular": [],
+    "yorumcular": [
+     "Sümer Ezgü"
+    ],
     "ara": "Misket Güvercin Uçuverdi Ankara oyun havası",
     "baglanti": "Ankara oyun havalarının en yaygın klasiklerinden biri; 'Güvercin Uçuverdi' adıyla da bilinir.",
-    "hikaye": "Misket ve Fidayda, Ankara oyun havaları arasında en yaygınlaşan klasikler olarak anılır. Ankara düğünlerinde ve eğlencelerinde, Seymen Meclisleri geleneğinden gelen oyunlu türküler çalınır; Misket bu repertuvarın başında gelir. Halk arasında Misket için hüzünlü bir aşk hikâyesi anlatılır; bu anlatı kaynakça ile doğrulanmış değildir.",
+    "hikaye": "Misket ve Fidayda, Ankara oyun havaları arasında en yaygınlaşan klasikler olarak anılır. Ankara düğünlerinde ve eğlencelerinde, Seymen Meclisleri geleneğinden gelen oyunlu türküler çalınır; Misket bu repertuvarın başında gelir. Halk arasında Misket için hüzünlü bir aşk hikâyesi anlatılır; bu anlatı kaynakça ile doğrulanmış değildir. Sümer Ezgü'nün albümündeki 'Misket' kaydında kaynak olarak Ankara Kulübü'nden Necmettin Palacı, nota olarak Nazım Onay belirtilir.",
     "video": "",
     "ilce": [],
     "koy": "",
@@ -776,9 +778,11 @@
     "kaynakKisi": "Sadık Ergun, Bayram Aracı",
     "derleyen": "Nida Tüfekçi",
     "notaya": "Nida Tüfekçi",
-    "yorumcular": [],
+    "yorumcular": [
+     "Sümer Ezgü"
+    ],
     "baglanti": "Misket ile birlikte en yaygın Ankara oyun havaları arasında anılır.",
-    "hikaye": "",
+    "hikaye": "Sümer Ezgü'nün 'Hakiki Angara Havaları' albümünün ilk parçası 'Hüdayda'dır; kaynak olarak Ankara Kulübü'nden Necmettin Palacı, Ümit Yılmaz Arslan ve Yekta Arslan belirtilir. Albümün ilk klibi de bu türküye Ankara'da çekilmiştir.",
     "ara": "Fidayda Hüdayda Ankara oyun havası",
     "video": ""
    },
@@ -1456,10 +1460,141 @@
     "kaynakKisi": "Zekeriya Bozdağ",
     "derleyen": "Plaktan yazıldı",
     "notaya": "Mehmet Erenler",
-    "yorumcular": [],
+    "yorumcular": [
+     "Sümer Ezgü"
+    ],
     "baglanti": "TRT repertuvarında Ankara yöresi türküsü olarak kayıtlıdır.",
     "hikaye": "",
     "ara": "Ayaş Yollarından Aştım da Geldim türküsü",
+    "video": ""
+   },
+   {
+    "ad": "Dalları Bastı Kiraz",
+    "tur": "Ankara türküsü",
+    "yore": "Ankara",
+    "ilce": [],
+    "koy": "",
+    "trt": "3970",
+    "kaynakKisi": "Rıfat Balaban",
+    "derleyen": "Rıfat Balaban",
+    "notaya": "",
+    "yorumcular": [
+     "Sümer Ezgü"
+    ],
+    "baglanti": "Sümer Ezgü'nün yorumuyla en çok bilinen Ankara türkülerinden.",
+    "hikaye": "Türkü Dostları kaydına göre Ankara yöresine ait olan türkü, Rıfat Balaban tarafından derlenmiştir. Sümer Ezgü'nün kayıtlarında iki kez yer alır: 1994 tarihli 'Yaban Gülü' albümünde (Duygu Müzik) ve 2015 tarihli 'Hakiki Angara Havaları' albümünde. Şarkı sözü bu sitede yer almaz.",
+    "ara": "Dalları Bastı Kiraz Sümer Ezgü",
+    "video": ""
+   },
+   {
+    "ad": "Atım Araptır Benim",
+    "tur": "Ankara türküsü (aşk-sevda konulu)",
+    "yore": "Ankara",
+    "ilce": [],
+    "koy": "",
+    "trt": "03301",
+    "kaynakKisi": "Mucip Arcıman",
+    "derleyen": "Nurettin Çamlıdağ",
+    "notaya": "Nurettin Çamlıdağ",
+    "yorumcular": [
+     "Sümer Ezgü",
+     "Bayram Aracı",
+     "Sıtkı Akın",
+     "Ankaralı Turgut"
+    ],
+    "baglanti": "Ankara düğünlerinin ve eğlencelerinin en bilinen havalarından; 'Atım Arap' adıyla da anılır.",
+    "hikaye": "TRT repertuvarındaki kaydı Mahur makamında olup Mucip Arcıman'dan Nurettin Çamlıdağ tarafından derlenmiştir; kayıtlarda icra edenler olarak Bayram Aracı ve Sıtkı Akın geçer. Türkü Dostları'nda 'Atım Arap' adıyla dört ayrı varyantı kayıtlıdır: Fadıl Bey, Mucip Arcıman ve Bay Halil'den derlenenler ile kaynağı bilinmeyen bir kayıt; üçü Ankara yöresi olarak gösterilir. Sümer Ezgü'nün 'Hakiki Angara Havaları' albümünde kaynak olarak Ankara Kulübü'nden Necmettin Palacı, Ümit Yılmaz Arslan ve Yekta Arslan belirtilir.",
+    "ara": "Atım Araptır Benim Atım Arap Sümer Ezgü",
+    "video": ""
+   },
+   {
+    "ad": "Zühtü",
+    "tur": "Ankara türküsü",
+    "yore": "Ankara",
+    "ilce": [],
+    "koy": "",
+    "trt": "",
+    "kaynakKisi": "Burhan Gökalp",
+    "derleyen": "Nida Tüfekçi",
+    "notaya": "",
+    "yorumcular": [
+     "Sümer Ezgü"
+    ],
+    "baglanti": "Sümer Ezgü'nün 'Hakiki Angara Havaları' albümünde yer alan Ankara türküsü.",
+    "hikaye": "",
+    "ara": "Zühtü Sümer Ezgü",
+    "video": ""
+   },
+   {
+    "ad": "Karam",
+    "tur": "Ankara türküsü",
+    "yore": "Ankara",
+    "ilce": [],
+    "koy": "",
+    "trt": "",
+    "kaynakKisi": "Refik Başaran",
+    "derleyen": "Belirtilmemiş",
+    "notaya": "",
+    "yorumcular": [
+     "Sümer Ezgü"
+    ],
+    "baglanti": "Sümer Ezgü'nün 'Hakiki Angara Havaları' albümünde yer alan Ankara türküsü.",
+    "hikaye": "",
+    "ara": "Karam Sümer Ezgü",
+    "video": ""
+   },
+   {
+    "ad": "Şeker Oğlan",
+    "tur": "Ankara türküsü",
+    "yore": "Ankara",
+    "ilce": [],
+    "koy": "",
+    "trt": "",
+    "kaynakKisi": "Burhan Gökalp",
+    "derleyen": "Belirtilmemiş",
+    "notaya": "",
+    "yorumcular": [
+     "Sümer Ezgü"
+    ],
+    "baglanti": "Sümer Ezgü'nün 'Hakiki Angara Havaları' albümünde yer alan Ankara türküsü.",
+    "hikaye": "",
+    "ara": "Şeker Oğlan Sümer Ezgü",
+    "video": ""
+   },
+   {
+    "ad": "Su Gelir Güldür Güldür",
+    "tur": "Ankara türküsü",
+    "yore": "Ankara",
+    "ilce": [],
+    "koy": "",
+    "trt": "",
+    "kaynakKisi": "Rıfat Balaban",
+    "derleyen": "Belirtilmemiş",
+    "notaya": "",
+    "yorumcular": [
+     "Sümer Ezgü"
+    ],
+    "baglanti": "Sümer Ezgü'nün 'Hakiki Angara Havaları' albümünde yer alan Ankara türküsü.",
+    "hikaye": "",
+    "ara": "Su Gelir Güldür Güldür Sümer Ezgü",
+    "video": ""
+   },
+   {
+    "ad": "Kalenin Bayır Düzü",
+    "tur": "Ankara türküsü",
+    "yore": "Ankara",
+    "ilce": [],
+    "koy": "",
+    "trt": "",
+    "kaynakKisi": "Zehra Bilir",
+    "derleyen": "Belirtilmemiş",
+    "notaya": "",
+    "yorumcular": [
+     "Sümer Ezgü"
+    ],
+    "baglanti": "Sümer Ezgü'nün 'Hakiki Angara Havaları' albümünde yer alan Ankara türküsü.",
+    "hikaye": "",
+    "ara": "Kalenin Bayır Düzü Sümer Ezgü",
     "video": ""
    }
   ]
