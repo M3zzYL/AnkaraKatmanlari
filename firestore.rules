@@ -1,0 +1,75 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email == "yilmaz.enesankara@gmail.com"
+        && request.auth.token.email_verified == true;
+    }
+    function isBanned() {
+      return exists(/databases/$(database)/documents/banned/$(request.auth.uid));
+    }
+
+    // Hesap belgesi (ilerleme, profil, onay kaydı): sahibi okur/yazar, yönetici okur
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow write: if signedIn() && request.auth.uid == uid;
+
+      // Özel anılar: sahibi yazar; yönetici okur ve uygunsuz fotoğrafı "removed" olarak işaretleyebilir
+      match /memories/{memId} {
+        allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+        allow create, update: if signedIn() && ((request.auth.uid == uid && !isBanned()) || isAdmin());
+        allow delete: if signedIn() && (request.auth.uid == uid || isAdmin());
+      }
+    }
+
+    // Topluluk puanları: herkes okur; herkes yalnızca KENDİ oyunu değiştirebilir
+    match /placeRatings/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && !isBanned()
+        && request.resource.data.keys().hasOnly(['name', 'votes'])
+        && request.resource.data.votes.keys().hasOnly([request.auth.uid]);
+      allow update: if signedIn()
+        && request.resource.data.keys().hasOnly(['name', 'votes'])
+        && request.resource.data.votes.diff(resource.data.votes).affectedKeys().hasOnly([request.auth.uid]);
+    }
+
+    // Herkese açık anı fotoğrafları: giriş yapan herkes görür; sahibi ekler/siler; yönetici silebilir
+    match /publicMemories/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && !isBanned()
+        && request.resource.data.uid == request.auth.uid
+        && (!('thumb' in request.resource.data) || request.resource.data.thumb.size() < 600000);
+      allow update: if signedIn() && !isBanned()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && (!('thumb' in request.resource.data) || request.resource.data.thumb.size() < 600000);
+      allow delete: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+    }
+
+    // Yasaklı listesi: kişi yalnızca kendi kaydını okur; yönetici hepsini okur/yazar
+    match /banned/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // Site içi duyurular: giriş yapan herkes okur; yalnızca yönetici yayınlar/siler
+    match /announcements/{id} {
+      allow read: if signedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Gönderilen duyuru e-postalarının kaydı: yalnızca yönetici
+    match /mailLog/{id} {
+      allow read, create: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // Geri kalan her şey kapalı
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

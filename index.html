@@ -59,9 +59,9 @@ a.btn,a.btn:hover{text-decoration:none;}
 .explore > *{min-width:0;}
 
 /* ---------- GİRİŞ KAPISI ---------- */
-.gate{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;
+.gate{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto;-webkit-overflow-scrolling:touch;
   background:radial-gradient(1200px 600px at 20% -10%,#1F6B4A55,transparent),radial-gradient(900px 500px at 100% 100%,#6B142544,transparent),var(--green);color:#fff;}
-.gate-box{max-width:440px;text-align:center;}
+.gate-box{max-width:440px;text-align:center;margin:auto;}
 .gate-logo{width:84px;height:84px;margin:0 auto 22px;border-radius:50%;background:var(--maroon);border:3px solid var(--gold-2);display:flex;align-items:center;justify-content:center;color:var(--gold-2);box-shadow:0 0 0 6px #ffffff12;}
 .gate h1{font-size:38px;line-height:1.1;margin-bottom:12px;} .gate p{color:#D5E3DA;font-size:15px;margin-bottom:26px;}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:999px;padding:11px 20px;font-weight:700;font-size:14px;transition:transform .15s var(--ease),background .15s,box-shadow .15s,border-color .15s;}
@@ -451,6 +451,23 @@ a.btn,a.btn:hover{text-decoration:none;}
 .dx-embed-btn{border:0;cursor:pointer;background:var(--green);color:#fff;border-radius:999px;padding:10px 18px;font:inherit;font-weight:700;font-size:13.5px;min-height:44px;}
 .dx-embed iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000;}
 
+/* ---------- GOOGLE'SIZ GİRİŞ + SİTE İÇİ DUYURULAR ---------- */
+.gate-alt{background:none;border:0;color:#F2E3B3;font:inherit;font-size:13.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;margin-top:12px;padding:8px;min-height:40px;}
+.gate-pw{margin:8px auto 0;max-width:320px;display:grid;gap:10px;text-align:left;}
+.gp-tabs{display:flex;gap:6px;background:#ffffff1f;border-radius:999px;padding:4px;}
+.gp-tabs button{flex:1;border:0;background:none;color:#fff;font:inherit;font-weight:700;font-size:13px;padding:9px 6px;border-radius:999px;cursor:pointer;}
+.gp-tabs button.on{background:#F2E3B3;color:#143F2C;}
+.gp-in{width:100%;border:1px solid #ffffff55;background:#ffffff1f;color:#fff;border-radius:12px;padding:12px 14px;font:inherit;font-size:15px;outline:none;}
+.gp-in::placeholder{color:#ffffffb0;} .gp-in:focus{border-color:#F2E3B3;}
+.gp-note{font-size:12.5px;line-height:1.55;color:#ffffffdd;margin:0;}
+.user-btn{position:relative;}
+.user-btn.has-ann::after{content:'';position:absolute;top:1px;right:1px;width:11px;height:11px;border-radius:50%;background:#E5484D;border:2px solid var(--surface);}
+.user-menu .cnt{margin-left:auto;font-size:11px;font-weight:700;color:var(--gold);}
+.ann-item{padding:12px 0;border-top:1px solid var(--line);} .ann-item:first-child{border-top:0;}
+.ann-item b{display:block;color:var(--ink);font-size:14.5px;} .ann-item small{display:block;color:var(--muted);font-size:12px;margin:2px 0 6px;} .ann-item p{margin:0;white-space:pre-wrap;line-height:1.6;}
+.ann-new{display:inline-block;background:#E5484D;color:#fff;border-radius:999px;font-size:10.5px;font-weight:700;padding:1px 7px;margin-left:6px;vertical-align:1px;}
+.an-row{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line);font-size:12.5px;} .an-row span{color:var(--muted);display:block;}
+
 </style>
 </head>
 <body>
@@ -469,6 +486,15 @@ a.btn,a.btn:hover{text-decoration:none;}
       <label class="chk"><input type="checkbox" id="c-transfer"><span>Kişisel verilerimin, hizmetin sunulması amacıyla yurt dışındaki sunucularda (Google Firebase) işlenmesine <b>açık rıza</b> veriyorum.</span></label>
     </div>
     <button class="btn btn-gold" id="gate-auth-btn" disabled>Google ile giriş yap</button>
+    <button class="gate-alt" id="gp-toggle" type="button">Google'sız devam et: e-posta vermeden kullanıcı adıyla</button>
+    <div class="gate-pw hidden" id="gp-box">
+      <div class="gp-tabs"><button type="button" id="gp-tab-in" class="on">Giriş yap</button><button type="button" id="gp-tab-new">Hesap oluştur</button></div>
+      <input class="gp-in" id="gp-user" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" placeholder="Kullanıcı adı (a-z, 0-9, . _ -)" aria-label="Kullanıcı adı">
+      <input class="gp-in" id="gp-pass" type="password" autocomplete="current-password" maxlength="64" placeholder="Şifre" aria-label="Şifre">
+      <input class="gp-in hidden" id="gp-pass2" type="password" autocomplete="new-password" maxlength="64" placeholder="Şifre (tekrar)" aria-label="Şifre tekrar">
+      <p class="gp-note" id="gp-note"></p>
+      <button class="btn btn-gold" id="gp-submit" type="button" disabled>Giriş yap</button>
+    </div>
     <div class="err" id="gate-error"></div>
     <p class="gate-links">Görüş ve öneriler: <a href="mailto:ankarakatmanlari@gmail.com">ankarakatmanlari@gmail.com</a> · <a href="https://instagram.com/ankarakatmanlari" target="_blank" rel="noopener noreferrer">Instagram</a></p>
   </div>
@@ -498,6 +524,7 @@ a.btn,a.btn:hover{text-decoration:none;}
     <div class="user-menu" id="user-menu">
       <div class="um-mail" id="um-mail"></div>
       <button id="um-admin" class="hidden"><span data-ico="shield"></span>Yönetici paneli</button>
+      <button id="um-ann"><span data-ico="mail"></span>Duyurular <span class="cnt"></span></button>
       <button id="um-export"><span data-ico="download"></span>Verilerimi indir</button>
       <button id="um-legal"><span data-ico="shield"></span>Aydınlatma metni ve gizlilik</button>
       <button id="um-install" class="hidden"><span data-ico="download"></span>Uygulamayı yükle</button>
@@ -643,6 +670,7 @@ a.btn,a.btn:hover{text-decoration:none;}
       <p>Enes Yılmaz — iletişim: <a href="mailto:ankarakatmanlari@gmail.com">ankarakatmanlari@gmail.com</a></p>
       <h4>2. İşlenen kişisel veriler</h4>
       <ul>
+        <li><b>Kullanıcı adıyla açılan hesaplar:</b> e-posta adresi istenmez; yalnızca seçtiğin kullanıcı adı ve şifren işlenir (şifre Google Firebase tarafından şifrelenmiş biçimde saklanır, site sahibi göremez). Şifreni unutursan sıfırlama bağlantısı gönderilemez; bu hesaplara duyurular site içinden gösterilir.</li>
         <li><b>Hesap bilgileri:</b> Google ile girişte paylaşılan ad-soyad ve e-posta adresi. (Profil fotoğrafın yalnızca ekranında gösterilir, sunucumuza kaydedilmez.)</li>
         <li><b>Gezi verileri:</b> gezdiğini işaretlediğin yerler, ziyaret tarihi ve doğrulama türü (konumla/kendi beyanın), favoriler, verdiğin puanlar, kazandığın rozetler.</li>
         <li><b>Anılar:</b> eklediğin fotoğraf ve not. Fotoğrafın konum (EXIF) bilgisi yüklenmeden önce silinir.</li>
@@ -656,6 +684,7 @@ a.btn,a.btn:hover{text-decoration:none;}
         <li>Fotoğraf ve notunun diğer kullanıcılara gösterilmesi — <i>açık rıza (m.5/1)</i>; her yüklemede ayrıca istenir, geri çekilebilir.</li>
         <li>Verilerin yurt dışındaki sunucularda işlenmesi — <i>açık rıza (m.9)</i>; girişte istenir.</li>
         <li>Güvenlik, kötüye kullanımın önlenmesi, uygunsuz içeriğin kaldırılması ve hesapların askıya alınması — <i>meşru menfaat (m.5/2-f)</i>.</li>
+        <li>Site içi duyuruların gösterilmesi (sahip olduğun rozetlere göre seçilebilir) — <i>meşru menfaat (m.5/2-f)</i>.</li>
         <li>Hesabınla ilgili bilgilendirme e-postaları (site güncellemesi, rozet ve hizmet duyuruları) — <i>meşru menfaat (m.5/2-f)</i>; yalnızca hizmete ilişkin iletilerdir (alıcılar, sahip olduğun rozetlere göre seçilebilir), reklam/ticari ileti gönderilmez. İstemezsen gelen e-postayı “çık” yazarak yanıtlaman yeterlidir.</li>
         <li>Hukuki yükümlülüklerin yerine getirilmesi (m.5/2-ç).</li>
       </ul>
@@ -682,6 +711,13 @@ a.btn,a.btn:hover{text-decoration:none;}
       <p>Oturum bilgisi, gece/gündüz tercihi, ilerleme ve fotoğraf önbelleği ile bu onayın kaydı tarayıcının yerel depolamasında tutulur; bunlar sitenin çalışması için gereklidir ve reklam amacıyla kullanılmaz.</p>
     </div>
     <div class="modal-foot"><span></span><button class="btn btn-green" id="lg-close">Kapat</button></div>
+  </div>
+</div>
+<div class="modal" id="ann-modal">
+  <div class="modal-box legal">
+    <h2>Duyurular</h2>
+    <div class="legal-body" id="ann-list"></div>
+    <div class="modal-foot"><span></span><button class="btn btn-green" id="ann-close">Kapat</button></div>
   </div>
 </div>
 <div class="lightbox" id="lightbox"><img alt=""></div>
@@ -1427,6 +1463,53 @@ function doSignIn(){
       : 'Giriş yapılamadı: ' + err.message);
   });
 }
+// ---- Google'sız giriş: e-posta vermeden kullanıcı adı + şifre ----
+// Firebase e-posta/şifre girişi kullanılır; kullanıcı adı, hiçbir zaman posta gönderilmeyen sahte bir adrese çevrilir (kullanıcıdan e-posta alınmaz).
+const PSEUDO_DOMAIN = 'ak-kullanici.invalid';
+const USERNAME_RE = /^[a-z0-9._-]{3,20}$/;
+const pseudoEmail = u => u + '@' + PSEUDO_DOMAIN;
+function isPseudo(user){ return !!(user && user.email && String(user.email).toLowerCase().endsWith('@' + PSEUDO_DOMAIN)); }
+function accountLabel(user){ if(!user) return 'Hesap'; return isPseudo(user) ? String(user.email).split('@')[0] : (user.displayName || 'Hesap'); }
+function initialAvatar(name){
+  const ch = (String(name || '?').trim()[0] || '?').toUpperCase();
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="#1F6B4A"/><text x="20" y="26.5" font-size="18" text-anchor="middle" fill="#fff" font-family="Georgia,serif" font-weight="700">${escHtml(ch)}</text></svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+let GP_MODE = 'in';
+function setGpMode(m){
+  GP_MODE = m; $('gp-tab-in').classList.toggle('on', m === 'in'); $('gp-tab-new').classList.toggle('on', m === 'new');
+  $('gp-pass2').classList.toggle('hidden', m !== 'new'); $('gp-pass').autocomplete = m === 'new' ? 'new-password' : 'current-password';
+  $('gp-submit').textContent = m === 'new' ? 'Hesap oluştur' : 'Giriş yap';
+  $('gp-note').textContent = m === 'new'
+    ? 'E-posta adresi istenmez. Dikkat: e-posta olmadığı için şifre sıfırlama bağlantısı gönderemeyiz; şifreni unutursan hesabı kurtaramayız. Şifreni güvenli bir yere not et. Duyurular sana site içinden gösterilir.'
+    : 'Hesap açarken seçtiğin kullanıcı adı ve şifreyle giriş yap.';
+}
+function pwErrorText(e){
+  const c = e && e.code;
+  if(c === 'auth/email-already-in-use') return 'Bu kullanıcı adı alınmış; başka bir tane dene.';
+  if(c === 'auth/weak-password') return 'Şifre çok zayıf; daha uzun ve tahmin edilmesi zor bir şifre seç.';
+  if(c === 'auth/operation-not-allowed') return 'Kullanıcı adıyla giriş henüz açılmamış. (Yönetici: Firebase → Authentication → Sign-in method → E-posta/Şifre seçeneğini etkinleştirin.)';
+  if(c === 'auth/invalid-credential' || c === 'auth/wrong-password' || c === 'auth/user-not-found' || c === 'auth/invalid-login-credentials') return 'Kullanıcı adı ya da şifre hatalı.';
+  if(c === 'auth/too-many-requests') return 'Çok fazla deneme yapıldı; biraz bekleyip tekrar dene.';
+  if(c === 'auth/network-request-failed') return 'İnternet bağlantısı kurulamadı; bağlantını kontrol edip tekrar dene.';
+  return 'İşlem yapılamadı: ' + ((e && (e.code || e.message)) || 'bilinmeyen hata');
+}
+async function doPasswordAuth(){
+  if(!auth){ showGateError('Giriş sistemi şu an başlatılamadı. Sayfayı internet üzerinden açtığınızdan emin olun.'); return; }
+  const u = $('gp-user').value.trim().toLowerCase(), p = $('gp-pass').value;
+  if(!USERNAME_RE.test(u)){ showGateError('Kullanıcı adı 3-20 karakter olmalı; yalnızca a-z, 0-9, nokta, alt çizgi ve tire kullanılabilir (Türkçe karakter yok).'); return; }
+  if(p.length < 8){ showGateError('Şifre en az 8 karakter olmalı.'); return; }
+  if(GP_MODE === 'new'){
+    if(p !== $('gp-pass2').value){ showGateError('İki şifre aynı değil.'); return; }
+    if(p.toLowerCase() === u){ showGateError('Şifre kullanıcı adınla aynı olamaz.'); return; }
+  }
+  $('gate-error').style.display = 'none'; $('gp-submit').disabled = true;
+  try {
+    if(GP_MODE === 'new'){ const cred = await auth.createUserWithEmailAndPassword(pseudoEmail(u), p); try { await cred.user.updateProfile({ displayName:u }); } catch(e){} }
+    else await auth.signInWithEmailAndPassword(pseudoEmail(u), p);
+  } catch(e){ showGateError(pwErrorText(e)); }
+  try { updateGate(); } catch(e){}
+}
 try {
   if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 
@@ -1475,7 +1558,7 @@ function startAuthWatcher(){
     if(!user){ currentUser = null; toggleAdminBtn(); showGate(); updateProgress(); refreshUI(); return; }
     currentUser = user; const uid = user.uid, same = () => currentUser && currentUser.uid === uid;
     // 1) HEMEN göster: bu hesaba ait cihazdaki kayıtla uygulamayı aç
-    $('user-img').src = safeUrl(user.photoURL) || ''; $('user-name').textContent = (user.displayName || 'Hesap').split(' ')[0]; $('um-mail').textContent = user.email || '';
+    $('user-img').src = safeUrl(user.photoURL) || initialAvatar(accountLabel(user)); $('user-name').textContent = accountLabel(user).split(' ')[0]; $('um-mail').textContent = isPseudo(user) ? 'Kullanıcı adı: ' + accountLabel(user) : (user.email || '');
     loadAppMeta();
     let local = {}; try { local = sanitizeState(JSON.parse(localStorage.getItem(stateKey()) || '{}')); } catch(e){}
     STATE = local;
@@ -1496,7 +1579,7 @@ function startAuthWatcher(){
     if(!same()) return;
     if(visitedNames().length) APP_META.onboardingDone = true;
     try { APP_META.earnedBadges = computeEarnedBadges().map(b => b.id); saveAppMeta(); } catch(e){ console.warn(e); }
-    maybeShowOnboarding(); syncProfile(); startUserListener(docRef); startRatingsListener();
+    maybeShowOnboarding(); syncProfile(); startUserListener(docRef); startRatingsListener(); loadAnnouncements();
     updateProgress(); refreshUI();
   });
 }
@@ -1521,7 +1604,7 @@ function computeEarnedBadges(){
 function buildProfile(){
   const earned = computeEarnedBadges();
   return {
-    email: currentUser ? (currentUser.email || '') : '', displayName: currentUser ? (currentUser.displayName || '') : '',
+    email: currentUser && !isPseudo(currentUser) ? (currentUser.email || '') : '', displayName: currentUser && !isPseudo(currentUser) ? (currentUser.displayName || '') : '', username: isPseudo(currentUser) ? accountLabel(currentUser) : '', provider: isPseudo(currentUser) ? 'password' : 'google',
     earnedBadges: earned.map(b => b.id), earnedBadgeNames: earned.map(b => b.name),
     visitedCount: visitedNames().length, gpsCount: Object.values(STATE).filter(s => s && s.visitType === 'gps').length, updatedAt: Date.now()
   };
@@ -1879,7 +1962,13 @@ async function deleteMyAccount(){
   try {
     await wipeMyData(true); const u = currentUser;
     try { await u.delete(); }
-    catch(e){ if(e.code === 'auth/requires-recent-login'){ await u.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider()); await u.delete(); } else throw e; }
+    catch(e){
+      if(e.code === 'auth/requires-recent-login'){
+        if(isPseudo(u)){ const pw = prompt('Güvenlik için şifreni yeniden gir:'); if(!pw) throw new Error('İptal edildi'); await u.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(u.email, pw)); }
+        else await u.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider());
+        await u.delete();
+      } else throw e;
+    }
     alert('Hesabın ve verilerin silindi. Görüşmek üzere!');
   } catch(e){ console.error(e); alert('Hesap silinemedi: ' + (e.code || e.message) + '. Verilerin silinmiş olabilir; tekrar giriş yapıp yeniden dene.'); }
 }
@@ -2569,7 +2658,7 @@ async function renderAdmin(){
     const [us, bs] = await Promise.all([db.collection('users').get(), db.collection('banned').get()]);
     ADMIN.users = [];
     us.forEach(d => { const x = d.data(), pr = x.profile || {};
-      ADMIN.users.push({ uid:d.id, hasProfile:!!x.profile, email:String(pr.email || ''), name:String(pr.displayName || ''), 
+      ADMIN.users.push({ uid:d.id, hasProfile:!!x.profile, email:String(pr.email || ''), name:String(pr.displayName || pr.username || ''), 
         badgeIds:Array.isArray(pr.earnedBadges) ? pr.earnedBadges : [], badgeNames:Array.isArray(pr.earnedBadgeNames) ? pr.earnedBadgeNames : [],
         visited:(pr.visitedCount != null) ? pr.visitedCount : Object.values(x.places || {}).filter(s => s && s.visited).length, gps:pr.gpsCount || 0 }); });
     ADMIN.banned = {}; bs.forEach(d => { ADMIN.banned[d.id] = d.data(); });
@@ -2579,7 +2668,7 @@ async function renderAdmin(){
 // Filtre çubuğunu bir kez kurar
 function buildAdminShell(){
   const defs = getAllBadgeDefs();
-  $('admin-body').innerHTML = `<p id="a-sum" style="margin-bottom:14px;color:var(--muted)"></p>${mailboxHtml(defs)}
+  $('admin-body').innerHTML = `<p id="a-sum" style="margin-bottom:14px;color:var(--muted)"></p>${mailboxHtml(defs)}${annAdminHtml(defs)}
     <div class="afilters">
       <label class="field"><span data-ico="search"></span><input class="input" id="a-q" type="search" placeholder="Ad veya e-posta ara…" autocomplete="off"></label>
       <select class="select" id="a-badge" aria-label="Rozet filtresi"><option value="">Rozet: hepsi</option><option value="__any">Herhangi bir rozeti olanlar</option><option value="__none">Hiç rozeti olmayanlar</option>${defs.map(b => `<option value="${escHtml(b.id)}">${escHtml(b.name)}</option>`).join('')}</select>
@@ -2591,7 +2680,7 @@ function buildAdminShell(){
   $('a-badge').addEventListener('change', e => { ADMIN.f.badge = e.target.value; paintAdminList(); });
   $('a-status').addEventListener('change', e => { ADMIN.f.status = e.target.value; paintAdminList(); });
   $('a-list').addEventListener('click', onAdminAction);
-  initMailbox();
+  initMailbox(); initAnnAdmin();
 }
 // Hesap listesini filtrelere göre çizer
 function paintAdminList(){
@@ -2727,7 +2816,7 @@ function mailAudienceUsers(){
 function mailStatus(msg, bad){ const el = $('m-status'); if(el){ el.textContent = msg || ''; el.classList.toggle('mb-bad', !!bad); } }
 function paintMailCount(){
   const el = $('m-count'); if(!el) return; const list = mailAudienceUsers(), o = $('m-aud').selectedOptions[0];
-  el.innerHTML = `<b>${list.length}</b> alıcı · ${escHtml(o ? o.textContent : '')}<div style="font-size:12px;color:var(--muted);margin-top:4px">Yalnızca e-postası kayıtlı ve yasaklı olmayan hesaplar sayılır.</div>`
+  el.innerHTML = `<b>${list.length}</b> alıcı · ${escHtml(o ? o.textContent : '')}<div style="font-size:12px;color:var(--muted);margin-top:4px">Yalnızca e-postası kayıtlı ve yasaklı olmayan hesaplar sayılır (kullanıcı adıyla açılan hesaplara e-posta gidemez; onlar için “Site içi duyuru” bölümünü kullanın).</div>`
     + (list.length ? `<details style="margin-top:6px"><summary style="cursor:pointer;font-size:12.5px">Alıcıları göster</summary><div style="font-size:12px;margin-top:6px;max-height:150px;overflow:auto;word-break:break-all">${list.slice(0, 200).map(u => escHtml((u.name ? u.name + ' — ' : '') + u.email)).join('<br>')}${list.length > 200 ? '<br>…' : ''}</div></details>` : '');
 }
 function initMailbox(){
@@ -2798,6 +2887,85 @@ async function loadMailLog(){
   } catch(e){ box.innerHTML = ''; }
 }
 
+// =====================================================================
+// 14c) SİTE İÇİ DUYURULAR (e-postası olmayan hesaplara da ulaşır; rozete göre seçilebilir)
+// =====================================================================
+let ANN = { list:[], seen:0 };
+const annSeenKey = () => 'ankaraAnnSeen_' + (currentUser ? currentUser.uid : '');
+function annForMe(a){
+  const ids = (computeEarnedBadges() || []).map(b => b.id), t = a.audience || '';
+  if(!t) return true; if(t === '__any') return ids.length > 0; if(t === '__none') return ids.length === 0; return ids.includes(t);
+}
+async function loadAnnouncements(){
+  if(!currentUser || !db) return;
+  try {
+    const qs = await db.collection('announcements').orderBy('at', 'desc').limit(20).get(), L = [];
+    qs.forEach(d => { const x = d.data() || {}; L.push({ id:d.id, title:String(x.title || '').slice(0, 150), body:String(x.body || '').slice(0, 4000), audience:String(x.audience || ''), at:(x.at && x.at.toMillis) ? x.at.toMillis() : 0 }); });
+    ANN.list = L.filter(annForMe);
+  } catch(e){ ANN.list = []; }
+  try { ANN.seen = Number(localStorage.getItem(annSeenKey()) || 0); } catch(e){ ANN.seen = 0; }
+  paintAnnDot();
+  const n = ANN.list.filter(a => a.at > ANN.seen).length;
+  if(n) showToast('📣 ' + n + ' yeni duyuru var; kullanıcı menüsünden okuyabilirsin.', true);
+}
+function paintAnnDot(){
+  const n = ANN.list.filter(a => a.at > ANN.seen).length;
+  $('user-btn').classList.toggle('has-ann', n > 0);
+  const c = $('um-ann') && $('um-ann').querySelector('.cnt'); if(c) c.textContent = n ? n + ' yeni' : '';
+}
+function openAnn(){
+  const box = $('ann-list'), seen = ANN.seen;
+  box.innerHTML = ANN.list.length ? ANN.list.map(a => `<div class="ann-item"><b>${escHtml(a.title)}${a.at > seen ? '<span class="ann-new">Yeni</span>' : ''}</b><small>${a.at ? new Date(a.at).toLocaleDateString('tr-TR', { day:'numeric', month:'long', year:'numeric' }) : ''}</small><p>${escHtml(a.body)}</p></div>`).join('') : '<p class="muted">Şu an gösterilecek duyuru yok.</p>';
+  $('ann-modal').classList.add('open'); box.scrollTop = 0;
+  ANN.seen = ANN.list.reduce((m, a) => Math.max(m, a.at), ANN.seen);
+  try { localStorage.setItem(annSeenKey(), String(ANN.seen)); } catch(e){}
+  paintAnnDot();
+}
+$('um-ann').addEventListener('click', () => { $('user-menu').classList.remove('open'); openAnn(); });
+$('ann-close').addEventListener('click', () => $('ann-modal').classList.remove('open'));
+function annAdminHtml(defs){
+  const auds = `<option value="">Tüm hesaplar</option><option value="__any">Herhangi bir rozeti olanlar</option><option value="__none">Hiç rozeti olmayanlar</option>${defs.map(b => `<option value="${escHtml(b.id)}">Rozet: ${escHtml(b.name)}</option>`).join('')}`;
+  return `<details class="mailbox" id="a-ann"><summary>${ico('mail', 18)} Site içi duyuru yayınla</summary><div class="mb-body">
+    <div class="mb-count" id="an-info"></div>
+    <div class="mb-row"><label for="an-aud">Kimler görsün? (rozete göre)</label><select class="select" id="an-aud">${auds}</select></div>
+    <div class="mb-row"><label for="an-title">Başlık</label><input class="input" id="an-title" maxlength="150" autocomplete="off"></div>
+    <div class="mb-row"><label for="an-body">Metin</label><textarea id="an-body" rows="6" maxlength="3000" placeholder="Duyuru metni…"></textarea><small>Duyuru, giriş yapan herkese uygulama içinde gösterilir; e-posta adresi olmayan (kullanıcı adıyla açılmış) hesaplara da ulaşır. Rozete göre seçersen yalnızca o rozeti olanlar görür.</small></div>
+    <div class="mb-actions"><button class="btn btn-green btn-sm" id="an-pub" type="button">Yayınla</button></div>
+    <div class="mb-status" id="an-status" role="status"></div><div id="an-log"></div>
+  </div></details>`;
+}
+function annStatus(m, bad){ const el = $('an-status'); if(el){ el.textContent = m || ''; el.classList.toggle('mb-bad', !!bad); } }
+async function annAdminLog(){
+  const box = $('an-log'); if(!box) return;
+  try {
+    const qs = await db.collection('announcements').orderBy('at', 'desc').limit(10).get(), rows = [];
+    qs.forEach(d => { const x = d.data() || {}, t = x.at && x.at.toMillis ? x.at.toMillis() : 0; rows.push(`<div class="an-row"><div><b>${escHtml(String(x.title || '').slice(0, 80))}</b><span>${escHtml(String(x.audienceLabel || 'Tüm hesaplar'))} · ${ago(t)}</span></div><button class="btn btn-ghost btn-sm" data-an-del="${escHtml(d.id)}" type="button">Sil</button></div>`); });
+    box.innerHTML = rows.length ? `<div class="mini-title" style="margin:8px 0 6px">Yayındaki duyurular</div>${rows.join('')}` : '';
+  } catch(e){ box.innerHTML = ''; }
+}
+function initAnnAdmin(){
+  if(!$('a-ann')) return;
+  const noMail = ADMIN.users.filter(u => !u.email).length;
+  $('an-info').innerHTML = `<b>${ADMIN.users.length}</b> hesap · e-postası olmayan (kullanıcı adıyla açılmış) hesap: <b>${noMail}</b><div style="font-size:12px;color:var(--muted);margin-top:4px">Bu hesaplara e-posta gidemez; onlara yalnızca site içi duyuru ulaşır.</div>`;
+  $('an-pub').addEventListener('click', async () => {
+    const title = $('an-title').value.trim(), body = $('an-body').value.trim(), aud = $('an-aud').value, o = $('an-aud').selectedOptions[0];
+    if(!title || !body){ annStatus('Başlık ve metin boş olamaz.', true); return; }
+    const ok = await dangerConfirm('Duyuru yayınla', `“${escHtml(title)}” başlıklı duyuru <b>${escHtml(o ? o.textContent : 'Tüm hesaplar')}</b> için yayınlanacak.`, 'YAYINLA');
+    if(!ok) return;
+    $('an-pub').disabled = true; annStatus('Yayınlanıyor…');
+    try {
+      await db.collection('announcements').add({ title:title.slice(0, 150), body:body.slice(0, 3000), audience:aud, audienceLabel:(o ? o.textContent : '').slice(0, 120), at:firebase.firestore.FieldValue.serverTimestamp(), by:currentUser.email });
+      $('an-title').value = ''; $('an-body').value = ''; annStatus('Duyuru yayınlandı.'); annAdminLog();
+    } catch(e){ annStatus('Yayınlanamadı: ' + (e.code || e.message) + ' (Firestore kurallarına announcements bölümü eklenmiş mi?)', true); }
+    $('an-pub').disabled = false;
+  });
+  $('an-log').addEventListener('click', async e => {
+    const b = e.target.closest('[data-an-del]'); if(!b) return;
+    if(!confirm('Bu duyuru silinsin mi?')) return;
+    try { await db.collection('announcements').doc(b.dataset.anDel).delete(); annAdminLog(); } catch(err){ annStatus('Silinemedi: ' + (err.code || err.message), true); }
+  });
+  annAdminLog();
+}
 // Bir kullanıcının herkese açık fotoğraflarını listeler; uygunsuz olanlar kaldırılabilir
 async function openAdminPhotos(u){
   $('am-title').textContent = `${u.name || u.email} — fotoğraflar`; $('am-body').innerHTML = '<p style="color:var(--muted)">Yükleniyor…</p>'; $('admin-modal').classList.add('open');
@@ -2837,12 +3005,18 @@ $('lg-close').addEventListener('click', () => $('legal-modal').classList.remove(
 // Rıza daha önce verildiyse kutular gizlenir; verilmediyse iki kutu da işaretlenmeden giriş düğmesi açılmaz
 function updateGate(){
   const done = hasConsent(); $('consent-box').style.display = done ? 'none' : 'block';
-  $('gate-auth-btn').disabled = !done && !($('c-notice').checked && $('c-transfer').checked);
+  const dis = !done && !($('c-notice').checked && $('c-transfer').checked);
+  $('gate-auth-btn').disabled = dis; $('gp-submit').disabled = dis;
 }
 $('c-notice').addEventListener('change', updateGate); $('c-transfer').addEventListener('change', updateGate);
 $('gate-auth-btn').addEventListener('click', () => { if(!hasConsent()){ if(!($('c-notice').checked && $('c-transfer').checked)) return; saveConsent(); } doSignIn(); });
+$('gp-toggle').addEventListener('click', () => { const b = $('gp-box'); b.classList.toggle('hidden'); if(!b.classList.contains('hidden')){ setGpMode('in'); setTimeout(() => { $('gp-user').focus(); b.scrollIntoView({ block:'end', behavior:'smooth' }); }, 50); } });
+$('gp-tab-in').addEventListener('click', () => setGpMode('in')); $('gp-tab-new').addEventListener('click', () => setGpMode('new'));
+$('gp-submit').addEventListener('click', () => { if(!hasConsent()){ if(!($('c-notice').checked && $('c-transfer').checked)) return; saveConsent(); } doPasswordAuth(); });
+['gp-user', 'gp-pass', 'gp-pass2'].forEach(id => $(id).addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); $('gp-submit').click(); } }));
+setGpMode('in');
 updateGate();
-document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeDrawer(); $('lightbox').classList.remove('open'); $('user-menu').classList.remove('open'); $('photo-warn').classList.remove('open'); $('legal-modal').classList.remove('open'); $('admin-modal').classList.remove('open'); $('gal-modal').classList.remove('open'); } });
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeDrawer(); $('lightbox').classList.remove('open'); $('user-menu').classList.remove('open'); $('photo-warn').classList.remove('open'); $('legal-modal').classList.remove('open'); $('ann-modal').classList.remove('open'); $('admin-modal').classList.remove('open'); $('gal-modal').classList.remove('open'); } });
 
 // ----- Gece / gündüz modu: seçim cihazda saklanır; seçim yoksa telefonun/bilgisayarın ayarı kullanılır -----
 function paintThemeBtn(){ const dark = document.documentElement.dataset.theme === 'dark'; $('theme-btn').innerHTML = ico(dark ? 'sun' : 'moon', 18); $('theme-btn').title = dark ? 'Gündüz moduna geç' : 'Gece moduna geç'; const m = document.querySelector('meta[name=theme-color]'); if(m) m.content = dark ? '#0E1613' : '#14452F'; }
