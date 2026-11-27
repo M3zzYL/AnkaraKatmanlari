@@ -333,6 +333,7 @@ a.btn,a.btn:hover{text-decoration:none;}
 /* ---------- LOGO, RIZA EKRANI, AYDINLATMA METNİ ---------- */
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
 .gate-logo-img{width:min(300px,72vw);height:auto;margin:0 auto 18px;display:block;}
+@media(max-height:820px){.gate-logo-img{width:min(190px,52vw);margin-bottom:10px;} .gate p{margin-bottom:16px;}}
 .logo-mark{width:46px;height:46px;object-fit:contain;display:block;}
 .lg-dark{display:none;} :root[data-theme="dark"] .lg-light{display:none;} :root[data-theme="dark"] .lg-dark{display:block;}
 .footer-logo{width:150px;height:auto;margin:0 auto 12px;}
@@ -468,6 +469,13 @@ a.btn,a.btn:hover{text-decoration:none;}
 .ann-new{display:inline-block;background:#E5484D;color:#fff;border-radius:999px;font-size:10.5px;font-weight:700;padding:1px 7px;margin-left:6px;vertical-align:1px;}
 .an-row{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line);font-size:12.5px;} .an-row span{color:var(--muted);display:block;}
 
+.gate-switch{margin:10px 0 0;font-size:14px;color:#ffffffcc;}
+.gate-switch button{background:none;border:0;color:#F2E3B3;font:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:8px 4px;min-height:40px;}
+.gate-or{display:flex;align-items:center;gap:12px;margin:8px auto 14px;max-width:320px;color:#ffffffaa;font-size:12.5px;}
+.gate-or::before,.gate-or::after{content:'';flex:1;height:1px;background:#ffffff40;}
+.gate-google{background:#fff;color:#143F2C;font-weight:700;border:0;min-width:240px;}
+.gate-google:disabled{opacity:.55;}
+
 </style>
 </head>
 <body>
@@ -485,17 +493,18 @@ a.btn,a.btn:hover{text-decoration:none;}
       <label class="chk"><input type="checkbox" id="c-notice"><span><a href="#" data-legal>Aydınlatma Metni ve Gizlilik Bildirimi</a>'ni okudum, anladım.</span></label>
       <label class="chk"><input type="checkbox" id="c-transfer"><span>Kişisel verilerimin, hizmetin sunulması amacıyla yurt dışındaki sunucularda (Google Firebase) işlenmesine <b>açık rıza</b> veriyorum.</span></label>
     </div>
-    <button class="btn btn-gold" id="gate-auth-btn" disabled>Google ile giriş yap</button>
-    <button class="gate-alt" id="gp-toggle" type="button">Google'sız devam et: e-posta vermeden kullanıcı adıyla</button>
-    <div class="gate-pw hidden" id="gp-box">
-      <div class="gp-tabs"><button type="button" id="gp-tab-in" class="on">Giriş yap</button><button type="button" id="gp-tab-new">Hesap oluştur</button></div>
-      <input class="gp-in" id="gp-user" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" placeholder="Kullanıcı adı (a-z, 0-9, . _ -)" aria-label="Kullanıcı adı">
+    <div class="gate-pw" id="gp-box">
+      <input class="gp-in" id="gp-user" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="120" placeholder="Kullanıcı adı veya e-posta" aria-label="Kullanıcı adı veya e-posta">
       <input class="gp-in" id="gp-pass" type="password" autocomplete="current-password" maxlength="64" placeholder="Şifre" aria-label="Şifre">
       <input class="gp-in hidden" id="gp-pass2" type="password" autocomplete="new-password" maxlength="64" placeholder="Şifre (tekrar)" aria-label="Şifre tekrar">
-      <p class="gp-note" id="gp-note"></p>
+      <p class="gp-note hidden" id="gp-note"></p>
       <button class="btn btn-gold" id="gp-submit" type="button" disabled>Giriş yap</button>
     </div>
     <div class="err" id="gate-error"></div>
+    <button class="gate-alt" id="gp-forgot" type="button">Şifremi unuttum</button>
+    <p class="gate-switch"><span id="gp-switch-q">Hesabın yok mu?</span> <button type="button" id="gp-switch-btn">Kayıt ol</button></p>
+    <div class="gate-or"><span>veya</span></div>
+    <button class="btn gate-google" id="gate-auth-btn" disabled>Google ile giriş yap</button>
     <p class="gate-links">Görüş ve öneriler: <a href="mailto:ankarakatmanlari@gmail.com">ankarakatmanlari@gmail.com</a> · <a href="https://instagram.com/ankarakatmanlari" target="_blank" rel="noopener noreferrer">Instagram</a></p>
   </div>
 </div>
@@ -525,6 +534,7 @@ a.btn,a.btn:hover{text-decoration:none;}
       <div class="um-mail" id="um-mail"></div>
       <button id="um-admin" class="hidden"><span data-ico="shield"></span>Yönetici paneli</button>
       <button id="um-ann"><span data-ico="mail"></span>Duyurular <span class="cnt"></span></button>
+      <button id="um-link" class="hidden"><span data-ico="mail"></span>E-posta bağla</button>
       <button id="um-export"><span data-ico="download"></span>Verilerimi indir</button>
       <button id="um-legal"><span data-ico="shield"></span>Aydınlatma metni ve gizlilik</button>
       <button id="um-install" class="hidden"><span data-ico="download"></span>Uygulamayı yükle</button>
@@ -711,6 +721,18 @@ a.btn,a.btn:hover{text-decoration:none;}
       <p>Oturum bilgisi, gece/gündüz tercihi, ilerleme ve fotoğraf önbelleği ile bu onayın kaydı tarayıcının yerel depolamasında tutulur; bunlar sitenin çalışması için gereklidir ve reklam amacıyla kullanılmaz.</p>
     </div>
     <div class="modal-foot"><span></span><button class="btn btn-green" id="lg-close">Kapat</button></div>
+  </div>
+</div>
+<div class="modal" id="link-modal">
+  <div class="modal-box legal">
+    <h2>E-posta bağla</h2>
+    <div class="legal-body">
+      <p>Kullanıcı adıyla açtığın hesaba bir e-posta adresi bağlayabilirsin. Böylece şifreni unutursan sıfırlayabilir, istersen e-posta duyurularını da alabilirsin.</p>
+      <p><b>Nasıl çalışır:</b> adresine bir doğrulama bağlantısı göndeririz. Bağlantıya tıkladıktan sonra hesabın bu e-posta adresine geçer; bundan sonra <b>kullanıcı adı yerine e-postanla</b> (aynı şifreyle) giriş yaparsın. Verilerin, rozetlerin ve anıların aynen korunur.</p>
+      <input class="input" id="lk-email" type="email" inputmode="email" autocomplete="email" maxlength="120" placeholder="ornek@eposta.com" aria-label="E-posta adresi">
+      <div class="mb-status" id="lk-status" role="status" style="margin-top:10px"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" id="lk-close">Kapat</button><button class="btn btn-green" id="lk-send">Doğrulama bağlantısı gönder</button></div>
   </div>
 </div>
 <div class="modal" id="ann-modal">
@@ -1477,12 +1499,15 @@ function initialAvatar(name){
 }
 let GP_MODE = 'in';
 function setGpMode(m){
-  GP_MODE = m; $('gp-tab-in').classList.toggle('on', m === 'in'); $('gp-tab-new').classList.toggle('on', m === 'new');
+  GP_MODE = m;
   $('gp-pass2').classList.toggle('hidden', m !== 'new'); $('gp-pass').autocomplete = m === 'new' ? 'new-password' : 'current-password';
-  $('gp-submit').textContent = m === 'new' ? 'Hesap oluştur' : 'Giriş yap';
-  $('gp-note').textContent = m === 'new'
-    ? 'E-posta adresi istenmez. Dikkat: e-posta olmadığı için şifre sıfırlama bağlantısı gönderemeyiz; şifreni unutursan hesabı kurtaramayız. Şifreni güvenli bir yere not et. Duyurular sana site içinden gösterilir.'
-    : 'Hesap açarken seçtiğin kullanıcı adı ve şifreyle giriş yap.';
+  $('gp-submit').textContent = m === 'new' ? 'Kayıt ol' : 'Giriş yap';
+  $('gp-user').maxLength = m === 'new' ? 20 : 120; $('gp-user').placeholder = m === 'new' ? 'Kullanıcı adı seç (a-z, 0-9, . _ -)' : 'Kullanıcı adı veya e-posta';
+  $('gp-forgot').classList.toggle('hidden', m === 'new');
+  $('gp-switch-q').textContent = m === 'new' ? 'Zaten hesabın var mı?' : 'Hesabın yok mu?'; $('gp-switch-btn').textContent = m === 'new' ? 'Giriş yap' : 'Kayıt ol';
+  const n = $('gp-note'); n.classList.toggle('hidden', m !== 'new');
+  n.textContent = m === 'new' ? 'E-posta adresi istenmez. Dikkat: e-posta olmadığı için şifre sıfırlama bağlantısı gönderemeyiz; şifreni unutursan hesabı kurtaramayız (istersen sonradan e-posta bağlayabilirsin). Duyurular sana site içinden gösterilir.' : '';
+  $('gate-error').style.display = 'none';
 }
 function pwErrorText(e){
   const c = e && e.code;
@@ -1496,8 +1521,9 @@ function pwErrorText(e){
 }
 async function doPasswordAuth(){
   if(!auth){ showGateError('Giriş sistemi şu an başlatılamadı. Sayfayı internet üzerinden açtığınızdan emin olun.'); return; }
-  const u = $('gp-user').value.trim().toLowerCase(), p = $('gp-pass').value;
-  if(!USERNAME_RE.test(u)){ showGateError('Kullanıcı adı 3-20 karakter olmalı; yalnızca a-z, 0-9, nokta, alt çizgi ve tire kullanılabilir (Türkçe karakter yok).'); return; }
+  const u = $('gp-user').value.trim().toLowerCase(), p = $('gp-pass').value, isMail = GP_MODE === 'in' && u.indexOf('@') > 0;
+  if(isMail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(u)){ showGateError('Geçerli bir e-posta adresi yaz.'); return; }
+  if(!isMail && !USERNAME_RE.test(u)){ showGateError('Kullanıcı adı 3-20 karakter olmalı; yalnızca a-z, 0-9, nokta, alt çizgi ve tire kullanılabilir (Türkçe karakter yok).'); return; }
   if(p.length < 8){ showGateError('Şifre en az 8 karakter olmalı.'); return; }
   if(GP_MODE === 'new'){
     if(p !== $('gp-pass2').value){ showGateError('İki şifre aynı değil.'); return; }
@@ -1506,7 +1532,7 @@ async function doPasswordAuth(){
   $('gate-error').style.display = 'none'; $('gp-submit').disabled = true;
   try {
     if(GP_MODE === 'new'){ const cred = await auth.createUserWithEmailAndPassword(pseudoEmail(u), p); try { await cred.user.updateProfile({ displayName:u }); } catch(e){} }
-    else await auth.signInWithEmailAndPassword(pseudoEmail(u), p);
+    else await auth.signInWithEmailAndPassword(isMail ? u : pseudoEmail(u), p);
   } catch(e){ showGateError(pwErrorText(e)); }
   try { updateGate(); } catch(e){}
 }
@@ -1544,7 +1570,7 @@ async function checkBanned(user){
 }
 // Ekranı gösterme yardımcıları: açılış perdesi → (oturum varsa) uygulama, (oturum yoksa) giriş ekranı
 function showApp(){ $('splash').classList.add('hidden'); $('auth-gate').classList.add('hidden'); $('app').classList.remove('hidden'); }
-function showGate(){ $('splash').classList.add('hidden'); $('app').classList.add('hidden'); $('auth-gate').classList.remove('hidden'); try { updateGate(); } catch(e){} }
+function showGate(){ $('splash').classList.add('hidden'); $('app').classList.add('hidden'); $('auth-gate').classList.remove('hidden'); try { setGpMode('in'); $('gp-pass').value = ''; $('gp-pass2').value = ''; } catch(e){} try { updateGate(); } catch(e){} }
 let authSettled = false;
 // Giriş yapıldığında/çıkıldığında çalışır.
 // ÖNEMLİ: Oturum açıksa giriş ekranı hiç gösterilmez; uygulama bu cihazdaki kayıtla HEMEN açılır, yasak kontrolü ve bulut verisi arka planda gelir.
@@ -1558,7 +1584,7 @@ function startAuthWatcher(){
     if(!user){ currentUser = null; toggleAdminBtn(); showGate(); updateProgress(); refreshUI(); return; }
     currentUser = user; const uid = user.uid, same = () => currentUser && currentUser.uid === uid;
     // 1) HEMEN göster: bu hesaba ait cihazdaki kayıtla uygulamayı aç
-    $('user-img').src = safeUrl(user.photoURL) || initialAvatar(accountLabel(user)); $('user-name').textContent = accountLabel(user).split(' ')[0]; $('um-mail').textContent = isPseudo(user) ? 'Kullanıcı adı: ' + accountLabel(user) : (user.email || '');
+    $('user-img').src = safeUrl(user.photoURL) || initialAvatar(accountLabel(user)); $('user-name').textContent = accountLabel(user).split(' ')[0]; $('um-mail').textContent = isPseudo(user) ? 'Kullanıcı adı: ' + accountLabel(user) : (user.email || ''); $('um-link').classList.toggle('hidden', !isPseudo(user));
     loadAppMeta();
     let local = {}; try { local = sanitizeState(JSON.parse(localStorage.getItem(stateKey()) || '{}')); } catch(e){}
     STATE = local;
@@ -1604,7 +1630,7 @@ function computeEarnedBadges(){
 function buildProfile(){
   const earned = computeEarnedBadges();
   return {
-    email: currentUser && !isPseudo(currentUser) ? (currentUser.email || '') : '', displayName: currentUser && !isPseudo(currentUser) ? (currentUser.displayName || '') : '', username: isPseudo(currentUser) ? accountLabel(currentUser) : '', provider: isPseudo(currentUser) ? 'password' : 'google',
+    email: currentUser && !isPseudo(currentUser) ? (currentUser.email || '') : '', displayName: currentUser && !isPseudo(currentUser) ? (currentUser.displayName || '') : '', username: isPseudo(currentUser) ? accountLabel(currentUser) : '', provider: (currentUser && (isPseudo(currentUser) || !(currentUser.providerData || []).some(p => p && p.providerId === 'google.com'))) ? 'password' : 'google',
     earnedBadges: earned.map(b => b.id), earnedBadgeNames: earned.map(b => b.name),
     visitedCount: visitedNames().length, gpsCount: Object.values(STATE).filter(s => s && s.visitType === 'gps').length, updatedAt: Date.now()
   };
@@ -2887,6 +2913,47 @@ async function loadMailLog(){
   } catch(e){ box.innerHTML = ''; }
 }
 
+async function gpForgot(){
+  const v = $('gp-user').value.trim().toLowerCase();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || v.endsWith('@' + PSEUDO_DOMAIN)){ showGateError('Şifre sıfırlama yalnızca e-posta adresi bağlanmış hesaplarda çalışır. E-postanı yukarıdaki kutuya yazıp tekrar dene. E-postası bağlanmamış, kullanıcı adıyla açılmış hesaplarda şifre kurtarılamaz.'); return; }
+  if(!auth){ showGateError('Giriş sistemi şu an başlatılamadı.'); return; }
+  try { auth.languageCode = 'tr'; await auth.sendPasswordResetEmail(v); showGateError('Bu e-posta ile kayıtlı bir hesap varsa şifre sıfırlama bağlantısı gönderildi; e-postanı (gereksiz kutusu dahil) kontrol et.'); }
+  catch(e){ showGateError(pwErrorText(e)); }
+}
+function lkStatus(m, bad){ const el = $('lk-status'); if(el){ el.textContent = m || ''; el.classList.toggle('mb-bad', !!bad); } }
+function lkErrorText(e){
+  const c = e && e.code;
+  if(c === 'auth/email-already-in-use') return 'Bu e-posta adresi başka bir hesapta kullanılıyor.';
+  if(c === 'auth/invalid-email') return 'Geçerli bir e-posta adresi yaz.';
+  if(c === 'auth/wrong-password' || c === 'auth/invalid-credential') return 'Şifre hatalı.';
+  if(c === 'auth/unauthorized-continue-uri') return 'Bu site adresi Firebase yetkili alan adlarında değil (yönetici: Authentication → Settings → Authorized domains).';
+  if(c === 'auth/operation-not-allowed') return 'E-posta bağlama Firebase tarafında kapalı (yönetici: Authentication → Sign-in method → E-posta/Şifre açık olmalı).';
+  if(c === 'auth/too-many-requests') return 'Çok fazla deneme yapıldı; biraz bekleyip tekrar dene.';
+  return 'İşlem yapılamadı: ' + ((e && (e.code || e.message)) || 'bilinmeyen hata');
+}
+async function sendEmailLink(){
+  const email = $('lk-email').value.trim().toLowerCase();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.endsWith('@' + PSEUDO_DOMAIN)){ lkStatus('Geçerli bir e-posta adresi yaz.', true); return; }
+  if(!currentUser || !isPseudo(currentUser)){ lkStatus('Bu hesapta e-posta bağlamaya gerek yok.', true); return; }
+  if(typeof currentUser.verifyBeforeUpdateEmail !== 'function'){ lkStatus('Bu sürümde e-posta bağlama desteklenmiyor (yönetici: Firebase SDK sürümünü güncelleyin).', true); return; }
+  $('lk-send').disabled = true; lkStatus('Gönderiliyor…');
+  const send = () => { auth.languageCode = 'tr'; return currentUser.verifyBeforeUpdateEmail(email, { url: location.origin + location.pathname }); };
+  try {
+    try { await send(); }
+    catch(e){
+      if(e && e.code === 'auth/requires-recent-login'){
+        const pw = prompt('Güvenlik için şifreni yeniden gir:'); if(!pw) throw new Error('İptal edildi');
+        await currentUser.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(currentUser.email, pw)); await send();
+      } else throw e;
+    }
+    lkStatus(email + ' adresine doğrulama bağlantısı gönderildi (gereksiz kutusuna da bak). Bağlantıya tıkladıktan sonra çıkış yapıp e-postan ve aynı şifrenle giriş yap; kullanıcı adı girişi kapanır.');
+  } catch(e){ lkStatus(lkErrorText(e), true); }
+  $('lk-send').disabled = false;
+}
+$('gp-forgot').addEventListener('click', gpForgot);
+$('um-link').addEventListener('click', () => { $('user-menu').classList.remove('open'); $('lk-status').textContent = ''; $('lk-email').value = ''; $('link-modal').classList.add('open'); setTimeout(() => $('lk-email').focus(), 50); });
+$('lk-close').addEventListener('click', () => $('link-modal').classList.remove('open'));
+$('lk-send').addEventListener('click', sendEmailLink);
 // =====================================================================
 // 14c) SİTE İÇİ DUYURULAR (e-postası olmayan hesaplara da ulaşır; rozete göre seçilebilir)
 // =====================================================================
@@ -3010,13 +3077,12 @@ function updateGate(){
 }
 $('c-notice').addEventListener('change', updateGate); $('c-transfer').addEventListener('change', updateGate);
 $('gate-auth-btn').addEventListener('click', () => { if(!hasConsent()){ if(!($('c-notice').checked && $('c-transfer').checked)) return; saveConsent(); } doSignIn(); });
-$('gp-toggle').addEventListener('click', () => { const b = $('gp-box'); b.classList.toggle('hidden'); if(!b.classList.contains('hidden')){ setGpMode('in'); setTimeout(() => { $('gp-user').focus(); b.scrollIntoView({ block:'end', behavior:'smooth' }); }, 50); } });
-$('gp-tab-in').addEventListener('click', () => setGpMode('in')); $('gp-tab-new').addEventListener('click', () => setGpMode('new'));
+$('gp-switch-btn').addEventListener('click', () => { setGpMode(GP_MODE === 'in' ? 'new' : 'in'); $('gp-user').focus(); });
 $('gp-submit').addEventListener('click', () => { if(!hasConsent()){ if(!($('c-notice').checked && $('c-transfer').checked)) return; saveConsent(); } doPasswordAuth(); });
 ['gp-user', 'gp-pass', 'gp-pass2'].forEach(id => $(id).addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); $('gp-submit').click(); } }));
 setGpMode('in');
 updateGate();
-document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeDrawer(); $('lightbox').classList.remove('open'); $('user-menu').classList.remove('open'); $('photo-warn').classList.remove('open'); $('legal-modal').classList.remove('open'); $('ann-modal').classList.remove('open'); $('admin-modal').classList.remove('open'); $('gal-modal').classList.remove('open'); } });
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeDrawer(); $('lightbox').classList.remove('open'); $('user-menu').classList.remove('open'); $('photo-warn').classList.remove('open'); $('legal-modal').classList.remove('open'); $('ann-modal').classList.remove('open'); $('link-modal').classList.remove('open'); $('admin-modal').classList.remove('open'); $('gal-modal').classList.remove('open'); } });
 
 // ----- Gece / gündüz modu: seçim cihazda saklanır; seçim yoksa telefonun/bilgisayarın ayarı kullanılır -----
 function paintThemeBtn(){ const dark = document.documentElement.dataset.theme === 'dark'; $('theme-btn').innerHTML = ico(dark ? 'sun' : 'moon', 18); $('theme-btn').title = dark ? 'Gündüz moduna geç' : 'Gece moduna geç'; const m = document.querySelector('meta[name=theme-color]'); if(m) m.content = dark ? '#0E1613' : '#14452F'; }

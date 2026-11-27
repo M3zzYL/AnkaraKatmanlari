@@ -1,17 +1,24 @@
-# Kullanıcı adıyla (e-postasız) giriş ve site içi duyurular
+# Giriş: hesapla giriş, kayıt ol, Google ve e-posta bağlama
 
-## 1. Firebase'de bir kez açman gerekenler
-1. Firebase Console → Authentication → Sign-in method → **E-posta/Şifre**'yi etkinleştir ("E-posta bağlantısı" kapalı kalsın).
-2. Firestore → Kurallar: `firestore.rules` dosyasındaki güncel kuralları yapıştırıp yayımla (yalnızca `announcements` bölümü yeni).
-3. Dosyaları GitHub'a yükle: `index.html`, `sw.js`, `gizlilik.html`, `data/ankara.json`.
+## Giriş ekranı (sıra)
+1. Kullanıcı adı veya e-posta + şifre ile **Giriş yap** (ilk görünen bölüm).
+2. Altında yazı olarak "Hesabın yok mu? **Kayıt ol**": tıklayınca kayıt formu açılır (kullanıcı adı + şifre + şifre tekrar; e-posta istenmez).
+3. En altta "veya" ayracından sonra **Google ile giriş yap**.
 
-## 2. Nasıl çalışır
-- Girişte Google düğmesinin altında "Google'sız devam et" bağlantısı çıkar: kullanıcı adı + şifre ile hesap açılır (e-posta istenmez).
-- Kullanıcı adı arka planda hiçbir zaman posta gönderilmeyen sahte bir adrese çevrilir (`ad@ak-kullanici.invalid`).
-- Şifre sıfırlama ŞU AN YOKTUR: şifresini unutan kullanıcı hesabını kurtaramaz (ekranda uyarı yazar).
-- Bu hesaplar yönetici olamaz, e-posta listesine girmez.
+## Firebase'de bir kez yapılacaklar
+1. Authentication → Sign-in method → **E-posta/Şifre** etkin olsun ("E-posta bağlantısı" kapalı kalabilir).
+2. Authentication → Settings → **Authorized domains** içinde `m3zzyl.github.io` bulunsun (Google girişi çalışıyorsa zaten vardır; e-posta bağlama bağlantısı için de gerekir).
+3. İsteğe bağlı: Authentication → Templates bölümünde doğrulama ve şifre sıfırlama e-postalarının dilini/metnini Türkçeleştir.
+4. Firestore kuralları: `firestore.rules` (announcements bölümü yeni).
+5. Dosyaları GitHub'a yükle: index.html, sw.js, gizlilik.html, data/ankara.json.
 
-## 3. Duyurular
-- E-posta (yönetici panelindeki "Duyuru / e-posta gönder"): yalnızca e-postası olan (Google) hesaplara gider.
-- Site içi duyuru (yönetici panelindeki "Site içi duyuru yayınla"): HERKESE ulaşır, kullanıcı adıyla açılan hesaplara da. Kullanıcı menüsünde "Duyurular" ve avatarda kırmızı nokta görünür. Rozete göre alıcı seçilebilir.
-- Duyuruları giriş yapan herkes okuyabilir (kural böyle); rozet seçimi yalnızca kimlerin göreceğini belirler, gizli bilgi yazma.
+## E-posta bağlama (kullanıcı adıyla açılan hesaplar)
+- Kullanıcı menüsünde yalnızca bu hesaplarda "E-posta bağla" görünür.
+- Kullanıcı e-postasını yazar → adresine doğrulama bağlantısı gider → bağlantıya tıklayınca hesabın e-postası o adrese geçer.
+- Bundan sonra kullanıcı adı yerine **e-posta + aynı şifreyle** giriş yapılır (giriş kutusu "kullanıcı adı veya e-posta" kabul eder). Veriler, rozetler, anılar korunur.
+- E-postası bağlanan hesapta "Şifremi unuttum" çalışır ve hesap e-posta duyuru listesine girebilir.
+- Kullanıcı adıyla açılıp e-postası bağlanmamış hesaplarda şifre kurtarılamaz (ekranda uyarı yazar).
+
+## Duyurular
+- E-posta duyurusu: yalnızca e-postası olan hesaplara gider.
+- Site içi duyuru (yönetici paneli): tüm hesaplara ulaşır; rozete göre seçilebilir.
